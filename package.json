@@ -3,8 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.9.3",
+    "fabric": "^2.7.0",
+    "gsap": "^2.1.2",
+    "immutable": "^4.0.0-rc.12",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dnd": "^7.4.5",
+    "react-dnd-html5-backend": "^7.4.4",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.3",
+    "react-router-dom": "^5.0.0",
+    "redux": "^4.0.1",
+    "redux-saga": "^1.0.2",
+    "styled-components": "^4.2.0"
   },
   "devDependencies": {
     "react-scripts": "3.0.0"
