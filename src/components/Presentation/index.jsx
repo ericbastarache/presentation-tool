@@ -35,27 +35,45 @@ class Presentation extends React.Component {
     this.canvas = new fabric.Canvas(this.canvasEl.current);
   }
   addSlide = () => {
-    this.props.dispatch({type: 'CREATE_SLIDE', payload: {title: 'Title', subtitle: 'Subtitle'}});
+    this.props.dispatch({type: 'CREATE_SLIDE', payload: {title: 'Title', subtitle: 'Subtitle', data:null}});
   }
   updateCanvas() {
     let currentSlide = this.props.slides.toJS().filter((slide, index) => {if (index === this.state.currentSlide) return slide});
-    let title = new fabric.IText(currentSlide[0].title, {
-      fontSize: 48,
-      textAlign: 'center',
-    });
-    let subtitle = new fabric.IText(currentSlide[0].subtitle, {
-      fontSize: 24,
-      textAlign: 'center'
-    });
-    this.canvas.add(title);
-    this.canvas.add(subtitle);
+    if (currentSlide[0].data !== null) {
+      this.loadSlide(this.state.currentSlide);
+    } else {
+      let title = new fabric.IText(currentSlide[0].title, {
+        fontSize: 48,
+        textAlign: 'center',
+      });
+      let subtitle = new fabric.IText(currentSlide[0].subtitle, {
+        fontSize: 24,
+        textAlign: 'center'
+      });
+      this.canvas.add(title);
+      this.canvas.add(subtitle);
+    }
+  }
+  saveSlide = (index) => {
+    let slideCanvasData = JSON.stringify(this.canvas.toJSON());
+    this.props.dispatch({type: 'SAVE_SLIDE', payload:{key:index, data:slideCanvasData}})
+  }
+  loadSlide = (index) => {
+    let slideData = false;
+    this.props.slides.toJS().map((slide, i) => {
+      if (index === i)
+        slideData = slide.data;
+    })
+    this.canvas.loadFromJSON(JSON.parse(slideData));
   }
   setActiveSlide = (index) => () => {
+    this.saveSlide(index);
     this.setState({currentSlide: index, activeSlide: index - 1});
+    this.canvas.clear();
     this.updateCanvas();
   }
   deleteSlide = () => {
-    this.props.dispatch({type: 'DELETE_SLIDE', payload: this.state.activeSlide})
+    this.props.dispatch({type: 'DELETE_SLIDE', payload:{key:this.state.activeSlide}})
   }
   renderSlides = () => {
     return this.props.slides.toJS().map((slide, index) => {
