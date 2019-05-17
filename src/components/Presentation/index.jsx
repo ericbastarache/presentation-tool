@@ -34,6 +34,9 @@ class Presentation extends React.Component {
   setActiveSlide = (index) => () => {
     this.setState({currentSlide: index, activeSlide: index - 1});
   }
+  deleteSlide = () => {
+    this.props.dispatch({type: 'DELETE_SLIDE', payload: this.state.activeSlide})
+  }
   renderSlides = () => {
     return this.props.slides.toJS().map((slide, index) => {
       return this.state.currentSlide === index ?
@@ -67,6 +70,7 @@ class Presentation extends React.Component {
         <Grid item xs={12}>
           <Toolbar
             createSlide={this.addSlide}
+            deleteSlide={this.deleteSlide}
           />
         </Grid>
         <Grid item xs={3}>
