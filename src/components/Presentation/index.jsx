@@ -21,7 +21,8 @@ class Presentation extends React.Component {
       activeSlide: 0,
       currentSlide: 0
     }
-    this.canvas = React.createRef();
+    this.canvasEl = React.createRef();
+    this.canvas = null;
   }
   componentWillReceiveProps (nextProps) {
     if (this.state.currentSlide !== nextProps.slides.toJS().length - 1) {
@@ -30,22 +31,24 @@ class Presentation extends React.Component {
       this.setState({currentSlide: nextProps.slides.toJS().length - 1});
     }
   }
+  componentDidMount() {
+    this.canvas = new fabric.Canvas(this.canvasEl.current);
+  }
   addSlide = () => {
     this.props.dispatch({type: 'CREATE_SLIDE', payload: {title: 'Title', subtitle: 'Subtitle'}});
   }
   updateCanvas() {
-    let canvas = new fabric.Canvas(this.canvas.current);
     let currentSlide = this.props.slides.toJS().filter((slide, index) => {if (index === this.state.currentSlide) return slide});
-    let title = new fabric.Text(currentSlide[0].title, {
+    let title = new fabric.IText(currentSlide[0].title, {
       fontSize: 48,
-      textAlign: 'center'
+      textAlign: 'center',
     });
-    let subtitle = new fabric.Text(currentSlide[0].subtitle, {
+    let subtitle = new fabric.IText(currentSlide[0].subtitle, {
       fontSize: 24,
       textAlign: 'center'
     });
-    canvas.add(title);
-    canvas.add(subtitle);
+    this.canvas.add(title);
+    this.canvas.add(subtitle);
   }
   setActiveSlide = (index) => () => {
     this.setState({currentSlide: index, activeSlide: index - 1});
@@ -95,7 +98,7 @@ class Presentation extends React.Component {
         </Grid>
         <Grid item xs={6}>
           <h1>Canvas</h1>
-          <canvas ref={this.canvas} width="640" height="400"/>
+          <canvas ref={this.canvasEl} width="640" height="400"/>
         </Grid>
         <Grid item xs={3}>
           <h1>Theme</h1>
