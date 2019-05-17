@@ -8,6 +8,7 @@ class Toolbar extends React.Component {
     return (
       <div>
         <button onClick={this.props.createSlide}>New Slide</button>
+        <button onClick={this.props.deleteSlide}>Delete Slide</button>
       </div>
     )
   }
