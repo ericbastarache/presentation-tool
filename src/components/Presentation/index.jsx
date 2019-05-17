@@ -7,8 +7,10 @@ import Slide, { ActiveSlide } from 'components/Slide';
 import { 
   connect 
 } from 'react-redux';
-import { DragDropContextProvider } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend'
+import {
+  compose
+} from 'redux';
+import withDragDrop from 'lib/withDragDrop';
 
 
 class Presentation extends React.Component {
@@ -61,24 +63,22 @@ class Presentation extends React.Component {
   }
   render () {
     return (
-      <DragDropContextProvider backend={HTML5Backend}>
-        <Grid container>
-          <Grid item xs={12}>
-            <Toolbar
-              createSlide={this.addSlide}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            {this.renderSlides()}
-          </Grid>
-          <Grid item xs={6}>
-            <h1>Canvas</h1>
-          </Grid>
-          <Grid item xs={3}>
-            <h1>Theme</h1>
-          </Grid>
+      <Grid container>
+        <Grid item xs={12}>
+          <Toolbar
+            createSlide={this.addSlide}
+          />
         </Grid>
-      </DragDropContextProvider>
+        <Grid item xs={3}>
+          {this.renderSlides()}
+        </Grid>
+        <Grid item xs={6}>
+          <h1>Canvas</h1>
+        </Grid>
+        <Grid item xs={3}>
+          <h1>Theme</h1>
+        </Grid>
+      </Grid>
     )
   }
 }
@@ -96,4 +96,7 @@ const mapDispatchToProps = dispatch => {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Presentation);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withDragDrop
+)(Presentation);
