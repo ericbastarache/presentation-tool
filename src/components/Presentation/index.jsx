@@ -11,6 +11,7 @@ import {
   compose
 } from 'redux';
 import withDragDrop from 'lib/withDragDrop';
+import { fabric } from 'fabric';
 
 
 class Presentation extends React.Component {
@@ -20,6 +21,7 @@ class Presentation extends React.Component {
       activeSlide: 0,
       currentSlide: 0
     }
+    this.canvas = React.createRef();
   }
   componentWillReceiveProps (nextProps) {
     if (this.state.currentSlide !== nextProps.slides.toJS().length - 1) {
@@ -31,8 +33,23 @@ class Presentation extends React.Component {
   addSlide = () => {
     this.props.dispatch({type: 'CREATE_SLIDE', payload: {title: 'Title', subtitle: 'Subtitle'}});
   }
+  updateCanvas() {
+    let canvas = new fabric.Canvas(this.canvas.current);
+    let currentSlide = this.props.slides.toJS().filter((slide, index) => {if (index === this.state.currentSlide) return slide});
+    let title = new fabric.Text(currentSlide[0].title, {
+      fontSize: 48,
+      textAlign: 'center'
+    });
+    let subtitle = new fabric.Text(currentSlide[0].subtitle, {
+      fontSize: 24,
+      textAlign: 'center'
+    });
+    canvas.add(title);
+    canvas.add(subtitle);
+  }
   setActiveSlide = (index) => () => {
     this.setState({currentSlide: index, activeSlide: index - 1});
+    this.updateCanvas();
   }
   deleteSlide = () => {
     this.props.dispatch({type: 'DELETE_SLIDE', payload: this.state.activeSlide})
@@ -78,6 +95,7 @@ class Presentation extends React.Component {
         </Grid>
         <Grid item xs={6}>
           <h1>Canvas</h1>
+          <canvas ref={this.canvas} width="640" height="400"/>
         </Grid>
         <Grid item xs={3}>
           <h1>Theme</h1>
