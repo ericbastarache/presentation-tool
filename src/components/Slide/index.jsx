@@ -22,9 +22,11 @@ class Slide extends React.Component {
         <Card
           activeSlide={this.props.currentSlide}
           onClick={() => this.props.onClick(this.props.slideNumber)}
+          style={{border: this.props.isDragging ? "1px solid #f009" : "none"}}
         >
           <h1>{this.props.slide.title}</h1>
           <h4>{this.props.slide.subtitle}</h4>
+          <h5>Index: {this.props.slide.position}</h5>
         </Card>
       </div>
     )

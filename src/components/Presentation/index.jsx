@@ -34,6 +34,7 @@ class Presentation extends React.Component {
   }
   componentDidMount() {
     this.canvas = new fabric.Canvas(this.canvasEl.current);
+    this.canvas.clear();
     this.updateCanvas();
   }
   addSlide = () => {
@@ -81,6 +82,7 @@ class Presentation extends React.Component {
 
   renderSlides = () => {
     return this.props.slides.toJS().map((slide, index) => {
+      slide.position = index.toString();
       return this.state.currentSlide === index ?
       (
         <ActiveSlide
@@ -91,7 +93,7 @@ class Presentation extends React.Component {
         >
           <h1>{slide.title}</h1>
           <h4>{slide.subtitle}</h4>
-          <h5>{index}</h5>
+          <span>Index: {slide.position}</span>
         </ActiveSlide>
       ) :
       (
@@ -103,7 +105,7 @@ class Presentation extends React.Component {
         >
           <h1>{slide.title}</h1>
           <h4>{slide.subtitle}</h4>
-          <h5>{index}</h5>
+          <span>Index: {slide.position}</span>
         </Slide>
       );
     })
