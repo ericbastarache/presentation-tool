@@ -19,34 +19,51 @@ class Presentation extends React.Component {
     super(props);
     this.state = {
       activeSlide: 0,
-      currentSlide: 0
+      lastActiveSlide: 0,
+      currentSlide: 0,
     }
     this.canvasEl = React.createRef();
     this.canvas = null;
   }
   componentWillReceiveProps (nextProps) {
     if (this.state.currentSlide !== nextProps.slides.toJS().length - 1) {
-      this.setState({currentSlide: this.state.currentSlide + 1});
+      this.setState({currentSlide: this.state.currentSlide + 1, activeSlide: this.state.activeSlide + 1 ,lastActiveSlide: this.state.lastActiveSlide + 1});
     } else {
-      this.setState({currentSlide: nextProps.slides.toJS().length - 1});
+      this.setState({currentSlide: nextProps.slides.toJS().length - 1, lastActiveSlide: this.state.lastActiveSlide - 1});
     }
   }
   componentDidMount() {
     this.canvas = new fabric.Canvas(this.canvasEl.current);
+    this.updateCanvas();
   }
   addSlide = () => {
     this.props.dispatch({type: 'CREATE_SLIDE', payload: {title: 'Title', subtitle: 'Subtitle', data:null}});
   }
+  deleteSlide = () => {
+    this.props.dispatch({type: 'DELETE_SLIDE', payload:{key:this.state.activeSlide}})
+  }
+  saveSlide = () => {
+    let slideCanvasData = JSON.stringify(this.canvas.toJSON());
+    this.props.dispatch({type: 'SAVE_SLIDE', payload:{key:this.state.lastActiveSlide, data:slideCanvasData}});
+  }
+  loadSlide = (key) => {
+    let slideData = false;
+    this.props.slides.toJS().map((slide, index) => {
+      if (key === index)
+        slideData = slide.data;
+    })
+    this.canvas.loadFromJSON(JSON.parse(slideData));
+  }
   updateCanvas() {
-    let currentSlide = this.props.slides.toJS().filter((slide, index) => {if (index === this.state.currentSlide) return slide});
-    if (currentSlide[0].data !== null) {
-      this.loadSlide(this.state.currentSlide);
+    let slideData = this.props.slides.toJS().filter((slide, index) => {if (index === this.state.activeSlide) return slide});
+    if (slideData[0].data !== null) {
+      this.loadSlide(this.state.activeSlide);
     } else {
-      let title = new fabric.IText(currentSlide[0].title, {
+      let title = new fabric.IText(slideData[0].title, {
         fontSize: 48,
         textAlign: 'center',
       });
-      let subtitle = new fabric.IText(currentSlide[0].subtitle, {
+      let subtitle = new fabric.IText(slideData[0].subtitle, {
         fontSize: 24,
         textAlign: 'center'
       });
@@ -54,50 +71,39 @@ class Presentation extends React.Component {
       this.canvas.add(subtitle);
     }
   }
-  saveSlide = (index) => {
-    let slideCanvasData = JSON.stringify(this.canvas.toJSON());
-    this.props.dispatch({type: 'SAVE_SLIDE', payload:{key:index, data:slideCanvasData}})
-  }
-  loadSlide = (index) => {
-    let slideData = false;
-    this.props.slides.toJS().map((slide, i) => {
-      if (index === i)
-        slideData = slide.data;
-    })
-    this.canvas.loadFromJSON(JSON.parse(slideData));
-  }
   setActiveSlide = (index) => () => {
-    this.saveSlide(index);
-    this.setState({currentSlide: index, activeSlide: index - 1});
-    this.canvas.clear();
-    this.updateCanvas();
+    this.setState({currentSlide: index, activeSlide: index, lastActiveSlide: this.state.activeSlide}, () => { 
+      this.saveSlide();
+      this.canvas.clear(); 
+      this.updateCanvas(); 
+    });
   }
-  deleteSlide = () => {
-    this.props.dispatch({type: 'DELETE_SLIDE', payload:{key:this.state.activeSlide}})
-  }
+
   renderSlides = () => {
     return this.props.slides.toJS().map((slide, index) => {
       return this.state.currentSlide === index ?
       (
         <ActiveSlide
           key={index}
-          activeSlide={this.state.currentSlide}
+          activeSlide={this.state.activeSlide}
           slide={slide}
           onClick={this.setActiveSlide(index)}
         >
           <h1>{slide.title}</h1>
           <h4>{slide.subtitle}</h4>
+          <h5>{index}</h5>
         </ActiveSlide>
       ) :
       (
         <Slide
           key={index}
-          activeSlide={this.state.currentSlide}
+          activeSlide={this.state.activeSlide}
           slide={slide}
           onClick={this.setActiveSlide(index)}
         >
           <h1>{slide.title}</h1>
           <h4>{slide.subtitle}</h4>
+          <h5>{index}</h5>
         </Slide>
       );
     })
