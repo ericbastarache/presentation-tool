@@ -1,8 +1,12 @@
 import Immutable, { List } from 'immutable';
+import {
+  uniqid
+} from 'lib/helpers';
 
 const INITIAL_STATE = Immutable.fromJS({
   presentation: null,
-  slides: List([{title: 'Title', subtitle: 'Subtitle', data:null}]),
+  presentations: List([]),
+  slides: List([{id: uniqid(), title: 'Title', subtitle: 'Subtitle', data:null}]),
 });
 
 const presentationReducer = (state = INITIAL_STATE, action) => {
