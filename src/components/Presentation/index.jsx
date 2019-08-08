@@ -1,93 +1,61 @@
 import React from 'react';
-import Toolbar from 'components/Toolbar';
-import Button from 'components/Button';
-import {
-  Grid,
-} from '@material-ui/core';
-import { 
-  connect 
-} from 'react-redux';
-import {
-  compose
-} from 'redux';
-import withDragDrop from 'lib/withDragDrop';
 import { fabric } from 'fabric';
+import { useDrop } from 'react-dnd';
+import ItemTypes from '../../constants/index'
 
+var canvas = null
 
-class Presentation extends React.PureComponent {
-  constructor (props) {
-    super(props);
-    this.state = {
-      activeSlide: null,
-    }
-    this.canvasEl = React.createRef();
-    this.canvas = null;
-  }
-  componentWillMount() {
-    this.canvas = new fabric.Canvas(this.canvasEl.current);
-  }
-  componentWillReceiveProps(nextProps) {
-    
+const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
+  const canvasEl = React.createRef();
+
+  const renderCanvasWithNewSlide = (slideIndex) => {
+      if (slides[activeSlide].data === null) {
+        //render just the text
+        canvas.clear();
+        Object.values(slides[activeSlide]).map((slide) => {
+          if (slide === null)
+            return
+            canvas.add(new fabric.Text(slide.toString()))
+        })
+      } else {
+        canvas.clear();
+        canvas.loadFromJSON(JSON.parse(slides[activeSlide].data))
+      }
   }
 
-  setActiveSlide = (id) => {
-    this.setState({activeSlide: id});
-  }
-  render () {
-    return (
-      <Grid container>
-        <Grid item xs={12}>
-          <Toolbar
-          >
-            {({
-              addSlide,
-              loadPresentation
-            }) => {
-              return (
-                <>
-                  <Button
-                    name='new-slide'
-                    onClick={addSlide}
-                  >
-                    Add Slide
-                  </Button>
-                  <Button
-                    onClick={loadPresentation}
-                  >
-                    Modal
-                  </Button>
-                </>
-              )
-            }}
-          </Toolbar>
-        </Grid>
-        <Grid item xs={3}>
-          {this.props.children({
-            slides: this.props.slides,
-            setActive: this.setActiveSlide,
-            presentation: this.props.presentation,
-            activeSlide: this.state.activeSlide,
-          })}
-        </Grid>
-      </Grid>
-    )
-  }
+  React.useEffect(() => {
+    canvas = new fabric.Canvas(canvasEl.current)
+    Object.values(slides[activeSlide]).map((slide) => {
+      if (slide === null)
+        return
+        canvas.add(new fabric.Text(slide.toString()))
+    })
+  },[])
+
+  React.useEffect(() =>{
+    renderCanvasWithNewSlide(activeSlide)
+  }, [activeSlide])
+
+  const [{ isOver, isOverCurrent}, drop] = useDrop({
+    accept: ItemTypes.SLIDE,
+    drop(item, monitor) {
+      if (monitor.didDrop())
+        return
+      saveSlide(activeSlide, JSON.stringify(canvas))
+      setActiveSlide(item.index)
+    },
+    collect: monitor => ({
+      isOver: monitor.isOver(),
+      isOverCurrent: monitor.isOver({ shallow: true})
+    })
+  })
+
+  const border = isOver ? '2px solid green' : '2px solid #0080004f';
+  return (
+    <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border, height: '400px', marginLeft: '20px'}}>
+      <canvas width='800px' height='400px' ref={canvasEl}></canvas>
+    </div>
+  )
 }
 
-const mapStateToProps = state => {
-  return {
-    presentation: state.presentation.get('presentation'),
-    slides: state.presentation.get('slides')
-  };
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    dispatch
-  };
-}
-
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withDragDrop
-)(Presentation);
+export default Presentation

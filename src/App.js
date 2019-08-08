@@ -1,39 +1,26 @@
-import React from 'react';
-import Slide from 'components/Slide';
-import Presentation from 'components/Presentation';
+import React from 'react'
+import Slidebar from 'containers/Slidebar'
+import Toolbar from 'containers/Toolbar'
+import HTML5Backend from 'react-dnd-html5-backend'
+import { DndProvider  } from 'react-dnd'
+import Presentation from 'containers/Presentation'
+import {Grid} from '@material-ui/core'
 
-class App extends React.PureComponent {
+class App extends React.Component {
   render() {
     return (
-      <div className="App">
-        <Presentation>
-          {({
-            slides,
-            setActive,
-            presentation,
-            activeSlide
-          }) => {
-            return (
-              <>
-                {slides.map((slide, index) => {
-                  return (
-                    <Slide
-                      onClick={() => setActive(slide.id)}
-                      key={`slide-${Math.random(0, 10000)}`}
-                      slide={slide}
-                      position={index}
-                      slideNumber={slide.id}
-                      activeSlide={activeSlide}
-                    />
-                  )
-                })}
-              </>
-            )
-          }}
-        </Presentation>
-      </div>
+        <div className="App">
+          <DndProvider backend={HTML5Backend}>
+            <Grid container>
+              <Toolbar />
+              <Slidebar />
+              <Presentation />
+            </Grid>
+          </DndProvider>
+        </div>
+
     );
   }
 }
 
-export default App;
+export default App
