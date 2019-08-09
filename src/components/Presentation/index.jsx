@@ -8,32 +8,60 @@ var canvas = null
 const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
   const canvasEl = React.createRef();
 
-  const renderCanvasWithNewSlide = (slideIndex) => {
-      if (slides[activeSlide].data === null) {
-        //render just the text
-        canvas.clear();
-        Object.values(slides[activeSlide]).map((slide) => {
-          if (slide === null)
-            return
-            canvas.add(new fabric.Text(slide.toString()))
-        })
+  const renderSlideWithData = (slide) => {
+    if (slide.data !== null && slide.data) {
+      canvas.clear();
+      canvas.loadFromJSON(JSON.parse(slide.data))
+    }
+  }
+
+
+  const renderSlideWithoutData = (slide) => {
+      if (slide.data === null) {
+        canvas.clear()
+        for (let [key, value] of Object.entries(slide)) {
+          switch (key) {
+            case 'title':
+              canvas.add(new fabric.Text(value))
+            break;
+            case 'subtitle':
+              canvas.add(new fabric.Text(value))
+            break;
+            case 'id':
+              canvas.add(new fabric.Text(value))
+            break;
+            default:
+              return                  
+          }
+        }
       } else {
-        canvas.clear();
-        canvas.loadFromJSON(JSON.parse(slides[activeSlide].data))
+        throw "slide.data is not null"
       }
   }
 
   React.useEffect(() => {
     canvas = new fabric.Canvas(canvasEl.current)
-    Object.values(slides[activeSlide]).map((slide) => {
-      if (slide === null)
-        return
-        canvas.add(new fabric.Text(slide.toString()))
+    slides.map((slide) => {
+      if (slide.id === activeSlide)
+        renderSlideWithoutData(slide)
+      return
     })
   },[])
 
   React.useEffect(() =>{
-    renderCanvasWithNewSlide(activeSlide)
+    slides.map((slide) => {
+      if (slide.id === activeSlide) {
+        if (slide.data && typeof slide.data === 'string') {
+          renderSlideWithData(slide)
+          return
+        }
+        if (slide.data === null) {
+          renderSlideWithoutData(slide)
+          return
+        }
+      }
+      return
+    })
   }, [activeSlide])
 
   const [{ isOver, isOverCurrent}, drop] = useDrop({
@@ -41,8 +69,13 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
     drop(item, monitor) {
       if (monitor.didDrop())
         return
+
       saveSlide(activeSlide, JSON.stringify(canvas))
-      setActiveSlide(item.index)
+      slides.map((slide, index) => {
+        if (index === item.index) {
+          setActiveSlide(slide.id)
+        }
+      })
     },
     collect: monitor => ({
       isOver: monitor.isOver(),

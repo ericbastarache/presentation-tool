@@ -4,12 +4,14 @@ import { setActiveSlide } from '../actions'
 import Slidebar from '../components/Slidebar'
 
 const mapStateToProps = state => {
-    return {slides : state.presentation.get('slides')}
+    return {
+        slides : state.presentation.get('slides')
+    }
 }
 
 const mapDispatchToProps = (dispatch) => ({
     changeSlideOrder: (selectedSlide, hoverSlide) => dispatch(changeSlideOrder(selectedSlide, hoverSlide)),
-    setActiveSlide: (slideIndex) => dispatch(setActiveSlide(slideIndex)),
+    setActiveSlide: (slideID) => dispatch(setActiveSlide(slideID)),
 });
 
 export default connect(

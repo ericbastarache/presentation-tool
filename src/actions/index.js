@@ -10,13 +10,13 @@ export const changeSlideOrder = (selectedSlide, hoverSlide) => ({
     hoverSlide
 })
 
-export const setActiveSlide = (slideIndex) => ({
+export const setActiveSlide = (slideID) => ({
     type: ActionTypes.SET_ACTIVE_SLIDE,
-    slideIndex
+    slideID
 })
 
-export const saveSlide = (slideIndex, slideData) => ({
+export const saveSlide = (slideID, slideData) => ({
     type: ActionTypes.SAVE_SLIDE,
-    slideIndex,
+    slideID,
     slideData
 })

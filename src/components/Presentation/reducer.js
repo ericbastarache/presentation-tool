@@ -4,11 +4,13 @@ import {
 } from 'lib/helpers';
 import { select } from 'redux-saga/effects';
 
+const initial_active_slide = uniqid();
+
 const INITIAL_STATE = Immutable.fromJS({
   presentation: null,
   presentations: List([]),
-  active_slide: 0,
-  slides: List([{id: uniqid(), title: 'Title', subtitle: 'Subtitle', data:null, position: 0}]),
+  active_slide: initial_active_slide,
+  slides: List([{id: initial_active_slide, title: 'Title', subtitle: 'Subtitle', data:null, position: 0}]),
 });
 
 const presentationReducer = (state = INITIAL_STATE, action) => {
@@ -18,11 +20,11 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
     case 'DELETE_SLIDE':
       return state.merge(state, state.update('slides', slides => slides.filter((slide, index) => index !== action.payload.key)));
     case 'SAVE_SLIDE':
-      return state.merge(state, state.update('slides', slides => slides.map((slide, index) => { if (index === action.slideIndex) slide.data = action.slideData; return slide })))
+      return state.merge(state, state.update('slides', slides => slides.map((slide) => { if (slide.id === action.slideID) slide.data = action.slideData; return slide })))
     case 'LOAD_PRESENTATION':
       return state.merge(state, state.set('presentation', action.payload));
     case 'SET_ACTIVE_SLIDE': 
-      return state.set('active_slide', action.slideIndex)
+      return state.set('active_slide', action.slideID)
     case 'CHANGE_SLIDE_ORDER':
         let newState = state.toJS();
         let currentSlides = newState.slides;

@@ -15,7 +15,6 @@ export default class Sidebar extends React.Component {
                         subtitle={slide.subtitle} 
                         id={slide.id} 
                         changeSlideOrder={this.props.changeSlideOrder}
-                        onClick={this.props.setActiveSlide}
                         />
         })
         return (

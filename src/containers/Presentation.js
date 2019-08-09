@@ -11,8 +11,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    saveSlide: (slideIndex, slideData) => dispatch(saveSlide(slideIndex, slideData)),
-    setActiveSlide: (slideIndex) => dispatch(setActiveSlide(slideIndex))
+    saveSlide: (slideID, slideData) => dispatch(saveSlide(slideID, slideData)),
+    setActiveSlide: (slideID) => dispatch(setActiveSlide(slideID))
 });
 
 export default connect(
