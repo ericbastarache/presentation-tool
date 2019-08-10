@@ -1,7 +1,9 @@
-import React from 'react';
-import { fabric } from 'fabric';
-import { useDrop } from 'react-dnd';
+import React from 'react'
+import { fabric } from 'fabric'
+import { useDrop } from 'react-dnd'
 import ItemTypes from '../../constants/index'
+import Canvas from '../Canvas'
+import Editor from '../Editor'
 
 var canvas = null
 
@@ -86,7 +88,8 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
   const border = isOver ? '2px solid green' : '2px solid #0080004f';
   return (
     <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border, height: '400px', marginLeft: '20px'}}>
-      <canvas width='800px' height='400px' ref={canvasEl}></canvas>
+        <Canvas />
+        <Editor />
     </div>
   )
 }
