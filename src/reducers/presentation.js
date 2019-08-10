@@ -2,15 +2,14 @@ import Immutable, { List } from 'immutable';
 import {
   uniqid
 } from 'lib/helpers';
-import { select } from 'redux-saga/effects';
 
 const initial_active_slide = uniqid();
+const initial_active_presentation = uniqid();
 
 const INITIAL_STATE = Immutable.fromJS({
-  presentation: null,
-  presentations: List([]),
-  active_slide: initial_active_slide,
-  slides: List([{id: initial_active_slide, title: 'Title', subtitle: 'Subtitle', data:null, position: 0}]),
+  active_presentation: initial_active_presentation,
+  presentations: List([{id: initial_active_presentation}]),
+  slides: List([{id: initial_active_slide, presentation_id: initial_active_presentation,title: 'Title', subtitle: 'Subtitle', data:null, position: 0}]),
 });
 
 const presentationReducer = (state = INITIAL_STATE, action) => {

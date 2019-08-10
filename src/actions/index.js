@@ -15,8 +15,12 @@ export const setActiveSlide = (slideID) => ({
     slideID
 })
 
-export const saveSlide = (slideID, slideData) => ({
-    type: ActionTypes.SAVE_SLIDE,
-    slideID,
-    slideData
+export const toggleModal = () => ({
+    type: ActionTypes.TOGGLE_MODAL
 })
+
+// export const saveSlide = (slideID, slideData) => ({
+//     type: ActionTypes.SAVE_SLIDE,
+//     slideID,
+//     slideData
+// })
