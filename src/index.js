@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './App.js';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import reducers from 'reducers';
 import sagas from 'sagas';
@@ -15,7 +15,10 @@ const middleware = [ sagaMiddleware, /*other middleware can go here */];
 
 const store = createStore(
   reducers,
-  applyMiddleware(...middleware)
+  compose (
+  applyMiddleware(...middleware),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  )
 );
 
 sagaMiddleware.run(sagas);
