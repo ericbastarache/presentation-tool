@@ -5,7 +5,7 @@ import {
 import ItemTypes from '../../constants/index'
 import { useDrag, useDrop } from 'react-dnd'
 
-const Slide = ({index, title, subtitle,id, changeSlideOrder}) => {
+const Slide = ({index, title, subtitle,id, changeSlideOrder, setActiveSlide, isActive}) => {
   const ref = React.useRef(null);
   const [, drop] = useDrop({
     accept: ItemTypes.SLIDE,
@@ -39,11 +39,12 @@ const Slide = ({index, title, subtitle,id, changeSlideOrder}) => {
     })
   })
   const opacity = isDragging ? 0 : 1
+  const border = isActive ? '1px solid blue' : '1px solid #dbdbdb';
   drop(drag(ref))
   return (
     <div>
         <Card
-          ref={ref} style={{opacity}}
+          ref={ref} style={{opacity, border}} onClick={() => setActiveSlide(id)}
         >
           <h1>{title}</h1>
           <h4>{subtitle}</h4>

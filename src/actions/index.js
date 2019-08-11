@@ -24,3 +24,7 @@ export const saveSlide = (slideID, slideData) => ({
     slideID,
     slideData
 })
+
+export const deleteSlide = () => ({
+    type: ActionTypes.DELETE_SLIDE
+})

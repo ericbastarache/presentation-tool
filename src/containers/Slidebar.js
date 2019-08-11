@@ -5,7 +5,8 @@ import Slidebar from '../components/Slidebar'
 
 const mapStateToProps = state => {
     return {
-        slides : state.presentation.slides
+        slides : state.presentation.slides,
+        activeSlide : state.presentation.active_slide
     }
 }
 

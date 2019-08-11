@@ -2,6 +2,7 @@ import Header from '../components/Header'
 import { connect } from 'react-redux'
 import { addSlide } from '../actions/index'
 import { toggleModal } from '../actions/index'
+import { deleteSlide } from '../actions/index'
 
 const mapStateToProps = state => {
     return {
@@ -14,7 +15,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
     addSlide: () => dispatch(addSlide()),
-    toggleModal: () => dispatch(toggleModal())
+    toggleModal: () => dispatch(toggleModal()),
+    deleteSlide: () => dispatch(deleteSlide())
 });
 
 export default connect(

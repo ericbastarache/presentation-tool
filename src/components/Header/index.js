@@ -10,7 +10,7 @@ export default class Header extends React.Component {
         return (
             <Grid container>
                 <Grid item xs={4}>
-                    <Toolbar addSlide={this.props.addSlide} toggleModal={this.props.toggleModal}/>
+                    <Toolbar addSlide={this.props.addSlide} toggleModal={this.props.toggleModal} deleteSlide={this.props.deleteSlide}/>
                 </Grid>
                 <Grid item xs={4}>
                     <Presentationbar toggleModal={this.props.toggleModal} isModalActive={this.props.isModalActive}/>

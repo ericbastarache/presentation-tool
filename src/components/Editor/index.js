@@ -4,14 +4,14 @@ import {
     Grid, Button, ButtonGroup
 } from '@material-ui/core'
 
-const Editor = ({clearCanvas, setBold}) => {
+const Editor = ({clearCanvas, setBold, addText}) => {
     return (
       <Grid item xs={12} md={6}>
         <Grid container spacing={1} direction="column" alignItems="flex-start">
           <Grid item>
-            <ButtonGroup variant="contained" size="small" aria-label="small contained button group">
-              <Button onClick={setBold}>B</Button>
-            </ButtonGroup>
+              <Button onClick={setBold} variant="contained" size="small">B</Button>
+              <Button onClick={addText} variant="contained" size="small" color="primary">Add Text</Button>
+              <Button onClick={clearCanvas} variant="contained" size="small" color="secondary" aria-label="small contained secondary button ">Clear</Button>
           </Grid>
         </Grid>
       </Grid>

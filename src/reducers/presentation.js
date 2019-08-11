@@ -18,7 +18,16 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
     case 'CREATE_SLIDE':
       return Object.assign({}, state, { slides: [...state.slides, {id: uniqid(), presentation_id: initial_active_presentation,title: 'Title', subtitle: 'Subtitle', data:null, position: state.slides.length-1}] });
     case 'DELETE_SLIDE':
-      return state.merge(state, state.update('slides', slides => slides.filter((slide, index) => index !== action.payload.key)));
+        let newState = {...state};
+        let slideToRemove = null;
+        newState.slides.map((slide, index) => {if (slide.id === state.active_slide) slideToRemove = index})
+        let newActiveSlide = null;
+        if (slideToRemove !== 0) {
+          let newActiveSlide = newState.slides[slideToRemove - 1].id;
+        }
+        newState.slides.splice(slideToRemove, 1)
+        newState.active_slide = newActiveSlide;
+        return Object.assign({}, state, { slides: [...newState.slides] });
     case 'SAVE_SLIDE':
       let slides = state.slides.map((slide) => {
         if (slide.id === action.slideID)

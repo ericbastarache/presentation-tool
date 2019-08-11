@@ -23,8 +23,14 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
   }
 
   const setBold = () => {
+    if (canvas.getActiveObject() === undefined || null)
+      return
     canvas.getActiveObject().set('fontWeight', 'bold')
     canvas.renderAll();
+  }
+
+  const addText = () => {
+    canvas.add(new fabric.IText('Edit Me'))
   }
 
   const renderSlideWithoutData = (slide) => {
@@ -93,7 +99,12 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
   return (
     <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border, height: '400px', marginLeft: '20px'}}>
         <Canvas ref={canvasEl}/>
-        <Editor canvas={canvasEl} clearCanvas={clearCanvas} setBold={setBold}/> 
+        <Editor 
+          canvas={canvasEl} 
+          clearCanvas={clearCanvas} 
+          setBold={setBold} 
+          addText={addText}
+        /> 
     </div>
   )
 }
