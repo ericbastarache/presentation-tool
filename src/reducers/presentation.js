@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   presentations: [{id: initial_active_presentation}],
   active_slide: initial_active_slide,
   slides: [{id: initial_active_slide, presentation_id: initial_active_presentation, title: 'Title', subtitle: 'Subtitle', data:null, position: 0}],
+  canvas: null
 };
 
 const presentationReducer = (state = INITIAL_STATE, action) => {

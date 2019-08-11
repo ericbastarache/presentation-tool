@@ -1,36 +1,20 @@
 import React from 'react'
+import { fabric } from 'fabric'
 import { 
-    Select,
-    FormControl,
-    FormHelperText,
-    OutlinedInput,
-    MenuItem,
-    InputLabel
+    Grid, Button, ButtonGroup
 } from '@material-ui/core'
 
-const Editor = () => {
-    const inputLabel = React.createRef(null)
-    const handleChange = () => {
-      console.log('change handled')
-    }
+const Editor = ({clearCanvas, setBold}) => {
     return (
-    <FormControl variant="outlined">
-        <InputLabel ref={inputLabel} htmlFor="outlined-age-simple">
-          Weight
-        </InputLabel>
-        <Select
-        //   value={values.age}
-          onChange={handleChange()}
-          input={<OutlinedInput name="age" id="outlined-age-simple" />}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
+      <Grid item xs={12} md={6}>
+        <Grid container spacing={1} direction="column" alignItems="flex-start">
+          <Grid item>
+            <ButtonGroup variant="contained" size="small" aria-label="small contained button group">
+              <Button onClick={setBold}>B</Button>
+            </ButtonGroup>
+          </Grid>
+        </Grid>
+      </Grid>
     )
 }
 

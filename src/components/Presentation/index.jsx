@@ -4,12 +4,13 @@ import { useDrop } from 'react-dnd'
 import ItemTypes from '../../constants/index'
 import Canvas from '../Canvas'
 import Editor from '../Editor'
+import {Button} from '@material-ui/core'
 
 let canvas = null;
-const canvasEl = React.createRef();
+
 
 const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
-
+  const canvasEl = React.createRef();
   const renderSlideWithData = (slide) => {
     if (slide.data !== null && slide.data) {
       canvas.clear();
@@ -17,6 +18,14 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
     }
   }
 
+  const clearCanvas = () => {
+    canvas.clear()
+  }
+
+  const setBold = () => {
+    canvas.getActiveObject().set('fontWeight', 'bold')
+    canvas.renderAll();
+  }
 
   const renderSlideWithoutData = (slide) => {
       if (slide.data === null) {
@@ -24,13 +33,13 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
         for (let [key, value] of Object.entries(slide)) {
           switch (key) {
             case 'title':
-              canvas.add(new fabric.Text(value))
+              canvas.add(new fabric.IText(value))
             break;
             case 'subtitle':
-              canvas.add(new fabric.Text(value))
+              canvas.add(new fabric.IText(value))
             break;
             case 'id':
-              canvas.add(new fabric.Text(value))
+              canvas.add(new fabric.IText(value))
             break;
             default:
               break;                  
@@ -84,7 +93,7 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
   return (
     <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border, height: '400px', marginLeft: '20px'}}>
         <Canvas ref={canvasEl}/>
-        {/* <Editor /> */}
+        <Editor canvas={canvasEl} clearCanvas={clearCanvas} setBold={setBold}/> 
     </div>
   )
 }
