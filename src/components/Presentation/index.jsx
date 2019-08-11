@@ -5,10 +5,10 @@ import ItemTypes from '../../constants/index'
 import Canvas from '../Canvas'
 import Editor from '../Editor'
 
-var canvas = null
+let canvas = null;
+const canvasEl = React.createRef();
 
 const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
-  const canvasEl = React.createRef();
 
   const renderSlideWithData = (slide) => {
     if (slide.data !== null && slide.data) {
@@ -33,7 +33,7 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
               canvas.add(new fabric.Text(value))
             break;
             default:
-              return                  
+              break;                  
           }
         }
       } else {
@@ -43,11 +43,6 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
 
   React.useEffect(() => {
     canvas = new fabric.Canvas(canvasEl.current)
-    slides.map((slide) => {
-      if (slide.id === activeSlide)
-        renderSlideWithoutData(slide)
-      return
-    })
   },[])
 
   React.useEffect(() =>{
@@ -88,8 +83,8 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
   const border = isOver ? '2px solid green' : '2px solid #0080004f';
   return (
     <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border, height: '400px', marginLeft: '20px'}}>
-        <Canvas />
-        <Editor />
+        <Canvas ref={canvasEl}/>
+        {/* <Editor /> */}
     </div>
   )
 }

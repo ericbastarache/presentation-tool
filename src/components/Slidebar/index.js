@@ -4,23 +4,23 @@ import {
     Grid
   } from '@material-ui/core';
 
-export default class Sidebar extends React.Component {
-
-    render() {
-        const slides = this.props.slides.map((slide, index) => {
+const Slidebar = ({slides, changeSlideOrder}) => {
+    const renderSlides = () => {
+        return slides.map((slide, index) => {
             return <Slide 
-                        key={slide.id} 
-                        index={index} 
-                        title={slide.title} 
-                        subtitle={slide.subtitle} 
-                        id={slide.id} 
-                        changeSlideOrder={this.props.changeSlideOrder}
-                        />
+            key={slide.id} 
+            index={index} 
+            title={slide.title} 
+            subtitle={slide.subtitle} 
+            id={slide.id} 
+            changeSlideOrder={changeSlideOrder}/>
         })
-        return (
-                <Grid item xs={3}>
-                    {slides}
-                </Grid>
-        )
     }
+    return (
+        <Grid item xs={3}>
+            {renderSlides()}
+        </Grid>
+    )
 }
+
+export default Slidebar

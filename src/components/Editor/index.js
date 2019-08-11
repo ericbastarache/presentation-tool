@@ -3,12 +3,15 @@ import {
     Select,
     FormControl,
     FormHelperText,
-    OutlinedInput 
+    OutlinedInput,
+    MenuItem,
+    InputLabel
 } from '@material-ui/core'
 
 const Editor = () => {
-    applyEffect = () => {
-        console.log('effect applied')
+    const inputLabel = React.createRef(null)
+    const handleChange = () => {
+      console.log('change handled')
     }
     return (
     <FormControl variant="outlined">
@@ -17,8 +20,8 @@ const Editor = () => {
         </InputLabel>
         <Select
         //   value={values.age}
-          onChange={handleChange}
-          input={<OutlinedInput labelWidth={labelWidth} name="age" id="outlined-age-simple" />}
+          onChange={handleChange()}
+          input={<OutlinedInput name="age" id="outlined-age-simple" />}
         >
           <MenuItem value="">
             <em>None</em>

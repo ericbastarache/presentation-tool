@@ -5,9 +5,9 @@ import { toggleModal } from '../actions/index'
 
 const mapStateToProps = state => {
     return {
-        slides : state.presentation.get('slides').toJS(),
-        active_presentation: state.presentation.get('active_presentation'),
-        presentations: state.presentation.get('presentations').toJS(),
+        slides : state.presentation.slides,
+        active_presentation: state.presentation.active_presentation,
+        presentations: state.presentation.presentations,
         isModalActive: state.toolbar.isModalActive
     }
 }
