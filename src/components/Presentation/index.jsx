@@ -4,13 +4,14 @@ import { useDrop } from 'react-dnd'
 import ItemTypes from '../../constants/index'
 import Canvas from '../Canvas'
 import Editor from '../Editor'
-import {Button} from '@material-ui/core'
+import Slidebar from '../Slidebar'
+import {Grid} from '@material-ui/core'
 
 let canvas = null;
 
 
-const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
-  const canvasEl = React.createRef();
+const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide, changeSlideOrder}) => {
+  const canvasEl = React.createRef(null);
   const renderSlideWithData = (slide) => {
     if (slide.data !== null && slide.data) {
       canvas.clear();
@@ -23,7 +24,7 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
   }
 
   const setBold = () => {
-    if (canvas.getActiveObject() === undefined || null)
+    if (canvas.getActiveObject() === undefined || canvas.getActiveObject() === null)
       return
     canvas.getActiveObject().set('fontWeight', 'bold')
     canvas.renderAll();
@@ -32,6 +33,28 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
   const addText = () => {
     canvas.add(new fabric.IText('Edit Me'))
   }
+
+  const increaseFontSize = () => {
+    if (canvas.getActiveObject() === undefined || canvas.getActiveObject() === null)
+      return
+    let fontSize = canvas.getActiveObject().get('fontSize')
+    let newFontSize = fontSize + 1;
+    canvas.getActiveObject().set('fontSize', newFontSize)
+    canvas.renderAll()
+  }
+
+  const decreaseFontSize = () => {
+    if (canvas.getActiveObject() === undefined || canvas.getActiveObject() === null)
+      return
+    let fontSize = canvas.getActiveObject().get('fontSize')
+    if (fontSize > 1) {
+      let newFontSize = fontSize - 1;
+      canvas.getActiveObject().set('fontSize', newFontSize)
+      canvas.renderAll()
+    }
+    return
+  }
+  
 
   const renderSlideWithoutData = (slide) => {
       if (slide.data === null) {
@@ -51,9 +74,12 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
               break;                  
           }
         }
-      } else {
-        throw "slide.data is not null"
       }
+  }
+
+  const handleSlideOnClick = (slideID) => {
+    saveSlide(activeSlide, JSON.stringify(canvas))
+    setActiveSlide(slideID)
   }
 
   React.useEffect(() => {
@@ -61,18 +87,19 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
   },[])
 
   React.useEffect(() =>{
-    slides.map((slide) => {
+    if (slides.length === 0) {
+      canvas.clear()
+      return
+    }
+    slides.forEach((slide) => {
       if (slide.id === activeSlide) {
         if (slide.data && typeof slide.data === 'string') {
           renderSlideWithData(slide)
-          return
         }
         if (slide.data === null) {
           renderSlideWithoutData(slide)
-          return
         }
       }
-      return
     })
   }, [activeSlide])
 
@@ -97,15 +124,30 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide}) => {
 
   const border = isOver ? '2px solid green' : '2px solid #0080004f';
   return (
-    <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border, height: '400px', marginLeft: '20px'}}>
-        <Canvas ref={canvasEl}/>
-        <Editor 
-          canvas={canvasEl} 
-          clearCanvas={clearCanvas} 
-          setBold={setBold} 
-          addText={addText}
-        /> 
-    </div>
+    <Grid container>
+      <Grid item xs={4}>
+        <Slidebar
+          changeSlideOrder={changeSlideOrder}
+          setActiveSlide={setActiveSlide}
+          activeSlide={activeSlide}
+          slides={slides}
+          handleSlideOnClick = {handleSlideOnClick}
+        />
+      </Grid>
+      <Grid item xs={8}>
+        <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border, height: '400px', marginLeft: '20px'}}>
+            <Canvas ref={canvasEl}/>
+            <Editor 
+              canvas={canvasEl} 
+              clearCanvas={clearCanvas} 
+              setBold={setBold} 
+              addText={addText}
+              increaseFontSize={increaseFontSize}
+              decreaseFontSize={decreaseFontSize}
+            /> 
+        </div>
+      </Grid>
+  </Grid>
   )
 }
 

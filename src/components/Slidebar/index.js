@@ -1,10 +1,7 @@
 import React from 'react'
 import Slide from '../Slide'
-import {
-    Grid
-  } from '@material-ui/core';
 
-const Slidebar = ({slides, changeSlideOrder, setActiveSlide, activeSlide}) => {
+const Slidebar = ({slides, changeSlideOrder, setActiveSlide, activeSlide, handleSlideOnClick}) => {
     const renderSlides = () => {
         return slides.map((slide, index) => {
             let isActive = (slide.id === activeSlide) ? true : false;
@@ -15,15 +12,15 @@ const Slidebar = ({slides, changeSlideOrder, setActiveSlide, activeSlide}) => {
             subtitle={slide.subtitle} 
             id={slide.id} 
             changeSlideOrder={changeSlideOrder}
-            setActiveSlide={setActiveSlide}
             isActive={isActive}
+            handleSlideOnClick={() => handleSlideOnClick(slide.id)}
             />
         })
     }
     return (
-        <Grid item xs={3}>
+        <>
             {renderSlides()}
-        </Grid>
+        </>
     )
 }
 

@@ -10,28 +10,42 @@ const INITIAL_STATE = {
   presentations: [{id: initial_active_presentation}],
   active_slide: initial_active_slide,
   slides: [{id: initial_active_slide, presentation_id: initial_active_presentation, title: 'Title', subtitle: 'Subtitle', data:null, position: 0}],
-  canvas: null
 };
 
 const presentationReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'CREATE_SLIDE':
-      return Object.assign({}, state, { slides: [...state.slides, {id: uniqid(), presentation_id: initial_active_presentation,title: 'Title', subtitle: 'Subtitle', data:null, position: state.slides.length-1}] });
+      let newSlideID = uniqid();
+      if (state.slides.length === 0) {
+        return Object.assign({}, state, { active_slide: newSlideID, slides: [...state.slides, {id: newSlideID, presentation_id: initial_active_presentation,title: 'Title', subtitle: 'Subtitle', data:null, position: state.slides.length-1}] });  
+      } else {
+        return Object.assign({}, state, { slides: [...state.slides, {id: newSlideID, presentation_id: initial_active_presentation,title: 'Title', subtitle: 'Subtitle', data:null, position: state.slides.length-1}] });
+      }
     case 'DELETE_SLIDE':
         let newState = {...state};
         let slideToRemove = null;
-        newState.slides.map((slide, index) => {if (slide.id === state.active_slide) slideToRemove = index})
-        let newActiveSlide = null;
+        newState.slides.forEach((slide, index) => {if (slide.id === state.active_slide) slideToRemove = index})
+        newState.active_slide = null;
+        //update active_slide as long as not all slides have bene deleted
         if (slideToRemove !== 0) {
-          let newActiveSlide = newState.slides[slideToRemove - 1].id;
+          newState.slides.forEach((slide, index) => {
+            if (index === (slideToRemove - 1))
+              newState.active_slide = slide.id
+          })
         }
         newState.slides.splice(slideToRemove, 1)
-        newState.active_slide = newActiveSlide;
-        return Object.assign({}, state, { slides: [...newState.slides] });
+
+        if (slideToRemove === 0) {
+          if (newState.slides.length > 0)
+            newState.active_slide = newState.slides[0].id
+        }
+
+        return Object.assign({}, state, { slides: [...newState.slides], active_slide: newState.active_slide });
     case 'SAVE_SLIDE':
       let slides = state.slides.map((slide) => {
-        if (slide.id === action.slideID)
+        if (slide.id === action.slideID) {
           slide.data = action.slideData
+        }
         return slide;
       });
       return {...state, slides:slides}
