@@ -6,12 +6,21 @@ import Canvas from '../Canvas'
 import Editor from '../Editor'
 import Slidebar from '../Slidebar'
 import Header from '../Header'
+import Welcome from '../Welcome'
 import {Grid} from '@material-ui/core'
 import { EditorContextProvider } from '../Editor/context'
 
 let canvas = null; 
 
-const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide, changeSlideOrder}) => {
+const Presentation = ({
+                      slides, 
+                      activeSlide, 
+                      saveSlide, 
+                      setActiveSlide, 
+                      changeSlideOrder, 
+                      presentations,
+                      createPresentation
+                    }) => {
   const canvasEl = React.createRef(null);
    
   const canvasObj = () => {
@@ -91,9 +100,9 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide, changeSli
     })
   })
 
-  const border = isOver ? '2px solid green' : '2px solid #0080004f';
   return (
     <Grid container>
+      <Welcome isModalOpen={(!!presentations) ? true : false} createPresentation={createPresentation}/>
       <Header />
         <Grid item xs={4}>
           <Slidebar
@@ -105,14 +114,14 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide, changeSli
           />
         </Grid>
         <Grid item xs={8}>
-          <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border, height: '400px', marginLeft: '20px'}}>
+          <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border:  isOver ? '2px solid green' : '2px solid #0080004f', height: '400px', marginLeft: '20px'}}>
               <Canvas ref={canvasEl}/>
               <EditorContextProvider canvasObj={canvasObj}>
                 <Editor /> 
               </EditorContextProvider>
           </div>
         </Grid>
-  </Grid>
+    </Grid>
   )
 }
 

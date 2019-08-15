@@ -28,3 +28,12 @@ export const saveSlide = (slideID, slideData) => ({
 export const deleteSlide = () => ({
     type: ActionTypes.DELETE_SLIDE
 })
+
+export const logIn = (token) => ({
+    type: ActionTypes.LOG_IN,
+    token
+})
+
+export const createPresentation = () => ({
+    type: ActionTypes.CREATE_PRESENTATION
+})

@@ -1,25 +1,42 @@
+import Immutable, { List } from 'immutable'
 import {
   uniqid
 } from 'lib/helpers';
 
-const initial_active_slide = uniqid();
-const initial_active_presentation = uniqid();
+const INITIAL_STATE = Immutable.fromJS({
+  active_presentation: null,
+  presentations: List([]),
+  active_slide: null,
+  slides: List([])
+})
 
-const INITIAL_STATE = {
-  active_presentation: initial_active_presentation,
-  presentations: [{id: initial_active_presentation}],
-  active_slide: initial_active_slide,
-  slides: [{id: initial_active_slide, presentation_id: initial_active_presentation, title: 'Title', subtitle: 'Subtitle', data:null, position: 0}],
-};
+const newPresentationID = uniqid();
+const newSlideID = uniqid();
 
 const presentationReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case 'CREATE_PRESENTATION':
+      return state.merge(state, state.withMutations(map => {
+        map.set('active_presentation', newPresentationID)
+           .update('presentations', presentations => presentations.push({id: newPresentationID, title: "Title"}))
+           .update('slides', slides => slides.push(
+             {
+               presentationID: newPresentationID, 
+               slide: {
+                 id: newSlideID,
+                 presentationID: newPresentationID,
+                 title: 'Title', 
+                 subtitle: 'Subtitle', 
+                 data:null, 
+                 position: 0
+              }
+            }))
+      }))
     case 'CREATE_SLIDE':
-      let newSlideID = uniqid();
       if (state.slides.length === 0) {
-        return Object.assign({}, state, { active_slide: newSlideID, slides: [...state.slides, {id: newSlideID, presentation_id: initial_active_presentation,title: 'Title', subtitle: 'Subtitle', data:null, position: state.slides.length-1}] });  
+        return Object.assign({}, state, { active_slide: newSlideID, slides: [...state.slides, {id: newSlideID, presentation_id: state.active_presentation,title: 'Title', subtitle: 'Subtitle', data:null, position: state.slides.length-1}] });  
       } else {
-        return Object.assign({}, state, { slides: [...state.slides, {id: newSlideID, presentation_id: initial_active_presentation,title: 'Title', subtitle: 'Subtitle', data:null, position: state.slides.length-1}] });
+        return Object.assign({}, state, { slides: [...state.slides, {id: newSlideID, presentation_id: state.active_presentation,title: 'Title', subtitle: 'Subtitle', data:null, position: state.slides.length-1}] });
       }
     case 'DELETE_SLIDE':
         let newState = {...state};
