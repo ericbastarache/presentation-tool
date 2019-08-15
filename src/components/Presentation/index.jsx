@@ -5,12 +5,18 @@ import ItemTypes from '../../constants/index'
 import Canvas from '../Canvas'
 import Editor from '../Editor'
 import Slidebar from '../Slidebar'
+import Header from '../Header'
 import {Grid} from '@material-ui/core'
-import { CanvasContextProvider } from './context'
+import { EditorContextProvider } from '../Editor/context'
+
+let canvas = null; 
 
 const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide, changeSlideOrder}) => {
   const canvasEl = React.createRef(null);
-  let canvas = null;  
+   
+  const canvasObj = () => {
+    return canvas
+  }
 
   const renderSlideWithData = (slide) => {
     if (slide.data !== null && slide.data) {
@@ -18,43 +24,6 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide, changeSli
       canvas.loadFromJSON(JSON.parse(slide.data))
     }
   }
-
-  const clearCanvas = () => {
-    canvas.clear()
-  }
-
-  const setBold = () => {
-    if (canvas.getActiveObject() === undefined || canvas.getActiveObject() === null)
-      return
-    canvas.getActiveObject().set('fontWeight', 'bold')
-    canvas.renderAll();
-  }
-
-  const addText = () => {
-    canvas.add(new fabric.IText('Edit Me'))
-  }
-
-  const increaseFontSize = () => {
-    if (canvas.getActiveObject() === undefined || canvas.getActiveObject() === null)
-      return
-    let fontSize = canvas.getActiveObject().get('fontSize')
-    let newFontSize = fontSize + 1;
-    canvas.getActiveObject().set('fontSize', newFontSize)
-    canvas.renderAll()
-  }
-
-  const decreaseFontSize = () => {
-    if (canvas.getActiveObject() === undefined || canvas.getActiveObject() === null)
-      return
-    let fontSize = canvas.getActiveObject().get('fontSize')
-    if (fontSize > 1) {
-      let newFontSize = fontSize - 1;
-      canvas.getActiveObject().set('fontSize', newFontSize)
-      canvas.renderAll()
-    }
-    return
-  }
-  
 
   const renderSlideWithoutData = (slide) => {
       if (slide.data === null) {
@@ -125,7 +94,7 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide, changeSli
   const border = isOver ? '2px solid green' : '2px solid #0080004f';
   return (
     <Grid container>
-      <CanvasContextProvider canvas={canvas} test={'test'}>
+      <Header />
         <Grid item xs={4}>
           <Slidebar
             changeSlideOrder={changeSlideOrder}
@@ -138,17 +107,11 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide, changeSli
         <Grid item xs={8}>
           <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border, height: '400px', marginLeft: '20px'}}>
               <Canvas ref={canvasEl}/>
-              <Editor 
-                canvas={canvasEl} 
-                clearCanvas={clearCanvas} 
-                setBold={setBold} 
-                addText={addText}
-                increaseFontSize={increaseFontSize}
-                decreaseFontSize={decreaseFontSize}
-              /> 
+              <EditorContextProvider canvasObj={canvasObj}>
+                <Editor /> 
+              </EditorContextProvider>
           </div>
         </Grid>
-      </CanvasContextProvider>
   </Grid>
   )
 }

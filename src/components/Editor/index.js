@@ -2,20 +2,21 @@ import React from 'react'
 import { 
     Grid, Button, ButtonGroup
 } from '@material-ui/core'
-import { CanvasContext } from '../Presentation/context'
+import { EditorContext } from './context'
 
-const Editor = ({clearCanvas, setBold, addText, increaseFontSize, decreaseFontSize}) => {
-  const canvasContext = React.useContext(CanvasContext)
+
+const Editor = ({}) => {
+   const canvas = React.useContext(EditorContext)
     return (
       <Grid item xs={12} md={6}>
         <Grid container spacing={1} direction="column" alignItems="flex-start">
           <Grid item>
-              <Button onClick={setBold} variant="contained" size="small">B</Button>
-              <Button onClick={addText} variant="contained" size="small" color="primary">Add Text</Button>
-              <Button onClick={canvasContext.clearCanvas} variant="contained" size="small" color="secondary" aria-label="small contained secondary button ">Click me to Test Context</Button>
+              <Button onClick={canvas.toggleBold} variant="contained" size="small">B</Button>
+              <Button onClick={canvas.addText} variant="contained" size="small" color="primary">Add Text</Button>
+              <Button onClick={canvas.clearCanvas} variant="contained" size="small" color="secondary" aria-label="small contained secondary button ">Clear</Button>
               <ButtonGroup>
-                <Button size="small" onClick={increaseFontSize}>+</Button>
-                <Button size="small" onClick={decreaseFontSize}>-</Button>
+                <Button size="small" onClick={() => canvas.toggleFontSize('increase')}>+</Button>
+                <Button size="small" onClick={() => canvas.toggleFontSize('decrease')}>-</Button>
               </ButtonGroup>
           </Grid>
         </Grid>
