@@ -6,12 +6,12 @@ import Canvas from '../Canvas'
 import Editor from '../Editor'
 import Slidebar from '../Slidebar'
 import {Grid} from '@material-ui/core'
-
-let canvas = null;
-
+import { CanvasContextProvider } from './context'
 
 const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide, changeSlideOrder}) => {
   const canvasEl = React.createRef(null);
+  let canvas = null;  
+
   const renderSlideWithData = (slide) => {
     if (slide.data !== null && slide.data) {
       canvas.clear();
@@ -125,28 +125,30 @@ const Presentation = ({slides, activeSlide, saveSlide, setActiveSlide, changeSli
   const border = isOver ? '2px solid green' : '2px solid #0080004f';
   return (
     <Grid container>
-      <Grid item xs={4}>
-        <Slidebar
-          changeSlideOrder={changeSlideOrder}
-          setActiveSlide={setActiveSlide}
-          activeSlide={activeSlide}
-          slides={slides}
-          handleSlideOnClick = {handleSlideOnClick}
-        />
-      </Grid>
-      <Grid item xs={8}>
-        <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border, height: '400px', marginLeft: '20px'}}>
-            <Canvas ref={canvasEl}/>
-            <Editor 
-              canvas={canvasEl} 
-              clearCanvas={clearCanvas} 
-              setBold={setBold} 
-              addText={addText}
-              increaseFontSize={increaseFontSize}
-              decreaseFontSize={decreaseFontSize}
-            /> 
-        </div>
-      </Grid>
+      <CanvasContextProvider canvas={canvas} test={'test'}>
+        <Grid item xs={4}>
+          <Slidebar
+            changeSlideOrder={changeSlideOrder}
+            setActiveSlide={setActiveSlide}
+            activeSlide={activeSlide}
+            slides={slides}
+            handleSlideOnClick = {handleSlideOnClick}
+          />
+        </Grid>
+        <Grid item xs={8}>
+          <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border, height: '400px', marginLeft: '20px'}}>
+              <Canvas ref={canvasEl}/>
+              <Editor 
+                canvas={canvasEl} 
+                clearCanvas={clearCanvas} 
+                setBold={setBold} 
+                addText={addText}
+                increaseFontSize={increaseFontSize}
+                decreaseFontSize={decreaseFontSize}
+              /> 
+          </div>
+        </Grid>
+      </CanvasContextProvider>
   </Grid>
   )
 }
