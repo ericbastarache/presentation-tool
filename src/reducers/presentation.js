@@ -10,12 +10,11 @@ const INITIAL_STATE = Immutable.fromJS({
   slides: List([])
 })
 
-const newPresentationID = uniqid();
-const newSlideID = uniqid();
-
 const presentationReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'CREATE_PRESENTATION':
+      let newPresentationID = uniqid();
+      let newSlideID = uniqid();
       return state.merge(state, state.withMutations(map => {
         map.set('active_presentation', newPresentationID)
            .update('presentations', presentations => presentations.push({id: newPresentationID, title: "Title"}))
@@ -33,7 +32,7 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
             }))
       }))
     case 'SET_ACTIVE_PRESENTATION':
-      return state.merge(state, state.update('active_presentation', action.id))
+      return state.merge(state, state.set('active_presentation', action.id))
     case 'SET_PRESENTATION_TITLE':
       let index = state.get('presentations').findIndex(presentation => presentation.id === action.id)
       return state.merge(state, state.update('presentations', presentations => 

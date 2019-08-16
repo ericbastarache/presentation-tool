@@ -8,7 +8,8 @@ import { addSlide,
         toggleModal, 
         deleteSlide, 
         setActivePresentation,
-        setPresentationTitle
+        setPresentationTitle,
+        createPresentation
         }  from '../../actions/index'
 
 
@@ -19,7 +20,9 @@ const Header = ({
                     isModalActive, 
                     presentations, 
                     activePresentation,
-                    setPresentationTitle
+                    setPresentationTitle,
+                    createPresentation,
+                    setActivePresentation
                 }) => {
     return (
         <Grid container>
@@ -33,6 +36,8 @@ const Header = ({
                     presentations={presentations} 
                     activePresentation={activePresentation}
                     setPresentationTitle={setPresentationTitle}
+                    createPresentation={createPresentation}
+                    setActivePresentation={setActivePresentation}
                 />
             </Grid>
             <Grid item xs={4}>
@@ -56,7 +61,8 @@ const mapDispatchToProps = (dispatch) => ({
     toggleModal: () => dispatch(toggleModal()),
     deleteSlide: () => dispatch(deleteSlide()),
     setActivePresentation: (id) => dispatch(setActivePresentation(id)),
-    setPresentationTitle: (id, title) => dispatch(setPresentationTitle(id, title))
+    setPresentationTitle: (id, title) => dispatch(setPresentationTitle(id, title)),
+    createPresentation: () => dispatch(createPresentation())
 });
 
 export default connect(

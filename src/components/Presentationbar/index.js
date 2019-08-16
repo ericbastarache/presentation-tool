@@ -8,48 +8,49 @@ import {
   Card,
   Typography,
   Tooltip,
-  makeStyles,
-  TextField
+  Radio,
+  TextField,
+  makeStyles 
 } from '@material-ui/core';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    color: '#4B8DF8'
+  },
+  radio: {
+    '&$checked': {
+    },
+    color: '#ffffff'
+  },
+  checked: {}
+}));
 
 const Presentationbar = ({toggleModal, 
                           isModalActive, 
                           presentations, 
                           activePresentation, 
                           setActivePresentation,
-                          setPresentationTitle
+                          setPresentationTitle,
+                          createPresentation
                         }) => {
-  const [ isTextFieldVisible, setTextFieldVisibility] = React.useState(false)
-  const [ isTitleVisible, setTitleVisibility] = React.useState(true)
-
-  const handleOnClick = (event) => {
-    event.stopPropagation()
-    setTitleVisibility(false)
-    setTextFieldVisibility(true)
-  }
-
+  const classes = useStyles();
   const handleChange = (event, id) => {
     setPresentationTitle(id, event.target.value)
   }
 
-  const handleOnBlur = () => {
-    setTextFieldVisibility(false)
-    setTitleVisibility(true)
-  }
 
   const renderPresentations = () => {
     let presentationsToRender = new Array()
     presentations.forEach((presentation, index) => {
       if (presentation.id === activePresentation) {
         presentationsToRender.push(
-        <Grid item xs={3} style={{padding: '22px'}} key={presentation.id} onClick={(event) => handleOnClick(event)}>
-          <Card style={{border: '2px solid #4285f4', padding: '60px 0'}} raised={true}>
+        <Grid item xs={3} style={{padding: '22px'}} key={presentation.id}> 
+          <Card style={{border: '2px solid #4285f4', padding: '60px 20px'}} raised={true}>
             <Tooltip title="Edit" placement="bottom">
               <Typography 
                 variant="h3" 
                 align="center"
-                onClick={(event) => handleOnClick(event)} 
-                style={{display: (isTitleVisible) ? 'block' : 'none'}}>
+                >
                 {presentation.title}
               </Typography>
             </Tooltip>
@@ -57,26 +58,34 @@ const Presentationbar = ({toggleModal,
               <TextField
                   id={"title-" + index}
                   label="Title"
-                  style={{display: (!isTextFieldVisible) ? 'none' : 'inline-flex'}}
                   value={presentation.title}
                   onChange={(event) => handleChange(event, presentation.id)}
-                  onBlur={() => handleOnBlur()}
+                  style={{marginTop: '30px'}}
                 />
             </Grid>
           </Card>
+          <Grid container justify="center">
+            <Radio
+              checked={true}
+              value={presentation.id}
+              color="primary"
+              name={"select-presentation-"+presentation.id}
+              inputProps={{ 'aria-label': 'select-presentation' }}
+              classes={{root: classes.radio, checked: classes.checked}}
+            />
+          </Grid>
         </Grid>
         )  
       } 
       else {
         presentationsToRender.push(
-          <Grid item xs={3} style={{padding: '22px'}} key={presentation.id} onClick={() => setActivePresentation(presentation.id)}>
+          <Grid item xs={3} style={{padding: '22px'}} key={presentation.id}>
           <Card style={{border: '2px solid #ffffff', padding: '60px 0'}} raised={false}>
             <Tooltip title="Edit" placement="bottom">
               <Typography 
                 variant="h3" 
                 align="center"
-                onClick={(event) => handleOnClick(event)} 
-                style={{display: (isTitleVisible) ? 'block' : 'none'}}>
+                >
                 {presentation.title}
               </Typography>
             </Tooltip>
@@ -84,13 +93,23 @@ const Presentationbar = ({toggleModal,
               <TextField
                   id={"title-" + index}
                   label="Title"
-                  style={{display: (!isTextFieldVisible) ? 'none' : 'inline-flex'}}
                   value={presentation.title}
+                  style={{marginTop: '30px'}}
                   onChange={(event) => handleChange(event, presentation.id)}
-                  onBlur={() => handleOnBlur()}
                 />
             </Grid>
           </Card>
+          <Grid container justify="center">
+            <Radio
+              checked={false}
+              onChange={() => setActivePresentation(presentation.id)}
+              value={presentation.id}
+              color="secondary"
+              name={"select-presentation-"+presentation.id}
+              inputProps={{ 'aria-label': 'select-presentation' }}
+              classes={{root: classes.radio, checked: classes.checked}}
+            />
+          </Grid>
         </Grid>
         )
       }
@@ -102,13 +121,18 @@ const Presentationbar = ({toggleModal,
       return (
         <Grid item xs={12}>
           <Dialog fullScreen open={isModalActive}>
-            <AppBar>
-              <ToolBar>
+            <AppBar style={{backgroundColor: '#1976d2'}}>
+              <ToolBar style={{justifyContent: "space-between"}}>
+                <Button variant="contained" color="primary" onClick={() => createPresentation()}>
+                  Add Presentation
+                </Button>
                 <Button variant="contained" color="secondary" onClick={toggleModal}>
                   X
                 </Button>
               </ToolBar>
-              {renderPresentations()}
+              <Grid container>
+                {renderPresentations()}
+              </Grid>
             </AppBar>
           </Dialog>
         </Grid>
