@@ -32,6 +32,14 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
               }
             }))
       }))
+    case 'SET_ACTIVE_PRESENTATION':
+      return state.merge(state, state.update('active_presentation', action.id))
+    case 'SET_PRESENTATION_TITLE':
+      let index = state.get('presentations').findIndex(presentation => presentation.id === action.id)
+      return state.merge(state, state.update('presentations', presentations => 
+                                      presentations.update(
+                                      index, (presentation) => {return {...presentation, title: action.title}})
+                                      ))
     case 'CREATE_SLIDE':
       if (state.slides.length === 0) {
         return Object.assign({}, state, { active_slide: newSlideID, slides: [...state.slides, {id: newSlideID, presentation_id: state.active_presentation,title: 'Title', subtitle: 'Subtitle', data:null, position: state.slides.length-1}] });  

@@ -102,17 +102,17 @@ const Presentation = ({
 
   return (
     <Grid container>
-      <Welcome isModalOpen={(!!presentations) ? true : false} createPresentation={createPresentation}/>
+      <Welcome isModalOpen={(presentations.length === 0) ? true : false} createPresentation={createPresentation}/>
       <Header />
-        <Grid item xs={4}>
-          <Slidebar
-            changeSlideOrder={changeSlideOrder}
-            setActiveSlide={setActiveSlide}
-            activeSlide={activeSlide}
-            slides={slides}
-            handleSlideOnClick = {handleSlideOnClick}
-          />
-        </Grid>
+      <Grid item xs={4}>
+        <Slidebar
+          changeSlideOrder={changeSlideOrder}
+          setActiveSlide={setActiveSlide}
+          activeSlide={activeSlide}
+          slides={slides}
+          handleSlideOnClick = {handleSlideOnClick}
+        />
+      </Grid>
         <Grid item xs={8}>
           <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border:  isOver ? '2px solid green' : '2px solid #0080004f', height: '400px', marginLeft: '20px'}}>
               <Canvas ref={canvasEl}/>

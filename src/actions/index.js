@@ -37,3 +37,14 @@ export const logIn = (token) => ({
 export const createPresentation = () => ({
     type: ActionTypes.CREATE_PRESENTATION
 })
+
+export const setActivePresentation = (id) => ({
+    type: ActionTypes.SET_ACTIVE_PRESENTATION,
+    id
+})
+
+export const setPresentationTitle = (id, title) => ({
+    type: ActionTypes.SET_PRESENTATION_TITLE,
+    id,
+    title
+})
