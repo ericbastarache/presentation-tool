@@ -1,7 +1,6 @@
 import Presentation from '../components/Presentation'
 import { saveSlide } from '../actions'
 import { setActiveSlide } from '../actions'
-import { changeSlideOrder } from '../actions'
 import { createPresentation } from '../actions'
 import { connect } from 'react-redux'
 
@@ -16,7 +15,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
     saveSlide: (slideID, slideData) => dispatch(saveSlide(slideID, slideData)),
     setActiveSlide: (slideID) => dispatch(setActiveSlide(slideID)),
-    changeSlideOrder: (selectedSlide, hoverSlide) => dispatch(changeSlideOrder(selectedSlide, hoverSlide)),
     createPresentation: () => dispatch(createPresentation())
 });
 

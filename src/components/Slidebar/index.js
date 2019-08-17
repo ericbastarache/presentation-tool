@@ -1,19 +1,13 @@
 import React from 'react'
 import Slide from '../Slide'
 
-const Slidebar = ({slides, changeSlideOrder, setActiveSlide, activeSlide, handleSlideOnClick}) => {
+const Slidebar = ({slides}) => {
     const renderSlides = () => {
         return slides.map((slide, index) => {
-            let isActive = (slide.id === activeSlide) ? true : false;
             return <Slide 
-            key={slide.id} 
+            key={index} 
             index={index} 
-            title={slide.title} 
-            subtitle={slide.subtitle} 
-            id={slide.id} 
-            changeSlideOrder={changeSlideOrder}
-            isActive={isActive}
-            handleSlideOnClick={() => handleSlideOnClick(slide.id)}
+            slide={slide}
             />
         })
     }

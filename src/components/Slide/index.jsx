@@ -4,9 +4,21 @@ import {
 } from '@material-ui/core';
 import ItemTypes from '../../constants/index'
 import { useDrag, useDrop } from 'react-dnd'
+import { connect } from 'react-redux'
+import { 
+  setActiveSlide,  
+  changeSlideOrder,
+  saveSlide,
+} from '../../actions'
+import { SlideContext } from './context'
 
-const Slide = ({index, title, subtitle,id, changeSlideOrder, setActiveSlide, isActive, handleSlideOnClick}) => {
+const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) => {
   const ref = React.useRef(null);
+  const canvas = React.useContext(SlideContext)
+  const handleClick = () => {
+    saveSlide(activeSlide, canvas.getCanvas().toJSON())
+    setActiveSlide(slide.id)
+  }
   const [, drop] = useDrop({
     accept: ItemTypes.SLIDE,
     hover(item, monitor) {
@@ -39,20 +51,33 @@ const Slide = ({index, title, subtitle,id, changeSlideOrder, setActiveSlide, isA
     })
   })
   const opacity = isDragging ? 0 : 1
-  const border = isActive ? '1px solid blue' : '1px solid #dbdbdb';
+  const border = (slide.id === activeSlide) ? '1px solid blue' : '1px solid #dbdbdb';
   drop(drag(ref))
   return (
     <div>
         <Card
-          ref={ref} style={{opacity, border}} onClick={ handleSlideOnClick}
+          ref={ref} style={{opacity, border}} onClick={() => handleClick()}
         >
-          <h1>{title}</h1>
-          <h4>{subtitle}</h4>
           <h5>Position: {index}</h5>
-          <h5>ID: {id}</h5>
+          <h5>ID: {slide.id}</h5>
         </Card>
       </div>
   )
 }
 
-export default Slide;
+const mapStateToProps = state => {
+  return {
+    activeSlide: state.presentation.active_slide
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  setActiveSlide: (slideID) => dispatch(setActiveSlide(slideID)),
+  changeSlideOrder: (selectedSlide, hoverSlide) => dispatch(changeSlideOrder(selectedSlide, hoverSlide)),
+});
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Slide)
