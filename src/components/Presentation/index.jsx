@@ -19,7 +19,7 @@ const Presentation = ({
                       saveSlide, 
                       setActiveSlide, 
                       presentations,
-                      createPresentation
+                      getNewPresentation
                     }) => {
   const canvasEl = React.createRef(null);
   const canvasObj = () => {
@@ -96,7 +96,7 @@ const Presentation = ({
 
   return (
     <Grid container>
-      <Welcome isModalOpen={(presentations.length === 0) ? true : false} createPresentation={createPresentation}/>
+      <Welcome isModalOpen={(presentations.length === 0) ? true : false} getNewPresentation={getNewPresentation}/>
       <Header />
       <Grid item xs={4}>
       <SlideContextProvider canvasObj={canvasObj}>

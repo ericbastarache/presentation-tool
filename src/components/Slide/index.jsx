@@ -17,7 +17,7 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
   const canvas = React.useContext(SlideContext)
   const handleClick = () => {
     saveSlide(activeSlide, canvas.getCanvas().toJSON())
-    setActiveSlide(slide.id)
+    setActiveSlide(slide._id)
   }
   const [, drop] = useDrop({
     accept: ItemTypes.SLIDE,
@@ -51,7 +51,7 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
     })
   })
   const opacity = isDragging ? 0 : 1
-  const border = (slide.id === activeSlide) ? '1px solid blue' : '1px solid #dbdbdb';
+  const border = (slide._id === activeSlide) ? '1px solid blue' : '1px solid #dbdbdb';
   drop(drag(ref))
   return (
     <div>
@@ -59,7 +59,7 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
           ref={ref} style={{opacity, border}} onClick={() => handleClick()}
         >
           <h5>Position: {index}</h5>
-          <h5>ID: {slide.id}</h5>
+          <h5>ID: {slide._id}</h5>
         </Card>
       </div>
   )

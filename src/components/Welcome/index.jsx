@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const Welcome = ({isModalOpen, createPresentation}) => {
+const Welcome = ({isModalOpen, getNewPresentation}) => {
     const classes = useStyles();
     return (
         <div className={classes.modal}>
@@ -31,7 +31,7 @@ const Welcome = ({isModalOpen, createPresentation}) => {
                 <DialogContent>Please create a new presentation or login to continue.</DialogContent>
                 <DialogActions className={classes.dialogActions}>
                     <div className={classes.buttonDiv}>
-                        <Button variant="contained" color="primary" className={classes.button} onClick={createPresentation}>
+                        <Button variant="contained" color="primary" className={classes.button} onClick={getNewPresentation}>
                             New Presentation
                         </Button>
                     </div>
