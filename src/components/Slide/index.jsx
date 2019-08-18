@@ -67,7 +67,7 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
 
 const mapStateToProps = state => {
   return {
-    activeSlide: state.presentation.active_slide
+    activeSlide: state.presentation.get('active_slide')
   }
 }
 

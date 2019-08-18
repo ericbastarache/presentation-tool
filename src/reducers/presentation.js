@@ -16,6 +16,7 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'CREATE_PRESENTATION':
       let newPresentationID = uniqid();
+      let newSlideID = uniqid();
       return state.merge(state, state.withMutations(map => {
         map.set('active_presentation', newPresentationID)
           .update('presentations', presentations => presentations.push({
@@ -25,12 +26,13 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
           .update('slides', slides => slides.push({
             presentationID: newPresentationID,
             slides: [{
-              id: uniqid(),
+              id: newSlideID,
               presentationID: newPresentationID,
               data: null,
               position: 0
             }]
           }))
+          .set('active_slide', newSlideID)
       }))
     case 'SET_ACTIVE_PRESENTATION':
       return state.merge(state, state.set('active_presentation', action.id))
@@ -109,13 +111,16 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
           ...state, active_slide: action.slideID
         }
         case 'CHANGE_SLIDE_ORDER':
-          let newSlideOrder = [...state.slides];
+          let newSlideOrder = state.get('slides').get(state.get('slides').findIndex(slide => slide.presentationID === state.get('active_presentation'))).slides
           let dragSlide = newSlideOrder[action.selectedSlide];
           newSlideOrder.splice(action.selectedSlide, 1);
           newSlideOrder.splice(action.hoverSlide, 0, dragSlide);
-          return Object.assign({}, state, {
-            slides: newSlideOrder
-          });
+          return state.merge(state, state.update('slides', slides =>
+            slides.update(
+              state.get('slides').findIndex(slide => slide.presentationID === state.get('active_presentation')), (slide) => {
+                return {...slide, slides: newSlideOrder}
+              })
+          ))
         default:
           return state;
   }
