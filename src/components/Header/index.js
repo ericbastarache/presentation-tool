@@ -4,7 +4,7 @@ import Toolbar from '../Toolbar/index'
 import Presentationbar from '../Presentationbar/index'
 import User from '../User/index'
 import { connect } from 'react-redux'
-import { addSlide, 
+import { getNewSlide, 
         toggleModal, 
         deleteSlide, 
         setActivePresentation,
@@ -14,7 +14,7 @@ import { addSlide,
 
 
 const Header = ({
-                    addSlide, 
+                    getNewSlide, 
                     toggleModal, 
                     deleteSlide, 
                     isModalActive, 
@@ -27,7 +27,12 @@ const Header = ({
     return (
         <Grid container>
             <Grid item xs={4}>
-                <Toolbar addSlide={addSlide} toggleModal={toggleModal} deleteSlide={deleteSlide}/>
+                <Toolbar 
+                    activePresentation={activePresentation} 
+                    getNewSlide={getNewSlide} 
+                    toggleModal={toggleModal} 
+                    deleteSlide={deleteSlide}
+                />
             </Grid>
             <Grid item xs={4}>
                 <Presentationbar 
@@ -57,7 +62,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addSlide: () => dispatch(addSlide()),
+    getNewSlide: (activePresentation) => dispatch(getNewSlide(activePresentation)),
     toggleModal: () => dispatch(toggleModal()),
     deleteSlide: () => dispatch(deleteSlide()),
     setActivePresentation: (id) => dispatch(setActivePresentation(id)),

@@ -3,10 +3,10 @@ import {
   Button
 } from '@material-ui/core';
 
-const Toolbar = ({addSlide, deleteSlide, toggleModal}) => {
+const Toolbar = ({getNewSlide, deleteSlide, toggleModal, activePresentation}) => {
   return (
     <div>
-      <Button variant="contained" size="small" onClick={addSlide}>
+      <Button variant="contained" size="small" onClick={() => getNewSlide(activePresentation)}>
         Add Slide
       </Button>
       <Button variant="contained" size="small" onClick={deleteSlide}>

@@ -5,15 +5,12 @@ import {
   takeLatest
 } from 'redux-saga/effects';
 import * as ActionTypes from '../types'
-
-const HEADERS = {
-  'Accept': 'application/json',
-  'Content-Type': 'application/json'
-}
+import * as Api from './api'
 
 function* rootSaga() {
   yield all([
-    watchPresentationCreation()
+    watchPresentationCreation(),
+    watchSlideCreation()
   ])
 }
 
@@ -21,28 +18,25 @@ function* watchPresentationCreation() {
   yield takeLatest(ActionTypes.GET_NEW_PRESENTATION, requestNewPresentation)
 }
 
-const getNewPresentation = () => {
-  const data = fetch(process.env.REACT_APP_PRESENTATION_ENDPOINT + '/presentations/create', {
-    method: 'POST',
-    headers: HEADERS,
-    body: JSON.stringify({
-      title: "Title",
-      slides: [
-        {data : null }
-      ]
-    })
-  }).then(res => res.json()).catch(err => {
-    throw err
-  })
-  return data
+function* watchSlideCreation() {
+  yield takeLatest(ActionTypes.GET_NEW_SLIDE, requestNewSlide)
+}
+
+function* requestNewSlide(action) {
+  try {
+    const presentation = yield call(() => Api.getNewSlide(action.presentationID))
+    yield put({ type: ActionTypes.CREATE_SLIDE, presentation});
+  } catch (error) {
+    throw error
+  }
 }
 
 function* requestNewPresentation() {
   try {
-    const presentation = yield call(getNewPresentation)
+    const presentation = yield call(Api.getNewPresentation)
     yield put({ type: ActionTypes.CREATE_PRESENTATION, presentation });
   } catch (error) {
-    throw new error
+    throw error
   }
 }
 

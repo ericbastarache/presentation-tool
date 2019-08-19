@@ -1,7 +1,13 @@
 import * as ActionTypes from '../types'
 
-export const addSlide = () => ({
-    type: ActionTypes.CREATE_SLIDE
+export const createSlide = (slide) => ({
+    type: ActionTypes.CREATE_SLIDE,
+    slide
+})
+
+export const getNewSlide = (presentationID) => ({
+    type: ActionTypes.GET_NEW_SLIDE,
+    presentationID
 })
 
 export const changeSlideOrder = (selectedSlide, hoverSlide) => ({

@@ -1,9 +1,6 @@
 import Immutable, {
   List
 } from 'immutable'
-import {
-  uniqid
-} from 'lib/helpers';
 
 const INITIAL_STATE = Immutable.fromJS({
   active_presentation: null,
@@ -34,26 +31,28 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
           })
       ))
     case 'CREATE_SLIDE':
-      return state.merge(state,
-        state.update('slides', slides =>
-          slides.update(
-            state.get('slides').findIndex(slides =>
-              slides.presentationID === state.get('active_presentation')),
-              slides => {
-                return {
-                  ...slides,
-                  slides: [
-                    ...slides.slides,
-                    {
-                    id: uniqid(),
-                    presentationID: state.get('active_presentation'),
-                    data: null,
-                    position: 'test'  
-                    }
-                  ]
-                }
-              }
-          )))
+      return state.merge(state, state.set('slides', List(action.presentation.slides.slides)))
+
+      // return state.merge(state,
+      //   state.update('slides', slides =>
+      //     slides.update(
+      //       state.get('slides').findIndex(slides =>
+      //         slides.presentationID === state.get('active_presentation')),
+      //         slides => {
+      //           return {
+      //             ...slides,
+      //             slides: [
+      //               ...slides.slides,
+      //               {
+      //               id: uniqid(),
+      //               presentationID: state.get('active_presentation'),
+      //               data: null,
+      //               position: 'test'  
+      //               }
+      //             ]
+      //           }
+      //         }
+      //     )))
     case 'DELETE_SLIDE':
       let newState = {
         ...state
@@ -98,16 +97,16 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
           ...state, active_slide: action.slideID
         }
         case 'CHANGE_SLIDE_ORDER':
-          let newSlideOrder = state.get('slides').get(state.get('slides').findIndex(slide => slide.presentationID === state.get('active_presentation'))).slides
-          let dragSlide = newSlideOrder[action.selectedSlide];
-          newSlideOrder.splice(action.selectedSlide, 1);
-          newSlideOrder.splice(action.hoverSlide, 0, dragSlide);
-          return state.merge(state, state.update('slides', slides =>
-            slides.update(
-              state.get('slides').findIndex(slide => slide.presentationID === state.get('active_presentation')), (slide) => {
-                return {...slide, slides: newSlideOrder}
-              })
-          ))
+          return state
+          // let newSlideOrder = state.get('slides').toJS()
+          // let dragSlide = newSlideOrder[action.selectedSlide];
+          // newSlideOrder.splice(action.selectedSlide, 1);
+          // newSlideOrder.splice(action.hoverSlide, 0, dragSlide);
+          // return state.merge(state, state.update('slides', slides =>
+          //    slides.update((slide) => {
+          //         return {...slide, slides: List(newSlideOrder)}
+          //      })
+          // ))
         default:
           return state;
   }
