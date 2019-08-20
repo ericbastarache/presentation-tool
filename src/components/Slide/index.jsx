@@ -16,7 +16,7 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
   const ref = React.useRef(null);
   const canvas = React.useContext(SlideContext)
   const handleClick = () => {
-    saveSlide(activeSlide, canvas.getCanvas().toJSON())
+    // saveSlide(activeSlide, canvas.getCanvas().toJSON())
     setActiveSlide(slide._id)
   }
   const [, drop] = useDrop({

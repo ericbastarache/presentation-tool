@@ -1,3 +1,4 @@
+import { INITIAL_SLIDE_DATA } from '../constants'
 const HEADERS = {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
@@ -10,7 +11,7 @@ export const getNewPresentation = () => {
         body: JSON.stringify({
             title: "Title",
             slides: [{
-                slide: {data: JSON.stringify(null)}
+                data: JSON.stringify(INITIAL_SLIDE_DATA)
             }]
         })
     }).then(res => res.json()).catch(err => {
@@ -25,7 +26,7 @@ export const getNewSlide = (presentationID) => {
         headers: HEADERS,
         body: JSON.stringify({
             id: presentationID,
-            data: JSON.stringify(null)
+            data: INITIAL_SLIDE_DATA
         })
     }).then(res => res.json()).catch(err => {
         throw err

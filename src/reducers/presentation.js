@@ -62,21 +62,20 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
         active_slide: newState.active_slide
       });
     case 'SAVE_SLIDE':
-      let slides = state.slides.map((slide) => {
-        if (slide.id === action.slideID) {
-          slide.data = action.slideData
-        }
-        return slide;
-      });
-      return {
-        ...state, slides: slides
-      }
+      return state
+      // let slides = state.slides.map((slide) => {
+      //   if (slide.id === action.slideID) {
+      //     slide.data = action.slideData
+      //   }
+      //   return slide;
+      // });
+      // return {
+      //   ...state, slides: slides
+      // }
       case 'LOAD_PRESENTATION':
         return state.merge(state, state.set('presentation', action.payload));
       case 'SET_ACTIVE_SLIDE':
-        return {
-          ...state, active_slide: action.slideID
-        }
+        return state.merge(state, state.set('active_slide', action.id))
         case 'CHANGE_SLIDE_ORDER':
           let dragSlide = state.get('slides').get(action.dragIndex)
           return state.merge(state, state.set('slides', state.get('slides').delete(action.dragIndex).insert(action.hoverIndex, dragSlide)))

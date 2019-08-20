@@ -16,9 +16,9 @@ export const changeSlideOrder = (dragIndex, hoverIndex) => ({
     hoverIndex
 })
 
-export const setActiveSlide = (slideID) => ({
+export const setActiveSlide = (id) => ({
     type: ActionTypes.SET_ACTIVE_SLIDE,
-    slideID
+    id
 })
 
 export const toggleModal = () => ({
