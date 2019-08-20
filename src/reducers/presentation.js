@@ -13,10 +13,11 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'CREATE_PRESENTATION':
       return state.merge(state, state.withMutations(map => {
-        map.set('active_presentation', action.presentation._id)
-          .update('presentations', presentations => presentations.push(action.presentation))
-          .set('slides', List(action.presentation.slides))
-          .set('active_slide', action.presentation.slides[0]._id)
+        const { presentation } = action.presentation;
+        map.set('active_presentation', presentation._id)
+          .update('presentations', presentations => presentations.push(presentation))
+          .set('slides', List(presentation.slides))
+          .set('active_slide', presentation.slides[0]._id)
       }))
     case 'SET_ACTIVE_PRESENTATION':
       return state.merge(state, state.set('active_presentation', action.id))
