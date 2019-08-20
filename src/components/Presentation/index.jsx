@@ -21,41 +21,27 @@ const Presentation = ({
                       presentations,
                       getNewPresentation
                     }) => {
-  const canvasEl = React.createRef(null);
+  const canvasEl = React.createRef(null)
+  const [canvasWidth, setCanvasWidth] = React.useState(null)
+  const [canvasHeight, setCanvasHeight] = React.useState(null)
   const canvasObj = () => {
     return canvas
   }
 
-  const renderSlideWithData = (slide) => {
-    if (slide.data !== null && slide.data) {
-      canvas.clear();
+  const renderSlide = (slide) => {
+      canvas.clear()
       canvas.loadFromJSON(JSON.parse(slide.data))
-    }
-  }
-
-  const renderSlideWithoutData = (slide) => {
-      if (slide.data === null) {
-        canvas.clear()
-        for (let [key, value] of Object.entries(slide)) {
-          switch (key) {
-            case 'title':
-              canvas.add(new fabric.IText(value))
-            break;
-            case 'subtitle':
-              canvas.add(new fabric.IText(value))
-            break;
-            case 'id':
-              canvas.add(new fabric.IText(value))
-            break;
-            default:
-              break;                  
-          }
-        }
-      }
   }
 
   React.useEffect(() => {
+    const resizeCanvas = () => {
+      let width = document.getElementById('canvasContainer').offsetWidth
+      let height = document.getElementById('canvasContainer').offsetHeight
+      height = width * height / width
+      canvas.setDimensions({width: width, height: height})
+    };
     canvas = new fabric.Canvas(canvasEl.current)
+    resizeCanvas()
   },[])
 
   React.useEffect(() =>{
@@ -64,13 +50,8 @@ const Presentation = ({
       return
     }
     slides.forEach((slide) => {
-      if (slide.id === activeSlide) {
-        if (slide.data && typeof slide.data === 'string') {
-          renderSlideWithData(slide)
-        }
-        if (slide.data === null) {
-          renderSlideWithoutData(slide)
-        }
+      if (slide._id === activeSlide) {
+        renderSlide(slide)
       }
     })
   }, [activeSlide])
@@ -96,6 +77,7 @@ const Presentation = ({
 
   return (
     <Grid container>
+      <>{canvasWidth}</>
       <Welcome isModalOpen={(presentations.length === 0) ? true : false} getNewPresentation={getNewPresentation}/>
       <Header />
       <Grid item xs={4}>
@@ -104,7 +86,7 @@ const Presentation = ({
       </SlideContextProvider>
       </Grid>
         <Grid item xs={8}>
-          <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border:  isOver ? '2px solid green' : '2px solid #0080004f', height: '400px', marginLeft: '20px'}}>
+          <div ref={drop} id="canvasContainer" className="MuiGrid-root MuiGrid-item" style={{border:  isOver ? '2px solid green' : '2px solid #0080004f', height: '400px', marginLeft: '20px', boxSizing: 'content-box'}}>
               <Canvas ref={canvasEl}/>
               <EditorContextProvider canvasObj={canvasObj}>
                 <Editor /> 

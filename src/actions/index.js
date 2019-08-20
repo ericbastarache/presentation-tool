@@ -25,10 +25,18 @@ export const toggleModal = () => ({
     type: ActionTypes.TOGGLE_MODAL
 })
 
-export const saveSlide = (slideID, slideData) => ({
+export const updateSlide = (slideID, presentationID, data) => ({
+    type: ActionTypes.UPDATE_SLIDE,
+    slideID,
+    presentationID,
+    data
+})
+
+export const saveSlide = (slideID, presentationID, data) => ({
     type: ActionTypes.SAVE_SLIDE,
     slideID,
-    slideData
+    presentationID,
+    data
 })
 
 export const deleteSlide = () => ({

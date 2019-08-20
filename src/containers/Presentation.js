@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 const mapStateToProps = state => {
     return {
         slides:      state.presentation.get('slides').toJS(),
-        activeSlide: state.presentation.active_slide,
+        activeSlide: state.presentation.get('active_slide'),
         presentations: state.presentation.get('presentations').toJS()
     }
 }

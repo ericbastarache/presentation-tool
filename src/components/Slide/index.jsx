@@ -9,19 +9,18 @@ import { fabric } from 'fabric'
 import { 
   setActiveSlide,  
   changeSlideOrder,
-  saveSlide,
+  updateSlide,
 } from '../../actions'
 import { SlideContext } from './context'
 
-const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) => {
+const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide, activePresentation, updateSlide}) => {
   const ref = React.useRef(null);
   const canvasEl = React.createRef(null);
   const canvas = React.useContext(SlideContext)
   const [src, setSrc] = React.useState(null)
 
   const handleClick = () => {
-    // saveSlide(activeSlide, canvas.getCanvas().toJSON())
-    console.log(canvas.getCanvas().toDataURL())
+    updateSlide(activeSlide, activePresentation, canvas.getCanvas().toJSON())
     setActiveSlide(slide._id)
   }
   const [, drop] = useDrop({
@@ -61,7 +60,7 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
   return (
     <div>
         <Card ref={ref} style={{opacity, border}} onClick={() => handleClick()}>
-          <img src={slide.thumbnail} alt="slide thumbnail"/>
+          <img src={slide.thumbnail} style={{width: '100%', height: 'auto'}} alt="slide thumbnail"/>
         </Card>
       </div>
   )
@@ -69,13 +68,15 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
 
 const mapStateToProps = state => {
   return {
-    activeSlide: state.presentation.get('active_slide')
+    activeSlide: state.presentation.get('active_slide'),
+    activePresentation: state.presentation.get('active_presentation')
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   setActiveSlide: (slideID) => dispatch(setActiveSlide(slideID)),
   changeSlideOrder: (dragIndex, hoverIndex) => dispatch(changeSlideOrder(dragIndex, hoverIndex)),
+  updateSlide: (slideID, presentationID, data) => dispatch(updateSlide(slideID, presentationID, data))
 });
 
 
