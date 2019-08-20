@@ -25,7 +25,20 @@ export const getNewSlide = (presentationID) => {
         headers: HEADERS,
         body: JSON.stringify({
             id: presentationID,
-            data: null
+            data: JSON.stringify(null)
+        })
+    }).then(res => res.json()).catch(err => {
+        throw err
+    })
+    return data
+}
+
+export const getLastSlide = (presentationID) => {
+    const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/last_slide`, {
+        method: 'POST',
+        headers: HEADERS,
+        body: JSON.stringify({
+            id: presentationID,
         })
     }).then(res => res.json()).catch(err => {
         throw err

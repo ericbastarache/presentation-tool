@@ -52,7 +52,7 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
   })
   const opacity = isDragging ? 0 : 1
   const border = (slide._id === activeSlide) ? '1px solid blue' : '1px solid #dbdbdb';
-  drop(drag(ref))
+  drag(drop(ref))
   return (
     <div>
         <Card
@@ -73,7 +73,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
   setActiveSlide: (slideID) => dispatch(setActiveSlide(slideID)),
-  changeSlideOrder: (selectedSlide, hoverSlide) => dispatch(changeSlideOrder(selectedSlide, hoverSlide)),
+  changeSlideOrder: (dragIndex, hoverIndex) => dispatch(changeSlideOrder(dragIndex, hoverIndex)),
 });
 
 

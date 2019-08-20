@@ -21,8 +21,9 @@ export function* watchSlideCreation() {
 
 export function* requestNewSlide(action) {
   try {
-    const presentation = yield call(() => Api.getNewSlide(action.presentationID))
-    yield put({ type: CREATE_SLIDE, presentation});
+    yield call(() => Api.getNewSlide(action.presentationID))
+    const slide = yield call(() => Api.getLastSlide(action.presentationID))
+    yield put({ type: CREATE_SLIDE, slide});
   } catch (error) {
     throw error
   }

@@ -5,7 +5,7 @@ const Slidebar = ({slides}) => {
     const renderSlides = () => {
         return slides.map((slide, index) => {
             return <Slide 
-            key={index} 
+            key={slide._id} 
             index={index} 
             slide={slide}
             />

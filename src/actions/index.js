@@ -10,10 +10,10 @@ export const getNewSlide = (presentationID) => ({
     presentationID
 })
 
-export const changeSlideOrder = (selectedSlide, hoverSlide) => ({
+export const changeSlideOrder = (dragIndex, hoverIndex) => ({
     type: ActionTypes.CHANGE_SLIDE_ORDER,
-    selectedSlide,
-    hoverSlide
+    dragIndex,
+    hoverIndex
 })
 
 export const setActiveSlide = (slideID) => ({
