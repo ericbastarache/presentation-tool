@@ -4,7 +4,7 @@ const HEADERS = {
 }
 
 export const getNewPresentation = () => {
-    const data = fetch(process.env.REACT_APP_PRESENTATION_ENDPOINT + '/presentations/create', {
+    const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/presentations/create`, {
         method: 'POST',
         headers: HEADERS,
         body: JSON.stringify({
@@ -20,7 +20,7 @@ export const getNewPresentation = () => {
 }
 
 export const getNewSlide = (presentationID) => {
-    const data = fetch(process.env.REACT_APP_PRESENTATION_ENDPOINT + '/slides/create', {
+    const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/slides/create`, {
         method: 'POST',
         headers: HEADERS,
         body: JSON.stringify({
