@@ -5,6 +5,7 @@ import {
 import ItemTypes from '../../constants/index'
 import { useDrag, useDrop } from 'react-dnd'
 import { connect } from 'react-redux'
+import { fabric } from 'fabric'
 import { 
   setActiveSlide,  
   changeSlideOrder,
@@ -14,9 +15,13 @@ import { SlideContext } from './context'
 
 const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) => {
   const ref = React.useRef(null);
+  const canvasEl = React.createRef(null);
   const canvas = React.useContext(SlideContext)
+  const [src, setSrc] = React.useState(null)
+
   const handleClick = () => {
     // saveSlide(activeSlide, canvas.getCanvas().toJSON())
+    console.log(canvas.getCanvas().toDataURL())
     setActiveSlide(slide._id)
   }
   const [, drop] = useDrop({
@@ -55,11 +60,8 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
   drag(drop(ref))
   return (
     <div>
-        <Card
-          ref={ref} style={{opacity, border}} onClick={() => handleClick()}
-        >
-          <h5>Position: {index}</h5>
-          <h5>ID: {slide._id}</h5>
+        <Card ref={ref} style={{opacity, border}} onClick={() => handleClick()}>
+          <img src={slide.thumbnail} alt="slide thumbnail"/>
         </Card>
       </div>
   )
