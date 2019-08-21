@@ -40,7 +40,7 @@ const Presentationbar = ({toggleModal,
 
 
   const renderPresentations = () => {
-    let presentationsToRender = new Array()
+    let presentationsToRender = [];
     presentations.forEach((presentation, index) => {
       if (presentation.id === activePresentation) {
         presentationsToRender.push(

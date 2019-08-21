@@ -8,6 +8,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import reducers from 'reducers';
 import sagas from 'sagas';
+import './i18n';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -17,7 +18,7 @@ const store = createStore(
   reducers,
   compose (
   applyMiddleware(...middleware),
-  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() // debug for redux store, please keep it for now, we will disable it when we have a production push ready
   )
 );
 
