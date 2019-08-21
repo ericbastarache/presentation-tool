@@ -3,10 +3,6 @@ import { Dialog, DialogActions, Button, DialogTitle, DialogContent} from '@mater
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
-    modal: {
-        borderRadius: '4px',
-        border: '2px solid #1976d2'
-    },
     dialogActions: {
         display: 'flex',
         flexDirection: 'column',
@@ -25,8 +21,8 @@ const useStyles = makeStyles(theme => ({
 const Welcome = ({isModalOpen, getNewPresentation}) => {
     const classes = useStyles();
     return (
-        <div className={classes.modal}>
-            <Dialog open={isModalOpen}>
+        <div>
+            <Dialog open={isModalOpen} disableScrollLock={true} style={{ padding: '0px 0px 0px 0px' }}>
                 <DialogTitle id="alert-dialog-title">Welcome!</DialogTitle>
                 <DialogContent>Please create a new presentation or login to continue.</DialogContent>
                 <DialogActions className={classes.dialogActions}>

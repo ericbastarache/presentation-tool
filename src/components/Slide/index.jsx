@@ -10,9 +10,17 @@ import {
   changeSlideOrder,
   updateSlide,
 } from '../../actions'
+import { makeStyles } from '@material-ui/core/styles';
 import { SlideContext } from 'components/Slide/context';
 
+const useStyles = makeStyles(theme => ({
+  slide: {
+    margin: theme.spacing(1)
+  }
+}));
+
 const Slide = ({index, slide, refs, changeSlideOrder, setActiveSlide, activeSlide, activePresentation, updateSlide}) => {
+  const classes = useStyles();
   const ref = React.useRef(null);
   const canvas = React.useContext(SlideContext)
   const {
@@ -93,11 +101,11 @@ const Slide = ({index, slide, refs, changeSlideOrder, setActiveSlide, activeSlid
     })
   })
   const opacity = isDragging ? 0 : 1
-  const border = (slide._id === activeSlide) ? '1px solid blue' : '1px solid #dbdbdb';
+  const border = (slide._id === activeSlide) ? '1px solid #42a5f5' : '1px solid #dbdbdb';
   drag(drop(ref))
   return (
     <div>
-        <Card ref={ref} style={{opacity, border}} onClick={() => handleClick()}>
+        <Card className={classes.slide} ref={ref} style={{opacity, border}} onClick={() => handleClick()}>
           <img ref={refs} id={activeSlide} src={slide.thumbnail} style={{width: '100%', height: 'auto'}} alt="slide thumbnail"/>
         </Card>
       </div>

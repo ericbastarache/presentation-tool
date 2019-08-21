@@ -42,9 +42,9 @@ const Presentationbar = ({toggleModal,
   const renderPresentations = () => {
     let presentationsToRender = [];
     presentations.forEach((presentation, index) => {
-      if (presentation.id === activePresentation) {
+      if (presentation._id === activePresentation) {
         presentationsToRender.push(
-        <Grid item xs={3} style={{padding: '22px'}} key={presentation.id}> 
+        <Grid item xs={3} style={{padding: '22px'}} key={presentation._id}> 
           <Card style={{border: '2px solid #4285f4', padding: '60px 20px'}} raised={true}>
             <Tooltip title="Edit" placement="bottom">
               <Typography 
@@ -59,7 +59,7 @@ const Presentationbar = ({toggleModal,
                   id={"title-" + index}
                   label="Title"
                   value={presentation.title}
-                  onChange={(event) => handleChange(event, presentation.id)}
+                  onChange={(event) => handleChange(event, presentation._id)}
                   style={{marginTop: '30px'}}
                 />
             </Grid>

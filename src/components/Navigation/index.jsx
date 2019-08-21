@@ -141,7 +141,7 @@ const Navigation = () => {
   );
 
   return (
-    <div className={classes.grow}>
+    <div>
       <AppBar position="static">
         <Toolbar>
           <IconButton

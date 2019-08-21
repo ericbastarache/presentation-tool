@@ -1,17 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Navigation from 'components/Navigation';
-
 import Editor from 'pages/Editor';
 // import Home from 'pages/Home';
 import Login from 'pages/Login';
 
+const style = {
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100vh',
+  overflow: 'hidden'
+}
 
 class App extends React.Component {
-
   render() {
     return (
-        <div className="App">
+        <div className="App" style={style}>
           <Router>
             <>
               <Navigation />
