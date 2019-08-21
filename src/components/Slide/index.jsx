@@ -35,6 +35,7 @@ const Slide = ({index, slide, refs, changeSlideOrder, setActiveSlide, activeSlid
       })
     }
   }
+  
   React.useEffect(() => {
     canvasObj.on('object:modified', () => {
       handleUpdateThumbnail();

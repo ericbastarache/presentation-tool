@@ -40,15 +40,17 @@ const useStyles = makeStyles(theme => ({
 const Presentation = ({
   slides,
   activeSlide,
-  saveSlide,
+  activePresentation,
+  updateSlide,
   setActiveSlide,
   presentations,
-  getNewPresentation
+  getNewPresentation,
 }) => {
   const classes = useStyles();
   const canvasEl = React.createRef(null)
   const [canvasWidth, setCanvasWidth] = React.useState(null)
   const [canvasHeight, setCanvasHeight] = React.useState(null)
+
   const canvasObj = () => {
     return canvas
   }
@@ -97,10 +99,21 @@ const Presentation = ({
       if (monitor.didDrop())
         return
 
-      saveSlide(activeSlide, JSON.stringify(canvas))
+      const getThumbnail = () => {
+        return new Promise(resolve => {
+          resolve(canvas.toDataURL({format: 'png',quality: 0.8}));
+        });
+      }      
+      const updateSlideWithThumbnail = async () => {
+        const thumbnail = await getThumbnail()
+        updateSlide(activeSlide, activePresentation, canvas.toJSON(), thumbnail)
+      }
+      updateSlideWithThumbnail()
+
+
       slides.map((slide, index) => {
         if (index === item.index) {
-          setActiveSlide(slide.id)
+          setActiveSlide(slide._id)
         }
       })
     },

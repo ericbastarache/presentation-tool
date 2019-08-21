@@ -52,13 +52,14 @@ export const getLastSlide = (presentationID) => {
     return data
 }
 
-export const updateSlide = (slideID, presentationID, slideData) => {
+export const updateSlide = (slideID, presentationID, slideData, thumbnail) => {
     const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/slides/update/${slideID}`, {
         method: 'PUT',
         headers: HEADERS,
         body: JSON.stringify({
             presentation: presentationID,
-            data: slideData
+            data: slideData,
+            thumbnail: thumbnail
         })
     }).then(res => res.json()).catch(err => {
         throw err

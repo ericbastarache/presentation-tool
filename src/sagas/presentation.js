@@ -45,8 +45,9 @@ export function* requestNewPresentation() {
 }
 
 export function* updateSlide(action) {
+  console.log(action)
   try {
-    yield call(() => Api.updateSlide(action.slideID, action.presentationID, action.data))
+    yield call(() => Api.updateSlide(action.slideID, action.presentationID, action.data, action.thumbnail))
     yield put({ type: SAVE_SLIDE, action });
   } catch (error) {
     throw error

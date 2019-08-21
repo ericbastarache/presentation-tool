@@ -62,7 +62,6 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
         active_slide: newState.active_slide
       });
     case 'SAVE_SLIDE':
-      console.log(action)
       return state
       // let slides = state.slides.map((slide) => {
       //   if (slide.id === action.slideID) {

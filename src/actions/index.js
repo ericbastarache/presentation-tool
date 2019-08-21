@@ -25,11 +25,12 @@ export const toggleModal = () => ({
     type: ActionTypes.TOGGLE_MODAL
 })
 
-export const updateSlide = (slideID, presentationID, data) => ({
+export const updateSlide = (slideID, presentationID, data, thumbnail) => ({
     type: ActionTypes.UPDATE_SLIDE,
     slideID,
     presentationID,
-    data
+    data,
+    thumbnail
 })
 
 export const saveSlide = (slideID, presentationID, data) => ({
