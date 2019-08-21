@@ -5,22 +5,60 @@ import {
 import ItemTypes from '../../constants/index'
 import { useDrag, useDrop } from 'react-dnd'
 import { connect } from 'react-redux'
-import { fabric } from 'fabric'
 import { 
   setActiveSlide,  
   changeSlideOrder,
   updateSlide,
 } from '../../actions'
-import { SlideContext } from './context'
+import { SlideContext } from 'components/Slide/context';
 
-const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide, activePresentation, updateSlide}) => {
+const Slide = ({index, slide, refs, changeSlideOrder, setActiveSlide, activeSlide, activePresentation, updateSlide}) => {
   const ref = React.useRef(null);
-  const canvasEl = React.createRef(null);
   const canvas = React.useContext(SlideContext)
-  const [src, setSrc] = React.useState(null)
+  const {
+    canvasObj
+  } = canvas;
+  
+  const handleUpdateThumbnail = async () => {
+    if (!!refs.current && refs.current.id === activeSlide) {
+      return refs.current.src = await canvasObj.toDataURL({
+        format: 'png',
+        quality: 0.8
+      })
+    }
+  }
+  React.useEffect(() => {
+    canvasObj.on('object:modified', () => {
+      handleUpdateThumbnail();
+    });
+
+    canvasObj.on('text:changed', () => {
+      handleUpdateThumbnail();
+    });
+    
+    canvasObj.on('object:added', () => {
+      handleUpdateThumbnail();
+    })
+  });
+
+  /**
+   * Effect to save the active slide automatically every 2 minutes.
+   * 
+   * We need to also add a save button so that the users can choose to save themselves
+   * if they don't want to risk losing work, or alternatively make auto save after every object
+   * deselection and display toast to the user saying "Slide Saved" or something.
+  */
+  React.useEffect(() => {
+    const saveTimeInterval = setInterval(() => {
+      updateSlide(activeSlide, activePresentation, canvasObj.toJSON());
+    }, 120000);
+    return () => {
+      clearInterval(saveTimeInterval);
+    }
+  }, []);
+
 
   const handleClick = () => {
-    updateSlide(activeSlide, activePresentation, canvas.getCanvas().toJSON())
     setActiveSlide(slide._id)
   }
   const [, drop] = useDrop({
@@ -60,7 +98,7 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide, act
   return (
     <div>
         <Card ref={ref} style={{opacity, border}} onClick={() => handleClick()}>
-          <img src={slide.thumbnail} style={{width: '100%', height: 'auto'}} alt="slide thumbnail"/>
+          <img ref={refs} id={activeSlide} src={slide.thumbnail} style={{width: '100%', height: 'auto'}} alt="slide thumbnail"/>
         </Card>
       </div>
   )

@@ -1,15 +1,15 @@
 import React from 'react'
 import { fabric } from 'fabric'
 import { useDrop } from 'react-dnd'
-import ItemTypes from '../../constants/index'
-import Canvas from '../Canvas'
-import Editor from '../Editor'
-import Slidebar from '../Slidebar'
-import Header from '../Header'
-import Welcome from '../Welcome'
+import ItemTypes from 'constants/index'
+import Canvas from 'components/Canvas'
+import Editor from 'components/Editor'
+import Slidebar from 'components/Slidebar'
+import Header from 'components/Header'
+import Welcome from 'components/Welcome'
 import {Grid} from '@material-ui/core'
-import { EditorContextProvider } from '../Editor/context'
-import { SlideContextProvider } from '../Slide/context'
+import { EditorContextProvider } from 'components/Editor/context'
+import { SlideContextProvider } from 'components/Slide/context'
 
 let canvas = null; 
 
