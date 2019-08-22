@@ -33,15 +33,13 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: '#f8f9fa'
   },
   padding: {
-    padding : theme.spacing(1)
+    padding: theme.spacing(1)
   }
 }));
 
 const Presentation = ({
   slides,
   activeSlide,
-  activePresentation,
-  updateSlide,
   setActiveSlide,
   presentations,
   getNewPresentation,
@@ -57,7 +55,7 @@ const Presentation = ({
     canvas.clear()
     canvas.loadFromJSON(JSON.parse(slide.data))
   }
-  
+
 
   React.useEffect(() => {
     const resizeCanvas = () => {
@@ -97,20 +95,7 @@ const Presentation = ({
       if (monitor.didDrop())
         return
 
-      const getThumbnail = () => {
-        return new Promise(resolve => {
-          resolve(canvas.toDataURL({format: 'png',quality: 0.8}));
-        });
-      }      
-      const updateSlideWithThumbnail = async () => {
-        const thumbnail = await getThumbnail()
-        updateSlide(activeSlide, activePresentation, canvas.toJSON(), thumbnail)
-      }
-      updateSlideWithThumbnail()
-
-
       slides.forEach((slide, index) => {
-        console.log(slide, index)
         if (index === item.index) {
           setActiveSlide(slide._id)
         }
@@ -123,31 +108,31 @@ const Presentation = ({
   })
 
   return (
-  <>
-    <Grid container>
-      <Welcome isModalOpen={(presentations.length === 0) ? true : false} getNewPresentation={getNewPresentation} />
-      <Header />
-      <Grid item xs={12}>
-        <EditorContextProvider canvasObj={canvasObj}>
-          <Editor />
-        </EditorContextProvider>
+    <>
+      <Grid container>
+        <Welcome isModalOpen={(presentations.length === 0) ? true : false} getNewPresentation={getNewPresentation} />
+        <Header />
+        <Grid item xs={12}>
+          <EditorContextProvider canvasObj={canvasObj}>
+            <Editor />
+          </EditorContextProvider>
+        </Grid>
       </Grid>
-    </Grid>
-    <Grid container className={`${classes.grow} ${classes.height}`}>
+      <Grid container className={`${classes.grow} ${classes.height}`}>
         <Grid item xs={2} className={classes.height}>
-        <div className={`${classes.overflow} ${classes.height}`}>
-          <SlideContextProvider canvasObj={canvasObj}>
-            <Slidebar slides={slides} />
-          </SlideContextProvider>
-        </div>
+          <div className={`${classes.overflow} ${classes.height}`}>
+            <SlideContextProvider canvasObj={canvasObj}>
+              <Slidebar slides={slides} />
+            </SlideContextProvider>
+          </div>
         </Grid>
         <Grid item xs={10} className={classes.padding}>
-          <div ref={drop} id="canvasContainer" className={classes.canvasContainer} style={{ border: isOver ? '2px solid #42a5f5' : '2px solid #bbdefb'}}>
+          <div ref={drop} id="canvasContainer" className={classes.canvasContainer} style={{ border: isOver ? '2px solid #42a5f5' : '2px solid #bbdefb' }}>
             <Canvas ref={canvasEl} />
           </div>
         </Grid>
-    </Grid>
-  </>
+      </Grid>
+    </>
   )
 }
 
