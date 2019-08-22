@@ -58,7 +58,7 @@ export const updateSlide = (slideID, presentationID, slideData, thumbnail) => {
         headers: HEADERS,
         body: JSON.stringify({
             presentation: presentationID,
-            data: slideData,
+            data: JSON.stringify(slideData),
             thumbnail: thumbnail
         })
     }).then(res => res.json()).catch(err => {

@@ -45,10 +45,10 @@ export function* requestNewPresentation() {
 }
 
 export function* updateSlide(action) {
-  console.log(action)
   try {
-    yield call(() => Api.updateSlide(action.slideID, action.presentationID, action.data, action.thumbnail))
-    yield put({ type: SAVE_SLIDE, action });
+    const {slideID, presentationID, data, thumbnail} = action
+    yield call(() => Api.updateSlide(slideID, presentationID, data, thumbnail))
+    yield put({ type: SAVE_SLIDE, slideID, presentationID, data, thumbnail});
   } catch (error) {
     throw error
   }

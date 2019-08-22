@@ -48,8 +48,6 @@ const Presentation = ({
 }) => {
   const classes = useStyles();
   const canvasEl = React.createRef(null)
-  const [canvasWidth, setCanvasWidth] = React.useState(null)
-  const [canvasHeight, setCanvasHeight] = React.useState(null)
 
   const canvasObj = () => {
     return canvas
@@ -111,7 +109,8 @@ const Presentation = ({
       updateSlideWithThumbnail()
 
 
-      slides.map((slide, index) => {
+      slides.forEach((slide, index) => {
+        console.log(slide, index)
         if (index === item.index) {
           setActiveSlide(slide._id)
         }

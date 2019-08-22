@@ -18,13 +18,14 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
   },
 }));
-const SelectInput = ({value, onChange, children}) => {
+const SelectInput = ({value, onChange, onOpen, children}) => {
   const classes = useStyles();
   return (
     <FormControl className={classes.formControl}>
         <Select
           value={value}
           onChange={onChange}
+          onOpen={onOpen}
           inputProps={{
             name: 'font',
             id: 'font-size',

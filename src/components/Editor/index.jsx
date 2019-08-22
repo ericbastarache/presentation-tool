@@ -43,6 +43,7 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
 
   const fontSizeChange = (e) => {
     if (!!canvas.getActiveObject() && canvas.getActiveObject().type === 'i-text') {
+      console.log(canvas.getActiveObject().get('fontSize'))
       setFontSize(e.target.value);
       canvas.getActiveObject().set('fontSize', e.target.value);
       canvas.renderAll();

@@ -62,16 +62,17 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
         active_slide: newState.active_slide
       });
     case 'SAVE_SLIDE':
-      return state
-      // let slides = state.slides.map((slide) => {
-      //   if (slide.id === action.slideID) {
-      //     slide.data = action.slideData
-      //   }
-      //   return slide;
-      // });
-      // return {
-      //   ...state, slides: slides
-      // }
+        const {data, thumbnail} = action
+        return state.merge(state, state.update('slides', slides =>
+        slides.update(
+          state.get('slides').findIndex(slide => slide._id === action.slideID), (slide) => {
+            return {
+              ...slide,
+              data: JSON.stringify(data),
+              thumbnail: thumbnail
+            }
+          })
+      ))
       case 'LOAD_PRESENTATION':
         return state.merge(state, state.set('presentation', action.payload));
       case 'SET_ACTIVE_SLIDE':
