@@ -11,6 +11,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -72,6 +73,10 @@ const useStyles = makeStyles(theme => ({
       display: 'none',
     },
   },
+  brandLink: {
+    textDecoration: 'none',
+    color: '#fff'
+  }
 }));
 
 const Navigation = () => {
@@ -153,7 +158,9 @@ const Navigation = () => {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Presentations
+            <Link className={classes.brandLink} to='/'>
+              Presentations
+            </Link>
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>

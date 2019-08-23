@@ -4,6 +4,7 @@ import Navigation from 'components/Navigation';
 import Editor from 'pages/Editor';
 // import Home from 'pages/Home';
 import Login from 'pages/Login';
+import Registration from 'pages/Registration';
 
 const style = {
   display: 'flex',
@@ -24,6 +25,7 @@ class App extends React.Component {
                 {/* will update this route later when routing is more fleshed out 
               and we don't need to load the editor right away */}
                 <Route exact path='/' component={Editor} />
+                <Route path='/register' component={Registration} />
                 <Route path='/login' component={Login} />
             </>
           </Router>

@@ -6,6 +6,17 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 // not like to use this?
 // have a look at the Quick start guide 
 // for passing in lng and translations on init
+import translationEN from 'locales/en/translation.json';
+import translationFR from 'locales/fr/translation.json';
+
+const resources = {
+  en: {
+    translation: translationEN
+  },
+  fr: {
+    translation: translationFR
+  }
+}
 
 i18n
   // load translation using xhr -> see /public/locales
@@ -19,12 +30,14 @@ i18n
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
+    resources,
     fallbackLng: 'en',
     debug: true,
 
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
-    }
+    },
+    useSuspense: false
   });
 
 

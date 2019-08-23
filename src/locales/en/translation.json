@@ -1,0 +1,14 @@
+{
+  "welcome": {
+    "editor" :"Welcome"
+  },
+  "presentation": {
+    "new": "New Presentation",
+    "create": {
+      "new": "Please create a new presentation or login to continue."
+    }
+  },
+  "login": {
+    "button": "Login"
+  }
+}
