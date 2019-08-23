@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Card
 } from '@material-ui/core';
-import ItemTypes from '../../constants/index'
 import { useDrag, useDrop } from 'react-dnd'
 import { connect } from 'react-redux'
 import { 
@@ -32,7 +31,7 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
   }
 
   const [, drop] = useDrop({
-    accept: ItemTypes.SLIDE,
+    accept: 'SLIDE',
     hover(item, monitor) {
       if (!ref.current) {
         return
@@ -57,7 +56,7 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
     } 
   })
   const [{ isDragging },drag] = useDrag({
-    item: {type: ItemTypes.SLIDE, index},
+    item: {type: 'SLIDE', index},
     collect: monitor => ({
       isDragging: monitor.isDragging()
     })

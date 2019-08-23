@@ -1,7 +1,8 @@
 import { 
-    INITIAL_CANVAS_DATA,
-    INITIAL_CANVAS_THUMBNAIL
-} from '../constants'
+    INITIAL_CANVAS_DATA, 
+    INITIAL_CANVAS_WIDTH, 
+    INITIAL_CANVAS_HEIGHT } from '../constants/canvas'
+import { INITIAL_SLIDE_THUMBNAIL } from '../constants/slide'
 const HEADERS = {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
@@ -15,7 +16,11 @@ export const getNewPresentation = () => {
             title: "Title",
             slides: [{
                 data: JSON.stringify(INITIAL_CANVAS_DATA),
-                thumbnail: INITIAL_CANVAS_THUMBNAIL
+                thumbnail: INITIAL_SLIDE_THUMBNAIL,
+                canvasDimensions: {
+                    height: INITIAL_CANVAS_HEIGHT,
+                    width: INITIAL_CANVAS_WIDTH
+                }
             }]
         })
     }).then(res => res.json()).catch(err => {
@@ -30,8 +35,12 @@ export const getNewSlide = (presentationID) => {
         headers: HEADERS,
         body: JSON.stringify({
             id: presentationID,
-            data: INITIAL_CANVAS_DATA,
-            thumbnail: INITIAL_CANVAS_THUMBNAIL
+            data: JSON.stringify(INITIAL_CANVAS_DATA),
+            thumbnail: INITIAL_SLIDE_THUMBNAIL,
+            canvasDimensions: {
+                height: INITIAL_CANVAS_HEIGHT,
+                width: INITIAL_CANVAS_WIDTH
+            }
         })
     }).then(res => res.json()).catch(err => {
         throw err
@@ -52,14 +61,15 @@ export const getLastSlide = (presentationID) => {
     return data
 }
 
-export const updateSlide = (slideID, presentationID, slideData, thumbnail) => {
+export const updateSlide = (slideID, presentationID, slideData, thumbnail, canvasDimensions) => {
     const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/slides/update/${slideID}`, {
         method: 'PUT',
         headers: HEADERS,
         body: JSON.stringify({
             presentation: presentationID,
             data: JSON.stringify(slideData),
-            thumbnail: thumbnail
+            thumbnail,
+            canvasDimensions
         })
     }).then(res => res.json()).catch(err => {
         throw err
