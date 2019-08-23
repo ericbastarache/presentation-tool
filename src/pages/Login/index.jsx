@@ -1,10 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const Login = () => {
-  return (
-    <h1>Hello World</h1>
-  )
-}
+import LoginComponent from 'components/LoginComponent';
+const Login = () => (
+  <>
+    <LoginComponent />
+  </>
+)
 
 export default Login;

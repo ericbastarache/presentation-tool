@@ -14,6 +14,10 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles(theme => ({
   slide: {
     margin: theme.spacing(1)
+  },
+  slideNumber: {
+    position: 'relative',
+    left: '6px'
   }
 }));
 
@@ -22,7 +26,9 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
   const ref = React.useRef(null);
 
   const handleClick = () => {
-    setActiveSlide(slide._id)
+    if (slide._id !== activeSlide) {
+      setActiveSlide(slide._id)   
+    }
   }
 
   const [, drop] = useDrop({
@@ -64,6 +70,7 @@ const Slide = ({index, slide, changeSlideOrder, setActiveSlide, activeSlide}) =>
         <Card className={classes.slide} ref={ref} style={{opacity, border}} onClick={() => handleClick()}>
           <img src={slide.thumbnail} style={{width: '100%', height: 'auto'}} alt="slide thumbnail"/>
         </Card>
+        <span className={classes.slideNumber}>{index + 1}</span>
       </div>
   )
 }

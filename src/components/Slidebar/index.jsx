@@ -9,7 +9,6 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide }) => {
     const {
         canvasObj
     } = canvas;
-    // const imageRefs = React.useRef(slides.map(() => React.createRef()));
     React.useEffect(() => {
         if (!!canvasObj) {
             const getThumbnail = () => {

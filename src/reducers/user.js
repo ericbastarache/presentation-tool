@@ -1,4 +1,4 @@
-import Immutable, { List } from 'immutable';
+import Immutable from 'immutable';
 
 const INITIAL_STATE = Immutable.fromJS({
   token: null,
