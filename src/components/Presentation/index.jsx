@@ -1,7 +1,6 @@
 import React from 'react'
 import { fabric } from 'fabric'
 import { useDrop } from 'react-dnd'
-import ItemTypes from 'constants/index'
 import Canvas from 'components/Canvas'
 import Editor from 'components/Editor'
 import Slidebar from 'components/Slidebar'
@@ -51,9 +50,26 @@ const Presentation = ({
     return canvas
   }
 
+  const updateSlideWithNewResolution = (canvasObjects, slideWidth) => {
+    if (canvas.width != slideWidth) {
+      let scaleMultiplier = canvas.width / slideWidth
+      var objects = canvasObjects
+        for (var i in objects) {
+            objects[i].scaleX = objects[i].scaleX * scaleMultiplier;
+            objects[i].scaleY = objects[i].scaleY * scaleMultiplier;
+            objects[i].left = objects[i].left * scaleMultiplier;
+            objects[i].top = objects[i].top * scaleMultiplier;
+        }
+      return objects
+    }
+    return false
+  }
+
   const renderSlide = (slide) => {
     canvas.clear()
-    canvas.loadFromJSON(JSON.parse(slide.data))
+    let slideData = JSON.parse(slide.data)
+    updateSlideWithNewResolution(slideData.objects, slide.canvasDimensions.width)
+    canvas.loadFromJSON(slideData)
   }
 
 
@@ -79,6 +95,7 @@ const Presentation = ({
   }, [])
 
   React.useEffect(() => {
+
     if (slides.length === 0) {
       canvas.clear()
       return
@@ -91,7 +108,7 @@ const Presentation = ({
   }, [activeSlide])
 
   const [{ isOver }, drop] = useDrop({
-    accept: ItemTypes.SLIDE,
+    accept: 'SLIDE',
     drop(item, monitor) {
       if (monitor.didDrop())
         return

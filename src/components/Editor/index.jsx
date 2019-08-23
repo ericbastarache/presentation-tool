@@ -148,7 +148,11 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
   }
 
   const addText = () => {
-    canvas.add(new fabric.IText('Edit Me'))
+    let text = new fabric.IText('Edit Me')
+    text.on('dblclick', function(e) {
+      console.log('text changed');
+    });
+    canvas.add(text)
   }
 
   const fontSizeChange = (e) => {
@@ -192,6 +196,7 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
       }
     }
   }
+
   return (
     <Grid item xs={12}>
       <Grid container direction="column" alignItems="flex-start" className={classes.padding}>

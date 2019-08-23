@@ -39,6 +39,9 @@ const Welcome = ({isModalOpen, getNewPresentation}) => {
                         <Button variant="contained" color="primary" className={classes.button} onClick={getNewPresentation}>
                             {t(`presentation.new`)}
                         </Button>
+                        <Button variant="contained" color="primary" className={classes.button} onClick={getNewPresentation}>
+                            New Presentation
+                        </Button>
                     </div>
                     <div className={classes.buttonDiv}>
                         <Button variant="contained" color="secondary" className={classes.button}>
