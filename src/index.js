@@ -9,8 +9,12 @@ import createSagaMiddleware from 'redux-saga';
 import reducers from 'reducers';
 import logger from 'redux-logger';
 import sagas from 'sagas';
+<<<<<<< HEAD
 import i18n from './i18n';
 import i18next from 'i18next';
+=======
+// import i18n from './i18n';
+>>>>>>> 46b91e5... fixed slides proportions when loading on different size canvas
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -33,8 +37,15 @@ i18n.init().then(() => {
   ReactDOM.render(
   <Provider store={store}>
     <App />
-  </Provider>, document.getElementById('root'));
-})
+  </Provider>, document.getElementById('root')
+)
+
+// i18n.init().then(() => {
+//   ReactDOM.render(
+//   <Provider store={store}>
+//     <App />
+//   </Provider>, document.getElementById('root'));
+// })
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

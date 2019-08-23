@@ -18,8 +18,13 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide }) => {
             }
             const updateSlideWithThumbnail = async () => {
                 const thumbnail = await getThumbnail()
-                updateSlide(activeSlide, activePresentation, canvasObj.toJSON(), thumbnail)
+                const canvasDimensions = {
+                    height: canvasObj.height,
+                    width: canvasObj.width
+                }
+                updateSlide(activeSlide, activePresentation, canvasObj.toJSON(), thumbnail, canvasDimensions)
             }
+
             canvasObj.on({ 
                             'object:modified': updateSlideWithThumbnail, 
                             'text:changed': updateSlideWithThumbnail, 
@@ -60,7 +65,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    updateSlide: (slideID, presentationID, data, thumbnail) => dispatch(updateSlide(slideID, presentationID, data, thumbnail))
+    updateSlide: (slideID, presentationID, data, thumbnail, canvasDimensions) => dispatch(updateSlide(slideID, presentationID, data, thumbnail, canvasDimensions))
 })
 
 export default connect(
