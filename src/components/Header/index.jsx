@@ -1,12 +1,9 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import Toolbar from '../Toolbar/index'
 import Presentationbar from '../Presentationbar/index'
-import User from '../User/index'
 import { connect } from 'react-redux'
-import { addSlide, 
+import {
         toggleModal, 
-        deleteSlide, 
         setActivePresentation,
         setPresentationTitle,
         createPresentation
@@ -14,9 +11,7 @@ import { addSlide,
 
 
 const Header = ({
-                    addSlide, 
                     toggleModal, 
-                    deleteSlide, 
                     isModalActive, 
                     presentations, 
                     activePresentation,
@@ -27,9 +22,6 @@ const Header = ({
     return (
         <Grid container>
             <Grid item xs={4}>
-                <Toolbar addSlide={addSlide} toggleModal={toggleModal} deleteSlide={deleteSlide}/>
-            </Grid>
-            <Grid item xs={4}>
                 <Presentationbar 
                     toggleModal={toggleModal} 
                     isModalActive={isModalActive}
@@ -39,9 +31,6 @@ const Header = ({
                     createPresentation={createPresentation}
                     setActivePresentation={setActivePresentation}
                 />
-            </Grid>
-            <Grid item xs={4}>
-                <User/>
             </Grid>
         </Grid>
     )
@@ -57,9 +46,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addSlide: () => dispatch(addSlide()),
     toggleModal: () => dispatch(toggleModal()),
-    deleteSlide: () => dispatch(deleteSlide()),
     setActivePresentation: (id) => dispatch(setActivePresentation(id)),
     setPresentationTitle: (id, title) => dispatch(setPresentationTitle(id, title)),
     createPresentation: () => dispatch(createPresentation())

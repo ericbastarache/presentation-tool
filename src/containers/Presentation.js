@@ -1,21 +1,22 @@
 import Presentation from '../components/Presentation'
-import { saveSlide } from '../actions'
+import { updateSlide } from '../actions'
 import { setActiveSlide } from '../actions'
-import { createPresentation } from '../actions'
+import { getNewPresentation } from '../actions'
 import { connect } from 'react-redux'
 
 const mapStateToProps = state => {
     return {
         slides:      state.presentation.get('slides').toJS(),
-        activeSlide: state.presentation.active_slide,
-        presentations: state.presentation.get('presentations').toJS()
+        activeSlide: state.presentation.get('active_slide'),
+        presentations: state.presentation.get('presentations').toJS(),
+        activePresentation: state.presentation.get('active_presentation')
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    saveSlide: (slideID, slideData) => dispatch(saveSlide(slideID, slideData)),
+    updateSlide: (activeSlide, activePresentation, data, thumbnail) => dispatch(updateSlide(activeSlide, activePresentation, data, thumbnail)),
     setActiveSlide: (slideID) => dispatch(setActiveSlide(slideID)),
-    createPresentation: () => dispatch(createPresentation())
+    getNewPresentation: () => dispatch(getNewPresentation())
 });
 
 export default connect(

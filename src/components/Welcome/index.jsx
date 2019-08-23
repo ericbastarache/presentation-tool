@@ -1,12 +1,10 @@
 import React from 'react'
 import { Dialog, DialogActions, Button, DialogTitle, DialogContent} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
-    modal: {
-        borderRadius: '4px',
-        border: '2px solid #1976d2'
-    },
     dialogActions: {
         display: 'flex',
         flexDirection: 'column',
@@ -19,25 +17,32 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         margin: '5px 0',
         textAlign: 'center'
+    },
+    loginLink: {
+        textDecoration: 'none',
+        color: '#fff',
+        display: 'block',
+        width: '100%'
     }
 }))
 
-const Welcome = ({isModalOpen, createPresentation}) => {
+const Welcome = ({isModalOpen, getNewPresentation}) => {
     const classes = useStyles();
+    const { t, i18n } = useTranslation();
     return (
-        <div className={classes.modal}>
-            <Dialog open={isModalOpen}>
-                <DialogTitle id="alert-dialog-title">Welcome!</DialogTitle>
-                <DialogContent>Please create a new presentation or login to continue.</DialogContent>
+        <div>
+            <Dialog open={isModalOpen} disableScrollLock={true} style={{ padding: '0px 0px 0px 0px' }}>
+                <DialogTitle id="alert-dialog-title">{t(`welcome.editor`)}!</DialogTitle>
+                <DialogContent>{t(`presentation.create.new`)}</DialogContent>
                 <DialogActions className={classes.dialogActions}>
                     <div className={classes.buttonDiv}>
-                        <Button variant="contained" color="primary" className={classes.button} onClick={createPresentation}>
-                            New Presentation
+                        <Button variant="contained" color="primary" className={classes.button} onClick={getNewPresentation}>
+                            {t(`presentation.new`)}
                         </Button>
                     </div>
                     <div className={classes.buttonDiv}>
                         <Button variant="contained" color="secondary" className={classes.button}>
-                            Login
+                            <Link className={classes.loginLink} to='/login'>{t(`login.button`)}</Link>
                         </Button>
                     </div>
                 </DialogActions>

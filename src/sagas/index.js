@@ -1,10 +1,19 @@
-import { all } from 'redux-saga/effects';
+import {
+  all
+} from 'redux-saga/effects';
+import { 
+  watchPresentationCreation,
+  watchSlideCreation,
+  watchSlideUpdate
+} from 'sagas/presentation';
 
 function* rootSaga() {
-  yield console.log('Hello World placeholder');
   yield all([
-    // all the other root sagas from the other sagas files (not here yet)
-  ]);
+    watchPresentationCreation(),
+    watchSlideCreation(),
+    watchSlideUpdate()
+  ])
 }
+
 
 export default rootSaga;

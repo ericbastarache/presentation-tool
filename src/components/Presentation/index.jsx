@@ -1,117 +1,138 @@
 import React from 'react'
 import { fabric } from 'fabric'
 import { useDrop } from 'react-dnd'
-import ItemTypes from '../../constants/index'
-import Canvas from '../Canvas'
-import Editor from '../Editor'
-import Slidebar from '../Slidebar'
-import Header from '../Header'
-import Welcome from '../Welcome'
-import {Grid} from '@material-ui/core'
-import { EditorContextProvider } from '../Editor/context'
-import { SlideContextProvider } from '../Slide/context'
+import ItemTypes from 'constants/index'
+import Canvas from 'components/Canvas'
+import Editor from 'components/Editor'
+import Slidebar from 'components/Slidebar'
+import Header from 'components/Header'
+import Welcome from 'components/Welcome'
+import { Grid } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
+import { EditorContextProvider } from 'components/Editor/context'
+import { SlideContextProvider } from 'components/Slide/context'
 
-let canvas = null; 
+let canvas = null;
+
+const useStyles = makeStyles(theme => ({
+  height: {
+    height: '100%'
+  },
+  grow: {
+    flexGrow: '1'
+  },
+  overflow: {
+    overflow: 'auto'
+  },
+  canvasContainer: {
+    boxSizing: 'border-box',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f8f9fa'
+  },
+  padding: {
+    padding: theme.spacing(1)
+  }
+}));
 
 const Presentation = ({
-                      slides, 
-                      activeSlide, 
-                      saveSlide, 
-                      setActiveSlide, 
-                      presentations,
-                      createPresentation
-                    }) => {
-  const canvasEl = React.createRef(null);
+  slides,
+  activeSlide,
+  setActiveSlide,
+  presentations,
+  getNewPresentation,
+}) => {
+  const classes = useStyles();
+  const canvasEl = React.createRef(null)
+
   const canvasObj = () => {
     return canvas
   }
 
-  const renderSlideWithData = (slide) => {
-    if (slide.data !== null && slide.data) {
-      canvas.clear();
-      canvas.loadFromJSON(JSON.parse(slide.data))
-    }
+  const renderSlide = (slide) => {
+    canvas.clear()
+    canvas.loadFromJSON(JSON.parse(slide.data))
   }
 
-  const renderSlideWithoutData = (slide) => {
-      if (slide.data === null) {
-        canvas.clear()
-        for (let [key, value] of Object.entries(slide)) {
-          switch (key) {
-            case 'title':
-              canvas.add(new fabric.IText(value))
-            break;
-            case 'subtitle':
-              canvas.add(new fabric.IText(value))
-            break;
-            case 'id':
-              canvas.add(new fabric.IText(value))
-            break;
-            default:
-              break;                  
-          }
-        }
-      }
-  }
 
   React.useEffect(() => {
+    const resizeCanvas = () => {
+      let width = document.getElementById('canvasContainer').offsetWidth
+      if (width > 1235)
+        width = 1235
+      //account for border
+      width = width - 32
+      let height = document.getElementById('canvasContainer').offsetHeight
+      height = width * (9 / 16)
+      canvas.setDimensions({ width: width, height: height })
+    };
+    const styleCanvas = () => {
+      document.getElementsByClassName('canvas-container')[0].style.boxShadow = "0 1px 3px 1px rgba(60,64,67,.15)"
+      document.getElementsByClassName('canvas-container')[0].style.backgroundColor = "#ffffff"
+    }
     canvas = new fabric.Canvas(canvasEl.current)
-  },[])
+    resizeCanvas()
+    styleCanvas()
+  }, [])
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     if (slides.length === 0) {
       canvas.clear()
       return
     }
     slides.forEach((slide) => {
-      if (slide.id === activeSlide) {
-        if (slide.data && typeof slide.data === 'string') {
-          renderSlideWithData(slide)
-        }
-        if (slide.data === null) {
-          renderSlideWithoutData(slide)
-        }
+      if (slide._id === activeSlide) {
+        renderSlide(slide)
       }
     })
   }, [activeSlide])
 
-  const [{ isOver, isOverCurrent}, drop] = useDrop({
+  const [{ isOver, isOverCurrent }, drop] = useDrop({
     accept: ItemTypes.SLIDE,
     drop(item, monitor) {
       if (monitor.didDrop())
         return
 
-      saveSlide(activeSlide, JSON.stringify(canvas))
-      slides.map((slide, index) => {
+      slides.forEach((slide, index) => {
         if (index === item.index) {
-          setActiveSlide(slide.id)
+          setActiveSlide(slide._id)
         }
       })
     },
     collect: monitor => ({
       isOver: monitor.isOver(),
-      isOverCurrent: monitor.isOver({ shallow: true})
+      isOverCurrent: monitor.isOver({ shallow: true })
     })
   })
 
   return (
-    <Grid container>
-      <Welcome isModalOpen={(presentations.length === 0) ? true : false} createPresentation={createPresentation}/>
-      <Header />
-      <Grid item xs={4}>
-      <SlideContextProvider canvasObj={canvasObj}>
-        <Slidebar slides={slides}/>
-      </SlideContextProvider>
+    <>
+      <Grid container>
+        <Welcome isModalOpen={(presentations.length === 0) ? true : false} getNewPresentation={getNewPresentation} />
+        <Header />
+        <Grid item xs={12}>
+          <EditorContextProvider canvasObj={canvasObj}>
+            <Editor />
+          </EditorContextProvider>
+        </Grid>
       </Grid>
-        <Grid item xs={8}>
-          <div ref={drop} className="MuiGrid-root MuiGrid-item" style={{border:  isOver ? '2px solid green' : '2px solid #0080004f', height: '400px', marginLeft: '20px'}}>
-              <Canvas ref={canvasEl}/>
-              <EditorContextProvider canvasObj={canvasObj}>
-                <Editor /> 
-              </EditorContextProvider>
+      <Grid container className={`${classes.grow} ${classes.height}`}>
+        <Grid item xs={2} className={classes.height}>
+          <div className={`${classes.overflow} ${classes.height}`}>
+            <SlideContextProvider canvasObj={canvasObj}>
+              <Slidebar slides={slides} />
+            </SlideContextProvider>
           </div>
         </Grid>
-    </Grid>
+        <Grid item xs={10} className={classes.padding}>
+          <div ref={drop} id="canvasContainer" className={classes.canvasContainer} style={{ border: isOver ? '2px solid #42a5f5' : '2px solid #bbdefb' }}>
+            <Canvas ref={canvasEl} />
+          </div>
+        </Grid>
+      </Grid>
+    </>
   )
 }
 

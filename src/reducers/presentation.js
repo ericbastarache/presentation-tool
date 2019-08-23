@@ -1,9 +1,6 @@
 import Immutable, {
   List
 } from 'immutable'
-import {
-  uniqid
-} from 'lib/helpers';
 
 const INITIAL_STATE = Immutable.fromJS({
   active_presentation: null,
@@ -15,22 +12,12 @@ const INITIAL_STATE = Immutable.fromJS({
 const presentationReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'CREATE_PRESENTATION':
-      let newPresentationID = uniqid();
       return state.merge(state, state.withMutations(map => {
-        map.set('active_presentation', newPresentationID)
-          .update('presentations', presentations => presentations.push({
-            id: newPresentationID,
-            title: "Title"
-          }))
-          .update('slides', slides => slides.push({
-            presentationID: newPresentationID,
-            slides: [{
-              id: uniqid(),
-              presentationID: newPresentationID,
-              data: null,
-              position: 0
-            }]
-          }))
+        const { presentation } = action.presentation;
+        map.set('active_presentation', presentation._id)
+          .update('presentations', presentations => presentations.push(presentation))
+          .set('slides', List(presentation.slides))
+          .set('active_slide', presentation.slides[0]._id)
       }))
     case 'SET_ACTIVE_PRESENTATION':
       return state.merge(state, state.set('active_presentation', action.id))
@@ -45,26 +32,8 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
           })
       ))
     case 'CREATE_SLIDE':
-      return state.merge(state,
-        state.update('slides', slides =>
-          slides.update(
-            state.get('slides').findIndex(slides =>
-              slides.presentationID === state.get('active_presentation')),
-              slides => {
-                return {
-                  ...slides,
-                  slides: [
-                    ...slides.slides,
-                    {
-                    id: uniqid(),
-                    presentationID: state.get('active_presentation'),
-                    data: null,
-                    position: 'test'  
-                    }
-                  ]
-                }
-              }
-          )))
+      const { slide } = action.slide
+      return state.merge(state, state.update('slides', slides => slides.push(slide)))
     case 'DELETE_SLIDE':
       let newState = {
         ...state
@@ -93,29 +62,24 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
         active_slide: newState.active_slide
       });
     case 'SAVE_SLIDE':
-      let slides = state.slides.map((slide) => {
-        if (slide.id === action.slideID) {
-          slide.data = action.slideData
-        }
-        return slide;
-      });
-      return {
-        ...state, slides: slides
-      }
+        const {data, thumbnail} = action
+        return state.merge(state, state.update('slides', slides =>
+        slides.update(
+          state.get('slides').findIndex(slide => slide._id === action.slideID), (slide) => {
+            return {
+              ...slide,
+              data: JSON.stringify(data),
+              thumbnail: thumbnail
+            }
+          })
+      ))
       case 'LOAD_PRESENTATION':
         return state.merge(state, state.set('presentation', action.payload));
       case 'SET_ACTIVE_SLIDE':
-        return {
-          ...state, active_slide: action.slideID
-        }
+        return state.merge(state, state.set('active_slide', action.id))
         case 'CHANGE_SLIDE_ORDER':
-          let newSlideOrder = [...state.slides];
-          let dragSlide = newSlideOrder[action.selectedSlide];
-          newSlideOrder.splice(action.selectedSlide, 1);
-          newSlideOrder.splice(action.hoverSlide, 0, dragSlide);
-          return Object.assign({}, state, {
-            slides: newSlideOrder
-          });
+          let dragSlide = state.get('slides').get(action.dragIndex)
+          return state.merge(state, state.set('slides', state.get('slides').delete(action.dragIndex).insert(action.hoverIndex, dragSlide)))
         default:
           return state;
   }

@@ -1,28 +1,43 @@
 import * as ActionTypes from '../types'
 
-export const addSlide = () => ({
-    type: ActionTypes.CREATE_SLIDE
+export const createSlide = (slide) => ({
+    type: ActionTypes.CREATE_SLIDE,
+    slide
 })
 
-export const changeSlideOrder = (selectedSlide, hoverSlide) => ({
+export const getNewSlide = (presentationID) => ({
+    type: ActionTypes.GET_NEW_SLIDE,
+    presentationID
+})
+
+export const changeSlideOrder = (dragIndex, hoverIndex) => ({
     type: ActionTypes.CHANGE_SLIDE_ORDER,
-    selectedSlide,
-    hoverSlide
+    dragIndex,
+    hoverIndex
 })
 
-export const setActiveSlide = (slideID) => ({
+export const setActiveSlide = (id) => ({
     type: ActionTypes.SET_ACTIVE_SLIDE,
-    slideID
+    id
 })
 
 export const toggleModal = () => ({
     type: ActionTypes.TOGGLE_MODAL
 })
 
-export const saveSlide = (slideID, slideData) => ({
+export const updateSlide = (slideID, presentationID, data, thumbnail) => ({
+    type: ActionTypes.UPDATE_SLIDE,
+    slideID,
+    presentationID,
+    data,
+    thumbnail
+})
+
+export const saveSlide = (slideID, presentationID, data) => ({
     type: ActionTypes.SAVE_SLIDE,
     slideID,
-    slideData
+    presentationID,
+    data
 })
 
 export const deleteSlide = () => ({
@@ -34,8 +49,13 @@ export const logIn = (token) => ({
     token
 })
 
-export const createPresentation = () => ({
-    type: ActionTypes.CREATE_PRESENTATION
+export const createPresentation = (presentation) => ({
+    type: ActionTypes.CREATE_PRESENTATION,
+    presentation
+})
+
+export const getNewPresentation = () => ({
+    type: ActionTypes.GET_NEW_PRESENTATION
 })
 
 export const setActivePresentation = (id) => ({

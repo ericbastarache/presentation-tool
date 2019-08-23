@@ -1,0 +1,14 @@
+{
+  "welcome": {
+    "editor": "Bienvenue"
+  },
+  "presentation": {
+    "new": "Nouveau Présentation",
+    "create": {
+      "new": "Veuillez créer une nouvelle présentation ou vous connecter pour continuer."
+    }
+  },
+  "login": {
+    "button": "S'identifier"
+  }
+}
