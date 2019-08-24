@@ -107,13 +107,8 @@ const Presentation = ({
     })
   }, [activeSlide])
 
-<<<<<<< HEAD
   const [{ isOver, isOverCurrent }, drop] = useDrop({
     accept: 'SLIDE',
-=======
-  const [{ isOver }, drop] = useDrop({
-    accept: ItemTypes.SLIDE,
->>>>>>> temp
     drop(item, monitor) {
       if (monitor.didDrop())
         return
