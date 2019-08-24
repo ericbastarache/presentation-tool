@@ -10,6 +10,7 @@ import reducers from 'reducers';
 import logger from 'redux-logger';
 import sagas from 'sagas';
 import i18n from './i18n';
+import i18next from 'i18next';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -24,6 +25,9 @@ const store = createStore(
 );
 
 sagaMiddleware.run(sagas);
+
+// figure out why we need this to stop breaking chrome/firefox/some browser
+i18next.changeLanguage('en');
 
 i18n.init().then(() => {
   ReactDOM.render(

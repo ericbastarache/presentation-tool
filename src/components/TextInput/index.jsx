@@ -23,16 +23,3 @@ const TextInput = (props) => {
 }
 
 export default TextInput;
-
-/*
-<TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-*/

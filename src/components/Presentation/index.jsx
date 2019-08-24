@@ -72,7 +72,8 @@ const Presentation = ({
       document.getElementsByClassName('canvas-container')[0].style.boxShadow = "0 1px 3px 1px rgba(60,64,67,.15)"
       document.getElementsByClassName('canvas-container')[0].style.backgroundColor = "#ffffff"
     }
-    canvas = new fabric.Canvas(canvasEl.current)
+    canvas = new fabric.Canvas(canvasEl.current);
+    canvas.preserveObjectStacking = true;
     resizeCanvas()
     styleCanvas()
   }, [])
@@ -89,7 +90,7 @@ const Presentation = ({
     })
   }, [activeSlide])
 
-  const [{ isOver, isOverCurrent }, drop] = useDrop({
+  const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.SLIDE,
     drop(item, monitor) {
       if (monitor.didDrop())
@@ -105,7 +106,7 @@ const Presentation = ({
       isOver: monitor.isOver(),
       isOverCurrent: monitor.isOver({ shallow: true })
     })
-  })
+  });
 
   return (
     <>

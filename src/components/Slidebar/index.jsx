@@ -1,6 +1,6 @@
 import React from 'react'
-import Slide from '../Slide'
-import { updateSlide } from '../../actions'
+import Slide from 'components/Slide'
+import { updateSlide } from 'actions'
 import { SlideContext } from 'components/Slide/context';
 import { connect } from 'react-redux'
 
@@ -23,7 +23,7 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide }) => {
             canvasObj.on({ 
                             'object:modified': updateSlideWithThumbnail, 
                             'text:changed': updateSlideWithThumbnail, 
-                            'object:added': updateSlideWithThumbnail 
+                            'object:added': updateSlideWithThumbnail,
                         });
             //Remove the event listener when the effect's params have changed
             //when activeSlide or the canvasObj change, the event handlers are destroyed
