@@ -53,8 +53,8 @@ const Presentation = ({
   const updateSlideWithNewResolution = (canvasObjects, slideWidth) => {
     if (canvas.width != slideWidth) {
       let scaleMultiplier = canvas.width / slideWidth
-      var objects = canvasObjects
-        for (var i in objects) {
+      let objects = canvasObjects
+        for (let i in objects) {
             objects[i].scaleX = objects[i].scaleX * scaleMultiplier;
             objects[i].scaleY = objects[i].scaleY * scaleMultiplier;
             objects[i].left = objects[i].left * scaleMultiplier;

@@ -39,9 +39,6 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
 
   const addText = () => {
     let text = new fabric.IText('Edit Me')
-    text.on('dblclick', function(e) {
-      console.log('text changed');
-    });
     canvas.add(text)
   }
 
