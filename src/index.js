@@ -9,7 +9,8 @@ import createSagaMiddleware from 'redux-saga';
 import reducers from 'reducers';
 import logger from 'redux-logger';
 import sagas from 'sagas';
-// import i18n from './i18n';
+import i18n from './i18n';
+import i18next from 'i18next';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -25,18 +26,15 @@ const store = createStore(
 
 sagaMiddleware.run(sagas);
 
-ReactDOM.render(
+// figure out why we need this to stop breaking chrome/firefox/some browser
+i18next.changeLanguage('en');
+
+i18n.init().then(() => {
+  ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>, document.getElementById('root')
 )
-
-// i18n.init().then(() => {
-//   ReactDOM.render(
-//   <Provider store={store}>
-//     <App />
-//   </Provider>, document.getElementById('root'));
-// })
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

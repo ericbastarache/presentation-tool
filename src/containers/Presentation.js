@@ -1,7 +1,7 @@
-import Presentation from '../components/Presentation'
-import { updateSlide } from '../actions'
-import { setActiveSlide } from '../actions'
-import { getNewPresentation } from '../actions'
+import Presentation from 'components/Presentation'
+import { updateSlide } from 'actions'
+import { setActiveSlide } from 'actions'
+import { getNewPresentation } from 'actions'
 import { connect } from 'react-redux'
 
 const mapStateToProps = state => {

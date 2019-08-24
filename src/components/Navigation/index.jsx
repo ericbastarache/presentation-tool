@@ -76,7 +76,12 @@ const useStyles = makeStyles(theme => ({
   brandLink: {
     textDecoration: 'none',
     color: '#fff'
-  }
+  },
+  link: {
+    margin: theme.spacing(1, 1.5),
+    color: '#fff',
+    textDecoration: 'none',
+  },
 }));
 
 const Navigation = () => {
@@ -175,6 +180,17 @@ const Navigation = () => {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
+          <nav>
+            <Link to='/' variant="button" color="textPrimary" href="#" className={classes.link}>
+              Home
+            </Link>
+            <Link to='/templates' variant="button" color="textPrimary" href="#" className={classes.link}>
+              Templates
+            </Link>
+            <Link to='/upgrade' variant="button" color="textPrimary" href="#" className={classes.link}>
+              Pricing
+            </Link>
+          </nav>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton

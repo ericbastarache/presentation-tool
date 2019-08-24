@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 const Welcome = ({isModalOpen, getNewPresentation}) => {
     const classes = useStyles();
-    //const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     return (
         <div>
             <Dialog open={isModalOpen} disableScrollLock={true} style={{ padding: '0px 0px 0px 0px' }}>
