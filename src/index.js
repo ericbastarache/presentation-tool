@@ -29,6 +29,7 @@ sagaMiddleware.run(sagas);
 // figure out why we need this to stop breaking chrome/firefox/some browser
 i18next.changeLanguage('en');
 
+
 i18n.init().then(() => {
   ReactDOM.render(
   <Provider store={store}>

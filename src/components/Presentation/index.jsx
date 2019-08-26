@@ -10,6 +10,10 @@ import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { EditorContextProvider } from 'components/Editor/context'
 import { SlideContextProvider } from 'components/Slide/context'
+import Cookies from 'js-cookie'
+import { uniqid } from 'lib/helpers'
+import { getTempPresentations } from 'sagas/api';
+
 
 let canvas = null;
 
@@ -42,6 +46,9 @@ const Presentation = ({
   setActiveSlide,
   presentations,
   getNewPresentation,
+  getNewTempPresentation,
+  loadTempPresentations,
+  isLoggedIn
 }) => {
   const classes = useStyles();
   const canvasEl = React.createRef(null)
@@ -63,6 +70,21 @@ const Presentation = ({
       return objects
     }
     return false
+  }
+
+  const initPresentations = () => {
+    if (!isLoggedIn) {
+      let tempUserID = Cookies.get('tempUserID')
+      if (!tempUserID) {
+        tempUserID = uniqid()
+        Cookies.set('tempUserID', tempUserID, 1)
+        getNewTempPresentation(tempUserID)
+      } else {
+        loadTempPresentations(tempUserID)
+      }
+    } else {
+      //logic to lead slides from backend
+    }
   }
 
   const renderSlide = (slide) => {
@@ -92,6 +114,7 @@ const Presentation = ({
     canvas.preserveObjectStacking = true;
     resizeCanvas()
     styleCanvas()
+    initPresentations()
   }, [])
 
   React.useEffect(() => {
@@ -128,7 +151,7 @@ const Presentation = ({
   return (
     <>
       <Grid container>
-        <Welcome isModalOpen={(presentations.length === 0) ? true : false} getNewPresentation={getNewPresentation} />
+        {/* <Welcome isModalOpen={(presentations.length === 0) ? true : false} getNewPresentation={getNewPresentation} /> */}
         <Header />
         <Grid item xs={12}>
           <EditorContextProvider canvasObj={canvasObj}>

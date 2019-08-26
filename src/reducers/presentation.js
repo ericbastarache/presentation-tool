@@ -62,20 +62,30 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
         active_slide: newState.active_slide
       });
     case 'SAVE_SLIDE':
-        const {data, thumbnail, canvasDimensions} = action
+        const {data, canvasDimensions} = action
         return state.merge(state, state.update('slides', slides =>
         slides.update(
           state.get('slides').findIndex(slide => slide._id === action.slideID), (slide) => {
             return {
               ...slide,
               data: JSON.stringify(data),
-              thumbnail: thumbnail,
               canvasDimensions: canvasDimensions
             }
           })
       ))
       case 'LOAD_PRESENTATION':
         return state.merge(state, state.set('presentation', action.payload));
+      case 'LOAD_PRESENTATIONS':
+        const presentations = action.presentations
+        const activePresentation = presentations[presentations.length - 1]._id
+        const slides = presentations[presentations.length - 1].slides
+        const activeSlide = slides[0]._id
+        return state.merge(state, state.withMutations(map => {
+          map.set('active_presentation', activePresentation)
+            .set('presentations', List(presentations))
+            .set('slides', List(slides))
+            .set('active_slide', activeSlide)
+        }))
       case 'SET_ACTIVE_SLIDE':
         return state.merge(state, state.set('active_slide', action.id))
         case 'CHANGE_SLIDE_ORDER':

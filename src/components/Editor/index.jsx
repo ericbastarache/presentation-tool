@@ -4,7 +4,8 @@ import {
   IconButton,
   MenuItem,
   Button,
-  Tooltip
+  Tooltip,
+  Link
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -35,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
+const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) => {
   const classes = useStyles();
   const [size, setFontSize] = React.useState(12);
   const [_clipboard, setClipboard] = React.useState(null);
@@ -164,7 +165,6 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
   const sendDirection = (direction) => {
     if (!!canvas.getActiveObject()) {
       if (direction === 'front') {
-        console.log(canvas.getActiveObject().bringToFront());
         canvas.getActiveObject().bringToFront();
         // canvas.renderAll();
       }
@@ -191,6 +191,16 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
           canvas.renderAll()
         }
       }
+    }
+  }
+
+  const saveLink = () => {
+    if (!isLoggedIn) {
+      return (
+        <Link component="button" variant="body1" onClick={() => {alert("I'm a button.")}}>
+          Login to save
+        </Link>    
+      )
     }
   }
 
@@ -281,6 +291,9 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
               <ClearIcon />
             </IconButton>
           </Tooltip>
+          <Tooltip title="Click here to login">
+            {saveLink()}
+          </Tooltip>
         </Grid>
       </Grid>
     </Grid>
@@ -288,7 +301,8 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
 }
 
 const mapStateToProps = state => ({
-  activePresentation : state.presentation.get('active_presentation')
+  activePresentation : state.presentation.get('active_presentation'),
+  isLoggedIn: state.user.get('isLoggedIn')
 })
 
 const mapDispatchToProps = dispatch => ({

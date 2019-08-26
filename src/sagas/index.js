@@ -3,6 +3,8 @@ import {
 } from 'redux-saga/effects';
 import { 
   watchPresentationCreation,
+  watchTempPresentationCreation,
+  watchLoadTempPresentations,
   watchSlideCreation,
   watchSlideUpdate
 } from 'sagas/presentation';
@@ -10,6 +12,8 @@ import {
 function* rootSaga() {
   yield all([
     watchPresentationCreation(),
+    watchTempPresentationCreation(),
+    watchLoadTempPresentations(),
     watchSlideCreation(),
     watchSlideUpdate()
   ])

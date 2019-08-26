@@ -22,7 +22,7 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide }) => {
                     height: canvasObj.height,
                     width: canvasObj.width
                 }
-                updateSlide(activeSlide, activePresentation, canvasObj.toJSON(), thumbnail, canvasDimensions)
+                updateSlide(activeSlide, activePresentation, canvasObj.toJSON(), canvasDimensions)
             }
 
             canvasObj.on({ 
@@ -65,7 +65,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    updateSlide: (slideID, presentationID, data, thumbnail, canvasDimensions) => dispatch(updateSlide(slideID, presentationID, data, thumbnail, canvasDimensions))
+    updateSlide: (slideID, presentationID, data, canvasDimensions) => dispatch(updateSlide(slideID, presentationID, data, canvasDimensions))
 })
 
 export default connect(
