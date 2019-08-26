@@ -10,6 +10,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { GoogleLogin } from 'react-google-login';
+import { logIn } from 'actions'
+import { connect } from 'react-redux'
+import { push } from "connected-react-router";
+
+
 
 import TextInput from 'components/TextInput';
 import useLoginForm from 'hooks/useLoginForm';
@@ -37,11 +43,25 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  glogin: {
+    width: '100%',
+    justifyContent: 'center',
+    fontSize: '0.875rem !important',
+    margin: theme.spacing(1, 0, 2),
+    boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12) !important'
+  }
 }));
 
-const LoginComponent = () => {
+const LoginComponent = ({logIn, push}) => {
   const classes = useStyles();
   const { inputs, handleInputChange, handleSubmit } = useLoginForm();
+
+  const responseGoogle = (response) => {
+    const token = response.Zi.id_token
+    logIn(token)
+    push('/')
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -92,6 +112,14 @@ const LoginComponent = () => {
           >
             Sign In
           </Button>
+          <GoogleLogin
+            clientId="688456308716-0n4h02s30uf3bnsssplskvmnbmfom47g.apps.googleusercontent.com"
+            buttonText="Login with Google"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+            className={classes.glogin}
+          />
           <Grid container>
             <Grid item xs>
               <Link to='/forgot' variant="body2">
@@ -110,4 +138,12 @@ const LoginComponent = () => {
   );
 }
 
-export default LoginComponent;
+const mapDispatchToProps = dispatch => ({
+  logIn: (token) => dispatch(logIn(token)),
+  push: (route) => dispatch(push(route))
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(LoginComponent);

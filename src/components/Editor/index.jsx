@@ -197,9 +197,11 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
   const saveLink = () => {
     if (!isLoggedIn) {
       return (
-        <Link component="button" variant="body1" onClick={() => {alert("I'm a button.")}}>
-          Login to save
-        </Link>    
+        <Tooltip title="Click here to login">
+          <Link variant="body1" href="/login">
+            Login to save
+          </Link>    
+        </Tooltip>
       )
     }
   }
@@ -291,9 +293,7 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
               <ClearIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Click here to login">
-            {saveLink()}
-          </Tooltip>
+          {saveLink()}
         </Grid>
       </Grid>
     </Grid>

@@ -90,7 +90,7 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
         return state.merge(state, state.set('active_slide', action.id))
         case 'CHANGE_SLIDE_ORDER':
           let dragSlide = state.get('slides').get(action.dragIndex)
-          return state.merge(state, state.set('slides', state.get('slides').delete(action.dragIndex).insert(action.hoverIndex, dragSlide)))
+          return state.merge(state, state.set('slides', state.get('slides').delete(action.dragIndex).insert(action.hoverIndex, dragSlide))) 
         default:
           return state;
   }

@@ -73,6 +73,7 @@ const Presentation = ({
   }
 
   const initPresentations = () => {
+    console.log(isLoggedIn)
     if (!isLoggedIn) {
       let tempUserID = Cookies.get('tempUserID')
       if (!tempUserID) {
