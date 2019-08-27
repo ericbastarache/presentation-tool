@@ -11,13 +11,7 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide }) => {
     } = canvas;
     React.useEffect(() => {
         if (!!canvasObj) {
-            const getThumbnail = () => {
-                return new Promise(resolve => {
-                    resolve(canvasObj.toDataURL({ format: 'png', quality: 0.8 }));
-                });
-            }
-            const updateSlideWithThumbnail = async () => {
-                const thumbnail = await getThumbnail()
+            const updateSlideData = async () => {
                 const canvasDimensions = {
                     height: canvasObj.height,
                     width: canvasObj.width
@@ -26,18 +20,18 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide }) => {
             }
 
             canvasObj.on({ 
-                            'object:modified': updateSlideWithThumbnail, 
-                            'text:changed': updateSlideWithThumbnail, 
-                            'object:added': updateSlideWithThumbnail,
+                            'object:modified': updateSlideData, 
+                            'text:changed': updateSlideData, 
+                            'object:added': updateSlideData,
                         });
             //Remove the event listener when the effect's params have changed
             //when activeSlide or the canvasObj change, the event handlers are destroyed
             //so new ones can be initialized
             return () => {
                 canvasObj.off({ 
-                    'object:modified': updateSlideWithThumbnail, 
-                    'text:changed': updateSlideWithThumbnail, 
-                    'object:added': updateSlideWithThumbnail 
+                    'object:modified': updateSlideData, 
+                    'text:changed': updateSlideData, 
+                    'object:added': updateSlideData 
                 });
             };
         }

@@ -56,7 +56,7 @@ const LoginComponent = ({logIn, push}) => {
   const classes = useStyles();
   const { inputs, handleInputChange, handleSubmit } = useLoginForm();
 
-  const responseGoogle = (response) => {
+  const handleGoogleLogin = (response) => {
     const token = response.Zi.id_token
     logIn(token)
     push('/')
@@ -115,8 +115,8 @@ const LoginComponent = ({logIn, push}) => {
           <GoogleLogin
             clientId="688456308716-0n4h02s30uf3bnsssplskvmnbmfom47g.apps.googleusercontent.com"
             buttonText="Login with Google"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
+            onSuccess={handleGoogleLogin}
+            onFailure={handleGoogleLogin}
             cookiePolicy={'single_host_origin'}
             className={classes.glogin}
           />

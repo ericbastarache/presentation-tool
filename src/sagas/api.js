@@ -101,7 +101,7 @@ export const updateSlide = (slideID, presentationID, slideData, canvasDimensions
             data: JSON.stringify(slideData),
             canvasDimensions
         })
-    }).then(res => res.json()).catch(err => {
+    }).then(res => console.log(res.json())).catch(err => {
         throw err
     })
     return data

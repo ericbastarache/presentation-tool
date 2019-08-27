@@ -2,7 +2,6 @@ import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Link } from 'react-router-dom';
@@ -11,7 +10,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Snackbar from 'components/Snackbar'
+import { connect } from 'react-redux'
+import { push } from "connected-react-router";
 
+import TextInput from 'components/TextInput';
+import useRegisterForm from 'hooks/useRegisterForm';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -38,11 +42,25 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Register = () => {
+const Register = ({push}) => {
   const classes = useStyles();
+  const { inputs, handleInputChange, handleSubmit } = useRegisterForm();
+  const [open, setOpen] = React.useState(false)
+
+
+  const handleSubmitWrapper = async (event) => {
+    const result = await handleSubmit(event)
+    if (result && result.success) {
+        setOpen(prev => !prev)
+        setTimeout(() =>{
+          push('/login')
+        }, 5000)
+    }
+  }
 
   return (
     <Container component="main" maxWidth="xs">
+      <Snackbar variant="success" message="Registration Successful. Redirecting to Sign In Page" isOpen={open}/>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -51,10 +69,12 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmitWrapper} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <TextInput
+                onChange={handleInputChange}
+                value={inputs.firstName}
                 autoComplete="fname"
                 name="firstName"
                 variant="outlined"
@@ -66,7 +86,9 @@ const Register = () => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <TextInput
+                onChange={handleInputChange}
+                value={inputs.lastName}
                 variant="outlined"
                 required
                 fullWidth
@@ -77,7 +99,9 @@ const Register = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <TextInput
+                onChange={handleInputChange}
+                value={inputs.email}
                 variant="outlined"
                 required
                 fullWidth
@@ -88,7 +112,9 @@ const Register = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <TextInput
+                onChange={handleInputChange}
+                value={inputs.password}
                 variant="outlined"
                 required
                 fullWidth
@@ -128,4 +154,11 @@ const Register = () => {
   );
 }
 
-export default Register;
+const mapDispatchToProps = dispatch => ({
+  push: (route) => dispatch(push(route))
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Register);

@@ -17,6 +17,11 @@ export const passwordValidator = (password) => {
   return true;
  }
 
+ export const stringValidator = (string) => {
+   const stringRegex = /^[a-zA-Z ]{2,30}$/;
+   return stringRegex.test(string)
+ }
+
  export default {
    emailValidator,
    passwordValidator,

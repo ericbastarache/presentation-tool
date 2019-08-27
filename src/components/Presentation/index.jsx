@@ -12,7 +12,6 @@ import { EditorContextProvider } from 'components/Editor/context'
 import { SlideContextProvider } from 'components/Slide/context'
 import Cookies from 'js-cookie'
 import { uniqid } from 'lib/helpers'
-import { getTempPresentations } from 'sagas/api';
 
 
 let canvas = null;
@@ -73,9 +72,8 @@ const Presentation = ({
   }
 
   const initPresentations = () => {
-    console.log(isLoggedIn)
+    let tempUserID = Cookies.get('tempUserID')
     if (!isLoggedIn) {
-      let tempUserID = Cookies.get('tempUserID')
       if (!tempUserID) {
         tempUserID = uniqid()
         Cookies.set('tempUserID', tempUserID, 1)
@@ -84,7 +82,11 @@ const Presentation = ({
         loadTempPresentations(tempUserID)
       }
     } else {
-      //logic to lead slides from backend
+      if (tempUserID) {
+        //assign ownership of the temp user slides to the signed in user
+        //remove tempUserID
+        loadTempPresentations(tempUserID)
+      }
     }
   }
 
