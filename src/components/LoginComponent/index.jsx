@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Snackbar from 'components/Snackbar'
 import { GoogleLogin } from 'react-google-login';
 import { logIn } from 'actions'
 import { connect } from 'react-redux'
@@ -55,6 +56,7 @@ const useStyles = makeStyles(theme => ({
 const LoginComponent = ({logIn, push}) => {
   const classes = useStyles();
   const { inputs, handleInputChange, handleSubmit } = useLoginForm();
+  const [open, setOpen] = React.useState(false)
 
   const handleGoogleLogin = (response) => {
     const token = response.Zi.id_token
@@ -62,8 +64,21 @@ const LoginComponent = ({logIn, push}) => {
     push('/')
   }
 
+  const handleSubmitWrapper = async (event) => {
+    const result = await handleSubmit(event)
+    const token = result.access_token
+    if (token) {
+      setOpen(prev => !prev)
+      logIn(token)
+      setTimeout(() =>{
+        push('/')
+      }, 5000)
+    }
+  }
+
   return (
     <Container component="main" maxWidth="xs">
+      <Snackbar variant="success" message="Sign in Successful. Redirecting to Editor" isOpen={open}/>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -72,7 +87,7 @@ const LoginComponent = ({logIn, push}) => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form onSubmit={handleSubmit} className={classes.form} noValidate>
+        <form onSubmit={handleSubmitWrapper} className={classes.form} noValidate>
           <TextInput
             onChange={handleInputChange}
             variant="outlined"

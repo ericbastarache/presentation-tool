@@ -9,16 +9,25 @@ const useLoginForm = () => {
     email: '',
     password: ''
   });
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     if (event) {
       event.preventDefault();
       if (!emailValidator(inputs.email)) {
         console.log('incorrect email entered')
+      } else {
+        const {email, password} = inputs
+          const result = await fetch(`${process.env.REACT_APP_AUTH_ENDPOINT}/login`, {
+              method: 'POST',
+              headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  email,
+                  password
+              })
+          }).then(res => res.json()).catch(err => {
+              throw err
+          })
+          return result
       }
-      if (!passwordValidator(inputs.password)) {
-        console.log('please enter a correct password');
-      }
-      // handle login logic
     }
   }
   const handleInputChange = (event) => {
