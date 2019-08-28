@@ -54,7 +54,7 @@ const Register = ({push}) => {
         setOpen(prev => !prev)
         setTimeout(() =>{
           push('/login')
-        }, 5000)
+        }, 1000)
     }
   }
 

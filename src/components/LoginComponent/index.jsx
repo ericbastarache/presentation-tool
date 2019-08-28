@@ -15,6 +15,7 @@ import { GoogleLogin } from 'react-google-login';
 import { logIn } from 'actions'
 import { connect } from 'react-redux'
 import { push } from "connected-react-router";
+import Cookies from 'js-cookie'
 
 
 
@@ -64,15 +65,32 @@ const LoginComponent = ({logIn, push}) => {
     push('/')
   }
 
+  const saveTempPresentations = async (token) => {
+    let tempUserID = Cookies.get('tempUserID')
+    if (tempUserID) {
+      fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/presentations/save_temp_presentations`, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+              id: tempUserID,
+              token
+          })
+      }).then(res => res.json()).catch(err => {
+          throw err
+      })
+    }
+  }
+
   const handleSubmitWrapper = async (event) => {
     const result = await handleSubmit(event)
     const token = result.access_token
     if (token) {
       setOpen(prev => !prev)
       logIn(token)
-      setTimeout(() =>{
-        push('/')
-      }, 5000)
+      await saveTempPresentations(token)
+      // setTimeout(() =>{
+      //   push('/')
+      // }, 1000)
     }
   }
 
@@ -152,6 +170,7 @@ const LoginComponent = ({logIn, push}) => {
     </Container>
   );
 }
+
 
 const mapDispatchToProps = dispatch => ({
   logIn: (token) => dispatch(logIn(token)),
