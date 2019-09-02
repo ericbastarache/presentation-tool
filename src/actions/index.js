@@ -45,11 +45,6 @@ export const deleteSlide = () => ({
     type: ActionTypes.DELETE_SLIDE
 })
 
-export const logIn = (token) => ({
-    type: ActionTypes.LOG_IN,
-    token
-})
-
 export const createPresentation = (presentation) => ({
     type: ActionTypes.CREATE_PRESENTATION,
     presentation
@@ -58,6 +53,11 @@ export const createPresentation = (presentation) => ({
 export const loadPresentations = (presentations) => ({
     type: ActionTypes.LOAD_PRESENTATIONS,
     presentations
+})
+
+export const getPresentations = (token) => ({
+    type: ActionTypes.GET_PRESENTATIONS,
+    token
 })
 
 export const getNewPresentation = () => ({

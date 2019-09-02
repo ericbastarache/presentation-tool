@@ -8,11 +8,12 @@ const INITIAL_STATE = Immutable.fromJS({
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'LOG_IN':
-      const token = action.token
       return state.merge(state, state.withMutations(map => {
         map.set('isLoggedIn', true)
-          .set('token', token)
+          .set('token', action.token)
       }))
+    case 'SET_USER_TOKEN':
+      return state.merge(state, state.set('token', action.token))
     default:
       return state;
   }

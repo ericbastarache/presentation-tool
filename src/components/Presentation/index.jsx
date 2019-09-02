@@ -10,8 +10,6 @@ import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { EditorContextProvider } from 'components/Editor/context'
 import { SlideContextProvider } from 'components/Slide/context'
-import Cookies from 'js-cookie'
-import { uniqid } from 'lib/helpers'
 
 
 let canvas = null;
@@ -47,7 +45,9 @@ const Presentation = ({
   getNewPresentation,
   getNewTempPresentation,
   loadTempPresentations,
-  isLoggedIn
+  getPresentations,
+  isLoggedIn,
+  token
 }) => {
   const classes = useStyles();
   const canvasEl = React.createRef(null)
@@ -71,24 +71,19 @@ const Presentation = ({
     return false
   }
 
-  const initPresentations = () => {
-    let tempUserID = Cookies.get('tempUserID')
-    if (!isLoggedIn) {
-      if (!tempUserID) {
-        tempUserID = uniqid()
-        Cookies.set('tempUserID', tempUserID, 1)
-        getNewTempPresentation(tempUserID)
-      } else {
-        loadTempPresentations(tempUserID)
-      }
-    } else {
-      if (tempUserID) {
-        //assign ownership of the temp user slides to the signed in user
-        //remove tempUserID
-        loadTempPresentations(tempUserID)
-      }
-    }
-  }
+  // const initPresentations = async () => {
+  //   if (!isLoggedIn) {
+  //     const doTempPresentationsExist = await checkTempPresentations(token)
+  //     if (!doTempPresentationsExist) {
+  //       getNewTempPresentation(token)
+  //     } else {
+  //       loadTempPresentations(token)
+  //     }
+  //   } else {
+  //     const doPresentationsExist = await checkPresentations(token)
+  //     getPresentations(token)
+  //   }
+  // }
 
   const renderSlide = (slide) => {
     canvas.clear()
@@ -117,7 +112,7 @@ const Presentation = ({
     canvas.preserveObjectStacking = true;
     resizeCanvas()
     styleCanvas()
-    initPresentations()
+    // initPresentations()
   }, [])
 
   React.useEffect(() => {

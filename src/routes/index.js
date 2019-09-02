@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Switch } from 'react-router'
+import Authentication from 'components/Authentication'
 import Navigation from 'components/Navigation';
 import Editor from 'pages/Editor';
 // import Home from 'pages/Home';
@@ -16,6 +17,7 @@ const style = {
 const routes = (
     <div className="App" style={style}>
         <>
+            <Authentication />
             <Navigation />
             {/* Uncomment this route when we don't need editor to be home route anymore*/}
             {/* <Route exact path='/' component={Home} /> */}

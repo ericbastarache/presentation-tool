@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Snackbar from 'components/Snackbar'
 import { GoogleLogin } from 'react-google-login';
-import { logIn } from 'actions'
+import { logIn } from 'actions/user'
 import { connect } from 'react-redux'
 import { push } from "connected-react-router";
 import Cookies from 'js-cookie'
@@ -88,9 +88,11 @@ const LoginComponent = ({logIn, push}) => {
       setOpen(prev => !prev)
       logIn(token)
       await saveTempPresentations(token)
-      // setTimeout(() =>{
-      //   push('/')
-      // }, 1000)
+      Cookies.remove('tempUserToken')
+      Cookies.set('userToken', token, 1)
+      setTimeout(() =>{
+        push('/')
+      }, 1000)
     }
   }
 

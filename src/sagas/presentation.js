@@ -9,6 +9,7 @@ import {
   GET_NEW_TEMP_PRESENTATION,
   LOAD_TEMP_PRESENTATIONS,
   LOAD_PRESENTATIONS,
+  GET_PRESENTATIONS,
   CREATE_SLIDE,
   CREATE_PRESENTATION,
   UPDATE_SLIDE,
@@ -22,6 +23,10 @@ export function* watchTempPresentationCreation() {
 
 export function* watchLoadTempPresentations() {
   yield takeLatest(LOAD_TEMP_PRESENTATIONS, requestTempPresentations)
+}
+
+export function* watchGetPresentations() {
+  yield takeLatest(GET_PRESENTATIONS, requestPresentations)
 }
 
 export function* watchPresentationCreation() {
@@ -60,6 +65,16 @@ export function* requestTempPresentations(action) {
   try {
     const { userID } = action
     const presentations = yield call(() => Api.getTempPresentations(userID))
+    yield put({ type: LOAD_PRESENTATIONS, presentations });
+  } catch (error) {
+    throw error
+  }
+}
+
+export function* requestPresentations(action) {
+  try {
+    const { token } = action
+    const presentations = yield call(() => Api.getTempPresentations(token))
     yield put({ type: LOAD_PRESENTATIONS, presentations });
   } catch (error) {
     throw error

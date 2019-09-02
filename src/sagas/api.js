@@ -40,6 +40,19 @@ export const getTempPresentations = (userID) => {
     return data
 }
 
+export const getPresentations = (token) => {
+    const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/presentations/load__presentations`, {
+        method: 'POST',
+        headers: HEADERS,
+        body: JSON.stringify({
+            token
+        })
+    }).then(res => res.json()).catch(err => {
+        throw err
+    })
+    return data
+}
+
 export const getNewTempPresentation = (userID) => {
     const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/presentations/create`, {
         method: 'POST',
