@@ -4,7 +4,7 @@ import { updateSlide } from 'actions'
 import { SlideContext } from 'components/Slide/context';
 import { connect } from 'react-redux'
 
-const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide }) => {
+const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token }) => {
     const canvas = React.useContext(SlideContext)
     const {
         canvasObj
@@ -16,7 +16,7 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide }) => {
                     height: canvasObj.height,
                     width: canvasObj.width
                 }
-                updateSlide(activeSlide, activePresentation, canvasObj.toJSON(), canvasDimensions)
+                updateSlide(token, activeSlide, activePresentation, canvasObj.toJSON(), canvasDimensions)
             }
 
             canvasObj.on({ 
@@ -55,11 +55,12 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide }) => {
 
 const mapStateToProps = state => ({
     activeSlide: state.presentation.get('active_slide'),
-    activePresentation: state.presentation.get('active_presentation')
+    activePresentation: state.presentation.get('active_presentation'),
+    token: state.user.get('token')
 })
 
 const mapDispatchToProps = dispatch => ({
-    updateSlide: (slideID, presentationID, data, canvasDimensions) => dispatch(updateSlide(slideID, presentationID, data, canvasDimensions))
+    updateSlide: (token, slideID, presentationID, data, canvasDimensions) => dispatch(updateSlide(token, slideID, presentationID, data, canvasDimensions))
 })
 
 export default connect(

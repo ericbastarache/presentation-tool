@@ -71,20 +71,6 @@ const Presentation = ({
     return false
   }
 
-  // const initPresentations = async () => {
-  //   if (!isLoggedIn) {
-  //     const doTempPresentationsExist = await checkTempPresentations(token)
-  //     if (!doTempPresentationsExist) {
-  //       getNewTempPresentation(token)
-  //     } else {
-  //       loadTempPresentations(token)
-  //     }
-  //   } else {
-  //     const doPresentationsExist = await checkPresentations(token)
-  //     getPresentations(token)
-  //   }
-  // }
-
   const renderSlide = (slide) => {
     canvas.clear()
     let slideData = JSON.parse(slide.data)

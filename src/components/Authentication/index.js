@@ -3,9 +3,9 @@ import { logIn, setUserToken } from 'actions/user'
 import {
     getNewPresentation,
     getPresentations, 
-    getNewTempPresentation,
-    loadTempPresentations,
+    getTempPresentations,
 } from 'actions'
+import { getNewToken } from 'sagas/api'
 import { connect } from 'react-redux'
 import Cookies from 'js-cookie'
 import { uniqid } from 'lib/helpers'
@@ -15,8 +15,7 @@ const Authentication = ({
     setUserToken, 
     getNewPresentation,
     getPresentations, 
-    getNewTempPresentation,
-    loadTempPresentations,
+    getTempPresentations,
 }) => {
     React.useEffect(() => {
 
@@ -24,20 +23,25 @@ const Authentication = ({
         const tempUserToken = Cookies.get('tempUserToken')
 
         if (!userToken && !tempUserToken) {
-            const token = uniqid();
-            Cookies.set('tempUserToken', token, 1)
-            setUserToken(token)
-            getNewTempPresentation(token)
+            const tokenBase = uniqid();
+            getNewToken(tokenBase)
+                .then(tokenObj => {
+                    const {token} = tokenObj
+                    Cookies.set('tempUserToken', token, 1)
+                    setUserToken(token)
+                    getTempPresentations(token)
+                })
+                .catch(error => console.log(error))
         }
 
         if (tempUserToken) {
             setUserToken(tempUserToken)
-            loadTempPresentations(tempUserToken)
+            getTempPresentations(tempUserToken)
         }
 
         if (userToken) {
             logIn(userToken)
-            //check if presentations exist, if not, then get new presentations, otherwise, get old presentations
+            getPresentations(userToken)
         }
 
     },[])
@@ -50,8 +54,7 @@ const mapDispatchToProps = (dispatch) => ({
     setUserToken: (token) => dispatch(setUserToken(token)),
     getNewPresentation: (token) => dispatch(getNewPresentation(token)),
     getPresentations: (token) => dispatch(getPresentations(token)),
-    getNewTempPresentation: (token) => dispatch(getNewTempPresentation(token)),
-    loadTempPresentations: (token) => dispatch(loadTempPresentations(token))
+    getTempPresentations: (token) => dispatch(getTempPresentations(token))
 });
 
 export default connect(

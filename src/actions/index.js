@@ -25,8 +25,9 @@ export const toggleModal = () => ({
     type: ActionTypes.TOGGLE_MODAL
 })
 
-export const updateSlide = (slideID, presentationID, data, canvasDimensions) => ({
+export const updateSlide = (token, slideID, presentationID, data, canvasDimensions) => ({
     type: ActionTypes.UPDATE_SLIDE,
+    token,
     slideID,
     presentationID,
     data,
@@ -64,14 +65,9 @@ export const getNewPresentation = () => ({
     type: ActionTypes.GET_NEW_PRESENTATION
 })
 
-export const getNewTempPresentation = (userID) => ({
-    type: ActionTypes.GET_NEW_TEMP_PRESENTATION,
-    userID
-})
-
-export const loadTempPresentations = (userID) => ({
-    type: ActionTypes.LOAD_TEMP_PRESENTATIONS,
-    userID
+export const getTempPresentations = (token) => ({
+    type: ActionTypes.GET_TEMP_PRESENTATIONS,
+    token
 })
 
 export const setActivePresentation = (id) => ({

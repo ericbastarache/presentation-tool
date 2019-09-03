@@ -66,13 +66,13 @@ const LoginComponent = ({logIn, push}) => {
   }
 
   const saveTempPresentations = async (token) => {
-    let tempUserID = Cookies.get('tempUserID')
-    if (tempUserID) {
+    let tempUserToken = Cookies.get('tempUserToken')
+    if (tempUserToken) {
       fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/presentations/save_temp_presentations`, {
           method: 'POST',
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
           body: JSON.stringify({
-              id: tempUserID,
+              tempUserToken,
               token
           })
       }).then(res => res.json()).catch(err => {

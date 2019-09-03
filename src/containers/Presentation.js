@@ -2,8 +2,6 @@ import Presentation from 'components/Presentation'
 import { 
     setActiveSlide,
     getNewPresentation,
-    getNewTempPresentation,
-    loadTempPresentations,
     getPresentations
 } from 'actions'
 import { connect } from 'react-redux'
@@ -22,8 +20,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
     setActiveSlide: (slideID) => dispatch(setActiveSlide(slideID)),
     getNewPresentation: () => dispatch(getNewPresentation()),
-    getNewTempPresentation: (userID) => dispatch(getNewTempPresentation(userID)),
-    loadTempPresentations: (userID) => dispatch(loadTempPresentations(userID)),
     getPresentations: (token) => dispatch(getPresentations(token))
 });
 

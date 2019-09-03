@@ -76,15 +76,11 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
       case 'LOAD_PRESENTATION':
         return state.merge(state, state.set('presentation', action.payload));
       case 'LOAD_PRESENTATIONS':
-        const presentations = action.presentations
-        const activePresentation = presentations[presentations.length - 1]._id
-        const slides = presentations[presentations.length - 1].slides
-        const activeSlide = slides[0]._id
         return state.merge(state, state.withMutations(map => {
-          map.set('active_presentation', activePresentation)
-            .set('presentations', List(presentations))
-            .set('slides', List(slides))
-            .set('active_slide', activeSlide)
+          map.set('active_presentation', action.presentations[action.presentations.length - 1]._id)
+            .set('presentations', List(action.presentations))
+            .set('slides', List(action.presentations[action.presentations.length - 1].slides))
+            .set('active_slide', action.presentations[action.presentations.length - 1].slides[0]._id)
         }))
       case 'SET_ACTIVE_SLIDE':
         return state.merge(state, state.set('active_slide', action.id))

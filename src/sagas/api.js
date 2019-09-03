@@ -7,6 +7,19 @@ const HEADERS = {
     'Content-Type': 'application/json'
 }
 
+export const getNewToken = (token) => {
+    const data = fetch(`${process.env.REACT_APP_AUTH_ENDPOINT}/generate`, {
+        method: 'POST',
+        headers: HEADERS,
+        body: JSON.stringify({
+            token
+        })
+    }).then(res => res.json()).catch(err => {
+        throw err
+    })
+    return data
+}
+
 export const getNewPresentation = () => {
     const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/presentations/create`, {
         method: 'POST',
@@ -27,21 +40,8 @@ export const getNewPresentation = () => {
     return data
 }
 
-export const getTempPresentations = (userID) => {
+export const getTempPresentations = (token) => {
     const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/presentations/load_temp_presentations`, {
-        method: 'POST',
-        headers: HEADERS,
-        body: JSON.stringify({
-            userID
-        })
-    }).then(res => res.json()).catch(err => {
-        throw err
-    })
-    return data
-}
-
-export const getPresentations = (token) => {
-    const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/presentations/load__presentations`, {
         method: 'POST',
         headers: HEADERS,
         body: JSON.stringify({
@@ -53,20 +53,12 @@ export const getPresentations = (token) => {
     return data
 }
 
-export const getNewTempPresentation = (userID) => {
-    const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/presentations/create`, {
+export const getPresentations = (token) => {
+    const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/presentations/load_presentations`, {
         method: 'POST',
         headers: HEADERS,
         body: JSON.stringify({
-            title: "Title",
-            userID,
-            slides: [{
-                data: JSON.stringify(INITIAL_CANVAS_DATA),
-                canvasDimensions: {
-                    height: INITIAL_CANVAS_HEIGHT,
-                    width: INITIAL_CANVAS_WIDTH
-                }
-            }]
+            token
         })
     }).then(res => res.json()).catch(err => {
         throw err
@@ -105,11 +97,12 @@ export const getLastSlide = (presentationID) => {
     return data
 }
 
-export const updateSlide = (slideID, presentationID, slideData, canvasDimensions) => {
+export const updateSlide = (token, slideID, presentationID, slideData, canvasDimensions) => {
     const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/slides/update/${slideID}`, {
         method: 'PUT',
         headers: HEADERS,
         body: JSON.stringify({
+            token,
             presentation: presentationID,
             data: JSON.stringify(slideData),
             canvasDimensions

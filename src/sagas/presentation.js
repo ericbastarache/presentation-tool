@@ -6,8 +6,7 @@ import {
 import {
   GET_NEW_SLIDE,
   GET_NEW_PRESENTATION,
-  GET_NEW_TEMP_PRESENTATION,
-  LOAD_TEMP_PRESENTATIONS,
+  GET_TEMP_PRESENTATIONS,
   LOAD_PRESENTATIONS,
   GET_PRESENTATIONS,
   CREATE_SLIDE,
@@ -17,12 +16,8 @@ import {
 }from '../types'
 import * as Api from './api'
 
-export function* watchTempPresentationCreation() {
-  yield takeLatest(GET_NEW_TEMP_PRESENTATION, requestNewTempPresentation)
-}
-
-export function* watchLoadTempPresentations() {
-  yield takeLatest(LOAD_TEMP_PRESENTATIONS, requestTempPresentations)
+export function* watchGetTempPresentations() {
+  yield takeLatest(GET_TEMP_PRESENTATIONS, getTempPresentations)
 }
 
 export function* watchGetPresentations() {
@@ -51,20 +46,10 @@ export function* requestNewSlide(action) {
   }
 }
 
-export function* requestNewTempPresentation(action) {
+export function* getTempPresentations(action) {
   try {
-    const { userID } = action
-    const presentation = yield call(() => Api.getNewTempPresentation(userID))
-    yield put({ type: CREATE_PRESENTATION, presentation });
-  } catch (error) {
-    throw error
-  }
-}
-
-export function* requestTempPresentations(action) {
-  try {
-    const { userID } = action
-    const presentations = yield call(() => Api.getTempPresentations(userID))
+    const { token } = action
+    const presentations = yield call(() => Api.getTempPresentations(token))
     yield put({ type: LOAD_PRESENTATIONS, presentations });
   } catch (error) {
     throw error
@@ -92,8 +77,8 @@ export function* requestNewPresentation() {
 
 export function* updateSlide(action) {
   try {
-    const {slideID, presentationID, data, canvasDimensions} = action
-    yield call(() => Api.updateSlide(slideID, presentationID, data, canvasDimensions));
+    const {token, slideID, presentationID, data, canvasDimensions} = action
+    yield call(() => Api.updateSlide(token, slideID, presentationID, data, canvasDimensions));
     yield put({ type: SAVE_SLIDE, slideID, presentationID, data, canvasDimensions});
   } catch (error) {
     throw error
