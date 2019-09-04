@@ -13,6 +13,7 @@ import { SlideContextProvider } from 'components/Slide/context'
 
 
 let canvas = null;
+let hiddenCanvas = null;
 
 const useStyles = makeStyles(theme => ({
   height: {
@@ -51,9 +52,14 @@ const Presentation = ({
 }) => {
   const classes = useStyles();
   const canvasEl = React.createRef(null)
+  const hiddenCanvasEl = React.createRef(null)
 
   const canvasObj = () => {
     return canvas
+  }
+
+  const hiddenCanvasObj = () => {
+    return hiddenCanvas
   }
 
   const updateSlideWithNewResolution = (canvasObjects, slideWidth) => {
@@ -89,16 +95,19 @@ const Presentation = ({
       let height = document.getElementById('canvasContainer').offsetHeight
       height = width * (9 / 16)
       canvas.setDimensions({ width: width, height: height })
+      hiddenCanvas.setDimensions({ width: width, height: height })
     };
     const styleCanvas = () => {
       document.getElementsByClassName('canvas-container')[0].style.boxShadow = "0 1px 3px 1px rgba(60,64,67,.15)"
       document.getElementsByClassName('canvas-container')[0].style.backgroundColor = "#ffffff"
+      document.getElementsByClassName('hidden-canvas')[0].style.display = "none"
     }
-    canvas = new fabric.Canvas(canvasEl.current);
+    canvas = new fabric.Canvas(canvasEl.current)
+    hiddenCanvas = new fabric.Canvas(hiddenCanvasEl.current, {containerClass: 'hidden-canvas'})
     canvas.preserveObjectStacking = true;
+    hiddenCanvas.preserveObjectStacking = true;
     resizeCanvas()
     styleCanvas()
-    // initPresentations()
   }, [])
 
   React.useEffect(() => {
@@ -146,7 +155,7 @@ const Presentation = ({
       <Grid container className={`${classes.grow} ${classes.height}`}>
         <Grid item xs={2} className={classes.height}>
           <div className={`${classes.overflow} ${classes.height}`}>
-            <SlideContextProvider canvasObj={canvasObj}>
+            <SlideContextProvider canvasObj={canvasObj} hiddenCanvasObj={hiddenCanvasObj}>
               <Slidebar slides={slides} />
             </SlideContextProvider>
           </div>
@@ -154,6 +163,7 @@ const Presentation = ({
         <Grid item xs={10} className={classes.padding}>
           <div ref={drop} id="canvasContainer" className={classes.canvasContainer} style={{ border: isOver ? '2px solid #42a5f5' : '2px solid #bbdefb' }}>
             <Canvas ref={canvasEl} />
+            <Canvas ref={hiddenCanvasEl} />
           </div>
         </Grid>
       </Grid>

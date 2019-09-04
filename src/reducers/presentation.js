@@ -62,14 +62,14 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
         active_slide: newState.active_slide
       });
     case 'SAVE_SLIDE':
-        const {data, canvasDimensions} = action
         return state.merge(state, state.update('slides', slides =>
         slides.update(
           state.get('slides').findIndex(slide => slide._id === action.slideID), (slide) => {
             return {
               ...slide,
-              data: JSON.stringify(data),
-              canvasDimensions: canvasDimensions
+              data: JSON.stringify(action.data),
+              canvasDimensions: action.canvasDimensions,
+              thumbnail: action.thumbnail
             }
           })
       ))

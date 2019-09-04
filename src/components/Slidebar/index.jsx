@@ -4,11 +4,17 @@ import { updateSlide } from 'actions'
 import { SlideContext } from 'components/Slide/context';
 import { connect } from 'react-redux'
 
+
 const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token }) => {
     const canvas = React.useContext(SlideContext)
+    const [slidesWithThumbnails, setSlidesWithThumbnails] = React.useState([])
+
     const {
-        canvasObj
+        canvasObj,
+        hiddenCanvasObj
     } = canvas;
+
+
     React.useEffect(() => {
         if (!!canvasObj) {
             const updateSlideData = async () => {
@@ -16,7 +22,8 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token 
                     height: canvasObj.height,
                     width: canvasObj.width
                 }
-                updateSlide(token, activeSlide, activePresentation, canvasObj.toJSON(), canvasDimensions)
+                const thumbnail = await canvasObj.toDataURL({ format: 'png', quality: 0.4 })
+                updateSlide(token, activeSlide, activePresentation, canvasObj.toJSON(), canvasDimensions, thumbnail)
             }
 
             canvasObj.on({ 
@@ -37,18 +44,41 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token 
         }
     }, [canvasObj, activeSlide]);
 
+
+    const getThumbnail = (slide) => {
+        if (slide.thumbnail) {
+            console.log(slide)
+        }
+        return new Promise((resolve, reject) => {
+            hiddenCanvasObj.clear()
+            let slideData = JSON.parse(slide.data)
+            hiddenCanvasObj.loadFromJSON(slideData)
+            resolve(hiddenCanvasObj.toDataURL({ format: 'png', quality: 0.8 }));
+        });
+    }
+
     const renderSlides = () => {
-        return slides.map((slide, index) => {
-            return <Slide
-                key={slide._id}
-                index={index}
-                slide={slide}
-            />
+        return slidesWithThumbnails.map((slide, index) => {
+            return <Slide key={slide._id} index={index} slide={slide} />
         })
     }
+
+    React.useEffect(() => {
+        if (slides) {
+            Promise.all(
+                slides.map(slide => getThumbnail(slide))
+            ).then(result => {
+                slides.forEach((slide, index) => {
+                    slide.thumbnail = result[index]
+                })
+                setSlidesWithThumbnails(slides)
+            })
+        }
+    },[slides])
+
     return (
         <>
-            {renderSlides()}
+        {renderSlides()}
         </>
     )
 }
@@ -60,7 +90,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    updateSlide: (token, slideID, presentationID, data, canvasDimensions) => dispatch(updateSlide(token, slideID, presentationID, data, canvasDimensions))
+    updateSlide: (token, slideID, presentationID, data, canvasDimensions, thumbnail) => dispatch(updateSlide(token, slideID, presentationID, data, canvasDimensions, thumbnail))
 })
 
 export default connect(
