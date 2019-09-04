@@ -20,7 +20,9 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import FlipToBackIcon from '@material-ui/icons/FlipToBack';
 import FlipToFrontIcon from '@material-ui/icons/FlipToFront';
-import { EditorContext } from 'components/Editor/context'
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import {DropzoneDialog} from 'material-ui-dropzone';
+import { EditorContext } from 'components/Editor/context';
 import { fabric } from 'fabric';
 import SelectInput from 'components/SelectInput';
 import { connect } from 'react-redux'
@@ -29,6 +31,7 @@ import {
   deleteSlide
 }  from 'actions/index'
 import { makeStyles } from '@material-ui/core/styles';
+import { useState } from 'react';
 
 const useStyles = makeStyles(theme => ({
   padding: {
@@ -38,8 +41,9 @@ const useStyles = makeStyles(theme => ({
 
 const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) => {
   const classes = useStyles();
-  const [size, setFontSize] = React.useState(12);
-  const [_clipboard, setClipboard] = React.useState(null);
+  const [size, setFontSize] = useState(12);
+  const [_clipboard, setClipboard] = useState(null);
+  const [showImageUpload, setShowImageUpload] = useState(false);
   const { canvas } = React.useContext(EditorContext);
   const clearCanvas = () => {
     canvas.clear();
@@ -91,6 +95,23 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
         break;
       default:
         break;
+    }
+  }
+
+  const addImage = (images) => {
+    setShowImageUpload(false)
+    const reader = new FileReader();
+    reader.readAsDataURL(images[0]);
+    reader.onload = () => {
+      const imgData = reader.result
+      fabric.Image.fromURL(imgData, function(img) {
+        img.left = 50;
+        img.top = 50;
+        canvas.add(img);
+        img.bringToFront();
+        canvas.fire('object:modified');
+        canvas.renderAll();
+      })
     }
   }
 
@@ -288,6 +309,22 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
               Paste
             </Button>
           </Tooltip>
+
+          <Tooltip title="Upload Image">
+            <IconButton size="small" onClick={() => setShowImageUpload(true)}>
+              <PhotoCamera />
+            </IconButton>
+          </Tooltip>
+          <DropzoneDialog 
+            onSave={addImage} 
+            open={showImageUpload}
+            acceptedFiles={['image/jpeg', 'image/png']}
+            showPreviews={true}
+            maxFileSize={1000000}
+            onClose={() => setShowImageUpload(false)}
+            filesLimit={1}
+            />
+
           <Tooltip title="Clear canvas">
             <IconButton onClick={() => clearCanvas()} variant="contained" size="small" color="secondary" aria-label="small contained secondary button ">
               <ClearIcon />

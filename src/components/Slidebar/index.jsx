@@ -46,9 +46,6 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token 
 
 
     const getThumbnail = (slide) => {
-        if (slide.thumbnail) {
-            console.log(slide)
-        }
         return new Promise((resolve, reject) => {
             hiddenCanvasObj.clear()
             let slideData = JSON.parse(slide.data)
