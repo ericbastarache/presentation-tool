@@ -50,7 +50,7 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token 
             hiddenCanvasObj.clear()
             let slideData = JSON.parse(slide.data)
             hiddenCanvasObj.loadFromJSON(slideData)
-            resolve(hiddenCanvasObj.toDataURL({ format: 'png', quality: 0.8 }));
+            resolve(hiddenCanvasObj.toDataURL({ format: 'png', quality: 0.4 }));
         });
     }
 
@@ -61,7 +61,7 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token 
     }
 
     React.useEffect(() => {
-        if (slides) {
+        if (slides && hiddenCanvasObj) {
             Promise.all(
                 slides.map(slide => getThumbnail(slide))
             ).then(result => {

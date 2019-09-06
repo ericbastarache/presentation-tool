@@ -20,7 +20,9 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import FlipToBackIcon from '@material-ui/icons/FlipToBack';
 import FlipToFrontIcon from '@material-ui/icons/FlipToFront';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import ImageSearch from 'components/ImageSearch'
 import {DropzoneDialog} from 'material-ui-dropzone';
 import { EditorContext } from 'components/Editor/context';
 import { fabric } from 'fabric';
@@ -44,7 +46,10 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
   const [size, setFontSize] = useState(12);
   const [_clipboard, setClipboard] = useState(null);
   const [showImageUpload, setShowImageUpload] = useState(false);
+  const [showImageSearch, setShowImageSearch] = useState(false);
   const { canvas } = React.useContext(EditorContext);
+
+
   const clearCanvas = () => {
     canvas.clear();
     canvas.renderAll();
@@ -312,7 +317,7 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
 
           <Tooltip title="Upload Image">
             <IconButton size="small" onClick={() => setShowImageUpload(true)}>
-              <PhotoCamera />
+              <CloudUploadIcon />
             </IconButton>
           </Tooltip>
           <DropzoneDialog 
@@ -324,7 +329,11 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
             onClose={() => setShowImageUpload(false)}
             filesLimit={1}
             />
-
+          <Tooltip title="Search and Insert Image">
+            <IconButton size="small" onClick={() => setShowImageSearch(true)}>
+              <PhotoCameraIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Clear canvas">
             <IconButton onClick={() => clearCanvas()} variant="contained" size="small" color="secondary" aria-label="small contained secondary button ">
               <ClearIcon />
@@ -333,13 +342,15 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
           {saveLink()}
         </Grid>
       </Grid>
+      <ImageSearch open={showImageSearch} setOpen={() => setShowImageSearch(!showImageSearch)}/>
     </Grid>
+
   )
 }
 
 const mapStateToProps = state => ({
   activePresentation : state.presentation.get('active_presentation'),
-  isLoggedIn: state.user.get('isLoggedIn')
+  isLoggedIn: state.user.get('isLoggedIn'),
 })
 
 const mapDispatchToProps = dispatch => ({
