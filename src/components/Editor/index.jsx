@@ -114,8 +114,8 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
         img.top = 50;
         canvas.add(img);
         img.bringToFront();
-        canvas.fire('object:modified');
         canvas.renderAll();
+        canvas.fire('object:modified');
       })
     }
   }

@@ -125,9 +125,9 @@ const ImageSearch = ({open, setOpen, token}) => {
         fabric.Image.fromURL(imgURL, function(img) {
           img.set({let: 0, top: 0});
           canvas.add(img);
-          canvas.fire('object:modified');
           canvas.renderAll();
           setOpen(false);
+          canvas.fire('object:modified');
         }, {crossOrigin: 'anonymous'})
       }
     }
