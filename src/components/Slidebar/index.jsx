@@ -47,10 +47,10 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token 
 
     const getThumbnail = (slide) => {
         return new Promise((resolve, reject) => {
-            hiddenCanvasObj.clear()
-            let slideData = JSON.parse(slide.data)
-            hiddenCanvasObj.loadFromJSON(slideData)
-            resolve(hiddenCanvasObj.toDataURL({ format: 'png', quality: 0.4 }));
+            hiddenCanvasObj.clear();
+            let slideData = JSON.parse(slide.data);
+            hiddenCanvasObj.loadFromJSON(slideData);
+            resolve(hiddenCanvasObj.toDataURL({ format: 'png', quality: 0.4}));
         });
     }
 
