@@ -42,13 +42,6 @@ const Presentation = ({
   slides,
   activeSlide,
   setActiveSlide,
-  presentations,
-  getNewPresentation,
-  getNewTempPresentation,
-  loadTempPresentations,
-  getPresentations,
-  isLoggedIn,
-  token
 }) => {
   const classes = useStyles();
   const canvasEl = React.createRef(null)
@@ -102,7 +95,7 @@ const Presentation = ({
       document.getElementsByClassName('canvas-container')[0].style.backgroundColor = "#ffffff"
       document.getElementsByClassName('hidden-canvas')[0].style.display = "none"
     }
-    canvas = new fabric.Canvas(canvasEl.current)
+    canvas = new fabric.Canvas(canvasEl.current, {stateful: true})
     hiddenCanvas = new fabric.Canvas(hiddenCanvasEl.current, {containerClass: 'hidden-canvas'})
     canvas.preserveObjectStacking = true;
     hiddenCanvas.preserveObjectStacking = true;

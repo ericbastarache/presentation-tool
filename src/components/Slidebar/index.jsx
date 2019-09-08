@@ -2,7 +2,13 @@ import React from 'react'
 import Slide from 'components/Slide'
 import { updateSlide } from 'actions'
 import { SlideContext } from 'components/Slide/context';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { 
+    handleObjectMoving,
+    handleObjectScaling,
+    handleObjectRotating
+
+} from 'events/index';
 
 
 const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token }) => {
@@ -30,6 +36,9 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token 
                             'object:modified': updateSlideData, 
                             'text:changed': updateSlideData, 
                             'object:added': updateSlideData,
+                            'object:moving': handleObjectMoving,
+                            'object:scaling': handleObjectScaling,
+                            "object:rotating": handleObjectRotating
                         });
             //Remove the event listener when the effect's params have changed
             //when activeSlide or the canvasObj change, the event handlers are destroyed
@@ -38,7 +47,10 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token 
                 canvasObj.off({ 
                     'object:modified': updateSlideData, 
                     'text:changed': updateSlideData, 
-                    'object:added': updateSlideData 
+                    'object:added': updateSlideData,
+                    'object:moving': handleObjectMoving,
+                    'object:scaling': handleObjectScaling,
+                    "object:rotating": handleObjectRotating
                 });
             };
         }

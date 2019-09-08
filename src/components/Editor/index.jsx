@@ -192,10 +192,12 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
     if (!!canvas.getActiveObject()) {
       if (direction === 'front') {
         canvas.getActiveObject().bringToFront();
+        canvas.fire('object:modified');
         // canvas.renderAll();
       }
       if (direction === 'back') {
         canvas.getActiveObject().sendToBack();
+        canvas.fire('object:modified');
         // canvas.renderAll();
       }
     }
