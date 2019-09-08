@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import { 
     handleObjectMoving,
     handleObjectScaling,
-    handleObjectRotating
-
+    handleObjectRotating,
+    handleObjectSelection
 } from 'events/index';
 
 

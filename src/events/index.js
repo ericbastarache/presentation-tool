@@ -1,7 +1,23 @@
+export const handleKeyboardShortcuts = (event, canvas) => {
+    const obj = canvas.getActiveObject();
+
+    if (obj !== undefined) {
+        switch (event.key) {
+            case 'Delete':
+                canvas.getActiveObjects().forEach((obj) => {
+                    canvas.remove(obj);
+                });
+                canvas.discardActiveObject().renderAll();
+                canvas.fire('object:modified');
+                return;
+        }
+    }
+}
+
 export const handleObjectRotating = (e) => {
     let obj = e.target;
 
-    obj.setCoords()
+    obj.setCoords();
 
     if(obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0){
         obj.top = Math.max(obj.top, obj.top-obj.getBoundingRect().top);
