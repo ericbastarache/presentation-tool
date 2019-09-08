@@ -78,11 +78,6 @@ const Presentation = ({
     canvas.loadFromJSON(slideData)
   }
 
-  // const handleKeyboard = (event) => {
-  //   handleKeyboardShortcuts(canvas, event)
-  // }
-
-
   React.useEffect(() => {
     const resizeCanvas = () => {
       let width = document.getElementById('canvasContainer').offsetWidth;
