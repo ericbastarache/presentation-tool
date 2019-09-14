@@ -123,6 +123,12 @@ const ImageSearch = ({open, setOpen, token}) => {
       if (result.sizes && result.sizes.size) {
         const imgURL = result.sizes.size[result.sizes.size.length - 2].source
         fabric.Image.fromURL(imgURL, function(img) {
+          if (img.height > canvas.height) {
+            img.scaleToHeight(canvas.height)
+          }
+          if (img.width > canvas.width) {
+            img.scaleToWidth(canvas.width)
+          }
           img.set({let: 0, top: 0});
           canvas.add(img);
           canvas.renderAll();
