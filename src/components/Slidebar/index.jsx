@@ -7,9 +7,9 @@ import {
     handleObjectMoving,
     handleObjectScaling,
     handleObjectRotating,
-    handleObjectSelection
 } from 'events/index';
 
+import _ from 'lodash';
 
 const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token }) => {
     const canvas = React.useContext(SlideContext)
@@ -28,13 +28,17 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token 
                     height: canvasObj.height,
                     width: canvasObj.width
                 }
-                const thumbnail = await canvasObj.toDataURL({ format: 'png', quality: 0.4 })
-                updateSlide(token, activeSlide, activePresentation, canvasObj.toJSON(), canvasDimensions, thumbnail)
+                const thumbnail = await canvasObj.toDataURL({ format: 'png', quality: 0.4 });
+                updateSlide(token, activeSlide, activePresentation, canvasObj.toJSON(), canvasDimensions, thumbnail);
             }
+
+            const withDebounce = _.debounce(() => {
+                return updateSlideData();
+            }, 500)
 
             canvasObj.on({ 
                             'object:modified': updateSlideData, 
-                            'text:changed': updateSlideData, 
+                            'text:changed': withDebounce, 
                             'object:added': updateSlideData,
                             'object:moving': handleObjectMoving,
                             'object:scaling': handleObjectScaling,
@@ -46,7 +50,7 @@ const Slidebar = ({ slides, activeSlide, activePresentation, updateSlide, token 
             return () => {
                 canvasObj.off({ 
                     'object:modified': updateSlideData, 
-                    'text:changed': updateSlideData, 
+                    'text:changed': withDebounce,
                     'object:added': updateSlideData,
                     'object:moving': handleObjectMoving,
                     'object:scaling': handleObjectScaling,
