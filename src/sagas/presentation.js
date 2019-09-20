@@ -12,7 +12,9 @@ import {
   CREATE_SLIDE,
   CREATE_PRESENTATION,
   UPDATE_SLIDE,
-  SAVE_SLIDE
+  SAVE_SLIDE,
+  REQUEST_DELETE_SLIDE,
+  DELETE_SLIDE
 }from '../types'
 import * as Api from './api'
 
@@ -34,6 +36,10 @@ export function* watchSlideCreation() {
 
 export function* watchSlideUpdate() {
   yield takeLatest(UPDATE_SLIDE, updateSlide)
+}
+
+export function* watchRequestDeleteSlide() {
+  yield takeLatest(REQUEST_DELETE_SLIDE, requestDeleteSlide)
 }
 
 export function* requestNewSlide(action) {
@@ -80,6 +86,16 @@ export function* updateSlide(action) {
     const {token, slideID, presentationID, data, canvasDimensions, thumbnail} = action
     yield call(() => Api.updateSlide(token, slideID, presentationID, data, canvasDimensions));
     yield put({ type: SAVE_SLIDE, slideID, presentationID, data, canvasDimensions, thumbnail});
+  } catch (error) {
+    throw error
+  }
+}
+
+export function* requestDeleteSlide(action) {
+  try {
+    const {token, slideID, presentationID} = action
+    yield call(() => Api.deleteSlide(token, slideID, presentationID));
+    yield put({ type: DELETE_SLIDE });
   } catch (error) {
     throw error
   }

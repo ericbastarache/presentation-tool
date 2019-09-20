@@ -112,6 +112,12 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
       fabric.Image.fromURL(imgData, function(img) {
         img.left = 50;
         img.top = 50;
+        if (img.height > canvas.height) {
+          img.scaleToHeight(canvas.height)
+        }
+        if (img.width > canvas.width) {
+          img.scaleToWidth(canvas.width)
+        }
         canvas.add(img);
         img.bringToFront();
         canvas.renderAll();

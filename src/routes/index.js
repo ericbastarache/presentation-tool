@@ -18,7 +18,7 @@ const routes = (
     <div className="App" style={style}>
         <>
             <Authentication />
-            <Navigation />
+            {/* <Navigation /> */}
             {/* Uncomment this route when we don't need editor to be home route anymore*/}
             {/* <Route exact path='/' component={Home} /> */}
             {/* will update this route later when routing is more fleshed out 

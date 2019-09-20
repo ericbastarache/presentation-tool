@@ -1,15 +1,16 @@
-import React from 'react'
-import { fabric } from 'fabric'
-import { useDrop } from 'react-dnd'
-import Canvas from 'components/Canvas'
-import Editor from 'components/Editor'
-import Slidebar from 'components/Slidebar'
-import Header from 'components/Header'
-import Welcome from 'components/Welcome'
-import { Grid } from '@material-ui/core'
+import React from 'react';
+import { fabric } from 'fabric';
+import { useDrop } from 'react-dnd';
+import Canvas from 'components/Canvas';
+import Editor from 'components/Editor';
+import Slidebar from 'components/Slidebar';
+import Header from 'components/Header';
+import Editormenu from 'components/Editormenu';
+import Welcome from 'components/Welcome';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { EditorContextProvider } from 'components/Editor/context'
-import { SlideContextProvider } from 'components/Slide/context'
+import { EditorContextProvider } from 'components/Editor/context';
+import { SlideContextProvider } from 'components/Slide/context';
 import { handleKeyboardShortcuts } from 'events/index';
 
 
@@ -32,10 +33,13 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f8f9fa'
+    backgroundColor: theme.palette.grey['100']
   },
   padding: {
     padding: theme.spacing(1)
+  },
+  slideBarContainer: {
+    backgroundColor: theme.palette.grey['100']
   }
 }));
 
@@ -142,14 +146,13 @@ const Presentation = ({
     <>
       <Grid container>
         {/* <Welcome isModalOpen={(presentations.length === 0) ? true : false} getNewPresentation={getNewPresentation} /> */}
-        <Header />
-        <Grid item xs={12}>
+        {/* <Header /> */}
           <EditorContextProvider canvasObj={canvasObj}>
-            <Editor />
+            {/* <Editor /> */}
+            <Editormenu />
           </EditorContextProvider>
-        </Grid>
       </Grid>
-      <Grid container className={`${classes.grow} ${classes.height}`}>
+      <Grid container className={`${classes.grow} ${classes.height} ${classes.slideBarContainer}`}>
         <Grid item xs={2} className={classes.height}>
           <div className={`${classes.overflow} ${classes.height}`}>
             <SlideContextProvider canvasObj={canvasObj} hiddenCanvasObj={hiddenCanvasObj}>

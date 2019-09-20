@@ -112,3 +112,17 @@ export const updateSlide = (token, slideID, presentationID, slideData, canvasDim
     })
     return data
 }
+
+export const deleteSlide = (token, slideID, presentationID) => {
+    const data = fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/slides/delete/${slideID}`, {
+        method: 'DELETE',
+        headers: HEADERS,
+        body: JSON.stringify({
+            token,
+            presentationID,
+        })
+    }).then(res => console.log(res.json())).catch(err => {
+        throw err
+    })
+    return data
+}

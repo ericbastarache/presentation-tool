@@ -7,6 +7,7 @@ import {
   watchGetPresentations,
   watchSlideCreation,
   watchSlideUpdate,
+  watchRequestDeleteSlide,
 } from 'sagas/presentation';
 
 function* rootSaga() {
@@ -15,7 +16,8 @@ function* rootSaga() {
     watchGetTempPresentations(),
     watchGetPresentations(),
     watchSlideCreation(),
-    watchSlideUpdate()
+    watchSlideUpdate(),
+    watchRequestDeleteSlide()
   ])
 }
 

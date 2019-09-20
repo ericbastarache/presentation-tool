@@ -44,8 +44,11 @@ export const saveSlide = (slideID, presentationID, data, canvasDimensions, thumb
     thumbnail
 })
 
-export const deleteSlide = () => ({
-    type: ActionTypes.DELETE_SLIDE
+export const deleteSlide = (token, slideID, presentationID) => ({
+    type: ActionTypes.REQUEST_DELETE_SLIDE,
+    token,
+    slideID,
+    presentationID
 })
 
 export const createPresentation = (presentation) => ({
