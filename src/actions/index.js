@@ -51,6 +51,12 @@ export const deleteSlide = (token, slideID, presentationID) => ({
     presentationID
 })
 
+export const setSlides = (slides, activeSlide) => ({
+    type: ActionTypes.SET_SLIDES,
+    slides,
+    activeSlide
+})
+
 export const createPresentation = (presentation) => ({
     type: ActionTypes.CREATE_PRESENTATION,
     presentation

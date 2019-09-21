@@ -8,6 +8,7 @@ import ClearCanvas from './children/ClearCanvas';
 import AddText from './children/AddText';
 import AddShape from './children/AddShape';
 import Clipboard from './children/Clipboard';
+import UndoRedo from './children/UndoRedo';
 
 import FontSize from './children/FontSize';
 import SetBold from './children/SetBold';
@@ -69,6 +70,9 @@ const Toolbar = ({ canvas }) => {
                 </div>
                 <div className={classes.buttonContainer}>
                     <Clipboard canvas={canvas} />
+                </div>
+                <div className={classes.buttonContainer}>
+                    <UndoRedo canvas={canvas} />
                 </div>
             </div>
             <div className={classes.divided}>

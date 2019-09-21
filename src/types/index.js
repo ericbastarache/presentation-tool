@@ -18,3 +18,4 @@ export const SET_ACTIVE_SLIDE = 'SET_ACTIVE_SLIDE';
 export const TOGGLE_MODAL = 'TOGGLE_MODAL';
 export const GET_NEW_SLIDE = 'GET_NEW_SLIDE';
 export const GET_PRESENTATIONS = 'GET_PRESENTATIONS';
+export const SET_SLIDES = 'SET_SLIDES';

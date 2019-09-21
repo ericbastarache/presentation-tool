@@ -45,7 +45,7 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
       let slideCount = state.get('slides').count();
       let activeSlide = null;
       if (slideCount > 1) {
-        if (state.get('slides').has(slideToRemove + 1)){
+        if (state.get('slides').has(slideToRemove + 1)) {
           activeSlide = state.get('slides').get(slideToRemove + 1)._id;
         } else {
           activeSlide = state.get('slides').get(slideToRemove - 1)._id;
@@ -60,7 +60,7 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
         .set('slide_count', slideCount)
       )
     case 'SAVE_SLIDE':
-        return state.merge(state, state.update('slides', slides =>
+      return state.merge(state, state.update('slides', slides =>
         slides.update(
           state.get('slides').findIndex(slide => slide._id === action.slideID), (slide) => {
             return {
@@ -71,37 +71,42 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
             }
           })
       ))
-      case 'LOAD_PRESENTATION':
-        return state.merge(state, state
-          .set('presentation', action.payload)
-        );
-      case 'LOAD_PRESENTATIONS':
-        return state.merge(state, state.withMutations(map => {
-          map.set('active_presentation', action.presentations[action.presentations.length - 1]._id)
-            .set('presentations', List(action.presentations))
-            .set('slides', 
-                 (action.presentations[action.presentations.length - 1].slides.length > 0) 
-                    ? List(action.presentations[action.presentations.length - 1].slides)
-                    : List([])
-            )
-            .set('active_slide', 
-                  (action.presentations[action.presentations.length - 1].slides.length > 0) 
-                  ? action.presentations[action.presentations.length - 1].slides[0]._id
-                  : null
-            )
-            .set('slide_count', 
-                  (action.presentations[action.presentations.length - 1].slides.length > 0) 
-                  ? action.presentations[action.presentations.length - 1].slides.length
-                  : 0
-            )
-        }))
-      case 'SET_ACTIVE_SLIDE':
-        return state.merge(state, state.set('active_slide', action.id))
-        case 'CHANGE_SLIDE_ORDER':
-          let dragSlide = state.get('slides').get(action.dragIndex)
-          return state.merge(state, state.set('slides', state.get('slides').delete(action.dragIndex).insert(action.hoverIndex, dragSlide))) 
-        default:
-          return state;
+    case 'LOAD_PRESENTATION':
+      return state.merge(state, state
+        .set('presentation', action.payload)
+      );
+    case 'LOAD_PRESENTATIONS':
+      return state.merge(state, state.withMutations(map => {
+        map.set('active_presentation', action.presentations[action.presentations.length - 1]._id)
+          .set('presentations', List(action.presentations))
+          .set('slides',
+            (action.presentations[action.presentations.length - 1].slides.length > 0)
+              ? List(action.presentations[action.presentations.length - 1].slides)
+              : List([])
+          )
+          .set('active_slide',
+            (action.presentations[action.presentations.length - 1].slides.length > 0)
+              ? action.presentations[action.presentations.length - 1].slides[0]._id
+              : null
+          )
+          .set('slide_count',
+            (action.presentations[action.presentations.length - 1].slides.length > 0)
+              ? action.presentations[action.presentations.length - 1].slides.length
+              : 0
+          )
+      }))
+    case 'SET_SLIDES':
+      return state.merge(state, state
+        .set('slides', action.slides.slides)
+        .set('active_slide', action.slides.activeSlide)
+      )
+    case 'SET_ACTIVE_SLIDE':
+      return state.merge(state, state.set('active_slide', action.id))
+    case 'CHANGE_SLIDE_ORDER':
+      let dragSlide = state.get('slides').get(action.dragIndex)
+      return state.merge(state, state.set('slides', state.get('slides').delete(action.dragIndex).insert(action.hoverIndex, dragSlide)))
+    default:
+      return state;
   }
 }
 
