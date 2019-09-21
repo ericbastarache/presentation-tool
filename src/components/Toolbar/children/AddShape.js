@@ -13,7 +13,6 @@ import {
         faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import {ReactComponent as TriangleIcon} from 'media/icons/triangle_icon.svg';
-import SvgIcon from '@material-ui/core/SvgIcon';
 import {connect} from 'react-redux';
 
 
@@ -43,14 +42,17 @@ const onMouseLeave = (e) => e.target.style.backgroundColor = blue['50'];
 const AddShape = ({canvas, slideCount}) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [isOpen, setIsOpen] = React.useState(false);
 
 
     const handleMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget)
+        setAnchorEl(event.currentTarget);
+        setIsOpen(true);
     }
 
     const handleClose = () => {
         setAnchorEl(null);
+        setIsOpen(false);
     }
 
     const addShape = (shapeType) => {
@@ -112,7 +114,7 @@ const AddShape = ({canvas, slideCount}) => {
             <Menu
                 anchorEl={anchorEl}
                 keepMounted
-                open={Boolean(anchorEl)}
+                open={isOpen}
                 onClose={handleClose}
                 getContentAnchorEl={null}
                 anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
@@ -126,8 +128,8 @@ const AddShape = ({canvas, slideCount}) => {
                     onClick={(e) => {addShape('square'); onMouseLeave(e)}}
                     >
                         <Tooltip title="Add Square">
-                            <div style={{backgroundColor: 'inherit'}}>
-                                <FontAwesomeIcon icon={faPlusSquare} />
+                            <div>
+                                <FontAwesomeIcon icon={faPlusSquare}/>
                             </div>
                         </Tooltip>
                 </MenuItem>        
@@ -137,7 +139,7 @@ const AddShape = ({canvas, slideCount}) => {
                 onClick={(e) => {addShape('circle'); onMouseLeave(e)}}
                 >
                 <Tooltip title="Add Circle">
-                    <div style={{backgroundColor: 'inherit'}}>
+                    <div>
                         <FontAwesomeIcon icon={faPlusCircle} />
                     </div>
                 </Tooltip>
@@ -148,7 +150,7 @@ const AddShape = ({canvas, slideCount}) => {
                 onClick={(e) => {addShape('triangle'); onMouseLeave(e)}}
                 >
                 <Tooltip title="Add Triangle">
-                    <div style={{backgroundColor: 'inherit'}}>
+                    <div>
                         <TriangleIcon />
                     </div>
                 </Tooltip>

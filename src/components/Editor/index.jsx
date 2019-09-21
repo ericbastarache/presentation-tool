@@ -50,10 +50,10 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
   const { canvas } = React.useContext(EditorContext);
 
 
-  const clearCanvas = () => {
-    canvas.clear();
-    canvas.renderAll();
-  }
+  // const clearCanvas = () => {
+  //   canvas.clear();
+  //   canvas.renderAll();
+  // }
 
   const copy = () => {
     if (!!canvas.getActiveObject()) {
@@ -103,82 +103,82 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
   //   }
   // }
 
-  const addImage = (images) => {
-    setShowImageUpload(false)
-    const reader = new FileReader();
-    reader.readAsDataURL(images[0]);
-    reader.onload = () => {
-      const imgData = reader.result
-      fabric.Image.fromURL(imgData, function(img) {
-        img.left = 50;
-        img.top = 50;
-        if (img.height > canvas.height) {
-          img.scaleToHeight(canvas.height)
-        }
-        if (img.width > canvas.width) {
-          img.scaleToWidth(canvas.width)
-        }
-        canvas.add(img);
-        img.bringToFront();
-        canvas.renderAll();
-        canvas.fire('object:modified');
-      })
-    }
-  }
+  // const addImage = (images) => {
+  //   setShowImageUpload(false)
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(images[0]);
+  //   reader.onload = () => {
+  //     const imgData = reader.result
+  //     fabric.Image.fromURL(imgData, function(img) {
+  //       img.left = 50;
+  //       img.top = 50;
+  //       if (img.height > canvas.height) {
+  //         img.scaleToHeight(canvas.height)
+  //       }
+  //       if (img.width > canvas.width) {
+  //         img.scaleToWidth(canvas.width)
+  //       }
+  //       canvas.add(img);
+  //       img.bringToFront();
+  //       canvas.renderAll();
+  //       canvas.fire('object:modified');
+  //     })
+  //   }
+  // }
 
-  const toggleTextStyle = (type) => {
-    if (!!canvas.getActiveObject() && canvas.getActiveObject().type === 'i-text') {
-      const textObj = canvas.getActiveObject();
-      switch (type) {
-        case 'bold':
-            if (textObj.get('fontWeight') === 'normal') {
-              textObj.set('fontWeight', 'bold');
-              canvas.fire('object:modified');
-              canvas.renderAll();
-            } else {
-              textObj.set('fontWeight', 'normal');
-              canvas.fire('object:modified');
-              canvas.renderAll();
-            }
-            break;
-        case 'italic':
-            if (textObj.get('fontStyle') === 'normal') {
-              textObj.set('fontStyle', 'italic');
-              canvas.fire('object:modified');
-              canvas.renderAll();
-            } else {
-              textObj.set('fontStyle', 'normal');
-              canvas.fire('object:modified');
-              canvas.renderAll();
-            }
-            break;
-        case 'underline':
-          if (!textObj.get('underline')) {
-            textObj.set('underline', true);
-            canvas.fire('object:modified');
-            canvas.renderAll();
-          } else {
-            textObj.set('underline', false);
-            canvas.fire('object:modified');
-            canvas.renderAll();
-          }
-          break;
-        case 'linethrough':
-          if (!textObj.get('linethrough')) {
-            textObj.set('linethrough', true);
-            canvas.fire('object:modified');
-            canvas.renderAll();
-          } else {
-            textObj.set('linethrough', false);
-            canvas.fire('object:modified');
-            canvas.renderAll();
-          }
-          break;
-        default:
-          break;
-      }
-    }
-  }
+  // const toggleTextStyle = (type) => {
+  //   if (!!canvas.getActiveObject() && canvas.getActiveObject().type === 'i-text') {
+  //     const textObj = canvas.getActiveObject();
+  //     switch (type) {
+        // case 'bold':
+        //     if (textObj.get('fontWeight') === 'normal') {
+        //       textObj.set('fontWeight', 'bold');
+        //       canvas.fire('object:modified');
+        //       canvas.renderAll();
+        //     } else {
+        //       textObj.set('fontWeight', 'normal');
+        //       canvas.fire('object:modified');
+        //       canvas.renderAll();
+        //     }
+        //     break;
+        // case 'italic':
+        //     if (textObj.get('fontStyle') === 'normal') {
+        //       textObj.set('fontStyle', 'italic');
+        //       canvas.fire('object:modified');
+        //       canvas.renderAll();
+        //     } else {
+        //       textObj.set('fontStyle', 'normal');
+        //       canvas.fire('object:modified');
+        //       canvas.renderAll();
+        //     }
+        //     break;
+        // case 'underline':
+          // if (!textObj.get('underline')) {
+          //   textObj.set('underline', true);
+          //   canvas.fire('object:modified');
+          //   canvas.renderAll();
+          // } else {
+          //   textObj.set('underline', false);
+          //   canvas.fire('object:modified');
+          //   canvas.renderAll();
+          // }
+        //   break;
+        // case 'linethrough':
+        //   if (!textObj.get('linethrough')) {
+        //     textObj.set('linethrough', true);
+        //     canvas.fire('object:modified');
+        //     canvas.renderAll();
+        //   } else {
+        //     textObj.set('linethrough', false);
+        //     canvas.fire('object:modified');
+        //     canvas.renderAll();
+        //   }
+        //   break;
+        // default:
+        //   break;
+  //     }
+  //   }
+  // }
 
   // const addText = () => {
   //   let text = new fabric.IText('Edit Me')
@@ -194,39 +194,39 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
   //   }
   // }
 
-  const sendDirection = (direction) => {
-    if (!!canvas.getActiveObject()) {
-      if (direction === 'front') {
-        canvas.getActiveObject().bringToFront();
-        canvas.fire('object:modified');
-        // canvas.renderAll();
-      }
-      if (direction === 'back') {
-        canvas.getActiveObject().sendToBack();
-        canvas.fire('object:modified');
-        // canvas.renderAll();
-      }
-    }
-  }
+  // const sendDirection = (direction) => {
+  //   if (!!canvas.getActiveObject()) {
+  //     if (direction === 'front') {
+  //       canvas.getActiveObject().bringToFront();
+  //       canvas.fire('object:modified');
+  //       // canvas.renderAll();
+  //     }
+  //     if (direction === 'back') {
+  //       canvas.getActiveObject().sendToBack();
+  //       canvas.fire('object:modified');
+  //       // canvas.renderAll();
+  //     }
+  //   }
+  // }
 
-  const toggleFontSize = (type) => {
-    if (!!canvas.getActiveObject() && canvas.getActiveObject().type === 'i-text') {
-      let fontSize = canvas.getActiveObject().get('fontSize');
-      if (type === 'increase') {
-        let newFontSize = fontSize + 1;
-        canvas.getActiveObject().set('fontSize', newFontSize);
-        canvas.fire('object:modified');
-        canvas.renderAll()
-      } else {
-        if (fontSize > 0) {
-          let newFontSize = fontSize - 1;
-          canvas.getActiveObject().set('fontSize', newFontSize)
-          canvas.fire('object:modified');
-          canvas.renderAll()
-        }
-      }
-    }
-  }
+  // const toggleFontSize = (type) => {
+  //   if (!!canvas.getActiveObject() && canvas.getActiveObject().type === 'i-text') {
+  //     let fontSize = canvas.getActiveObject().get('fontSize');
+  //     if (type === 'increase') {
+  //       let newFontSize = fontSize + 1;
+  //       canvas.getActiveObject().set('fontSize', newFontSize);
+  //       canvas.fire('object:modified');
+  //       canvas.renderAll()
+  //     } else {
+  //       if (fontSize > 0) {
+  //         let newFontSize = fontSize - 1;
+  //         canvas.getActiveObject().set('fontSize', newFontSize)
+  //         canvas.fire('object:modified');
+  //         canvas.renderAll()
+  //       }
+  //     }
+  //   }
+  // }
 
   const saveLink = () => {
     if (!isLoggedIn) {

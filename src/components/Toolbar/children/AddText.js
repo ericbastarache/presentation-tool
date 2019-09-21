@@ -13,18 +13,20 @@ const AddText = ({canvas, slideCount}) => {
 
     const addText = () => {
         let text = new fabric.IText('Edit Me')
-        canvas.add(text)
+        canvas.add(text);
+        canvas.fire('object:modified');
+        canvas.renderAll();
     }
 
     return (
         <Tooltip title="Add Text">
-            <>
+            <div>
                 <IconButton onClick={() => addText()} variant="contained" size="small" color="primary" disabled={!Boolean(slideCount)}>
                     <SvgIcon>
                         <AddTextIcon />
                     </SvgIcon>
                 </IconButton>
-            </>
+            </div>
         </Tooltip>
     )
 }

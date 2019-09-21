@@ -16,11 +16,11 @@ const DeleteSlide = ({slideCount, deleteSlide, activeSlide, token, activePresent
     }
     return (
         <Tooltip title="Delete Slide">
-            <>
+            <div>
                 <IconButton variant="contained" size="small" onClick={handleDelete} disabled={!Boolean(slideCount)}>
                     <DeleteIcon />
                 </IconButton>
-            </>
+            </div>
         </Tooltip>
     )
 }
