@@ -8,6 +8,7 @@ import AddText from './children/AddText';
 import AddShape from './children/AddShape';
 
 import FontSize from './children/FontSize';
+import SetBold from './children/SetBold';
 
 
 const useStyles = makeStyles(theme => ({
@@ -50,6 +51,9 @@ const Toolbar = ({canvas}) => {
             <div className={classes.divided}>
                 <div className={classes.buttonContainer}>
                     <FontSize canvas={canvas} />
+                </div>
+                <div className={classes.buttonContainer}>
+                    <SetBold canvas={canvas} />
                 </div>
             </div>
         </div>

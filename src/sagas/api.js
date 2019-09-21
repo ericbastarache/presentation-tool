@@ -2,10 +2,7 @@ import {
     INITIAL_CANVAS_DATA, 
     INITIAL_CANVAS_WIDTH, 
     INITIAL_CANVAS_HEIGHT } from '../constants/canvas'
-const HEADERS = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-}
+import { HEADERS } from '../constants/headers';
 
 export const getNewToken = (token) => {
     const data = fetch(`${process.env.REACT_APP_AUTH_ENDPOINT}/generate`, {

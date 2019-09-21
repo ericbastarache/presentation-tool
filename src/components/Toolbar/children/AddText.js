@@ -5,7 +5,8 @@ import {
     IconButton,
     Tooltip
 } from '@material-ui/core';
-import TextFormatIcon from '@material-ui/icons/TextFormat';
+import {ReactComponent as AddTextIcon} from 'media/icons/add_text_icon.svg';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 
 const AddText = ({canvas, slideCount}) => {
@@ -16,11 +17,12 @@ const AddText = ({canvas, slideCount}) => {
     }
 
     return (
-
         <Tooltip title="Add Text">
             <>
                 <IconButton onClick={() => addText()} variant="contained" size="small" color="primary" disabled={!Boolean(slideCount)}>
-                    <TextFormatIcon />
+                    <SvgIcon>
+                        <AddTextIcon />
+                    </SvgIcon>
                 </IconButton>
             </>
         </Tooltip>

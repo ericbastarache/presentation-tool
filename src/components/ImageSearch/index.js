@@ -129,7 +129,7 @@ const ImageSearch = ({open, setOpen, token}) => {
           if (img.width > canvas.width) {
             img.scaleToWidth(canvas.width)
           }
-          img.set({let: 0, top: 0});
+          img.set({left: 0, top: 0});
           canvas.add(img);
           canvas.renderAll();
           setOpen(false);

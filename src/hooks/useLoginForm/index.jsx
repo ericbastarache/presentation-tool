@@ -3,6 +3,7 @@ import {
   emailValidator,
   passwordValidator
 } from 'validators';
+import { HEADERS } from 'constants/headers';
 
 const useLoginForm = () => {
   const [inputs, setInputs] = React.useState({
@@ -18,7 +19,7 @@ const useLoginForm = () => {
         const {email, password} = inputs
           const result = await fetch(`${process.env.REACT_APP_AUTH_ENDPOINT}/login`, {
               method: 'POST',
-              headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+              headers: HEADERS,
               body: JSON.stringify({
                   email,
                   password

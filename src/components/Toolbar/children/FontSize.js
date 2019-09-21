@@ -10,7 +10,7 @@ const customStyles = {
   }
 
 
-const FontSize = ({canvas, slideCount}) => {
+const FontSize = ({canvas}) => {
     const [showControls, setShowControls] = React.useState(false);
     const [fontSize, setFontSize] = React.useState(null);
 
@@ -61,15 +61,10 @@ const FontSize = ({canvas, slideCount}) => {
                 isDisabled={!Boolean(showControls)}
                 onChange={changeFontSize}
                 isOptionSelected={(option) => (option.value == fontSize) ? true : false}
+                isSearchable={true}
             />
         </>
     )
 }
 
-const mapStateToProps = state => ({
-    slideCount : state.presentation.get('slide_count'),
-})
-
-export default connect(
-    mapStateToProps
-)(FontSize)
+export default FontSize

@@ -87,21 +87,21 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
     }
   }
 
-  const addShape = (shapeType) => {
-    switch (shapeType) {
-      case 'square':
-        canvas.add(new fabric.Rect({
-          width: 100,
-          height: 100,
-          x: 200,
-          y: 200,
-          fill: '#ff0000'
-        }));
-        break;
-      default:
-        break;
-    }
-  }
+  // const addShape = (shapeType) => {
+  //   switch (shapeType) {
+  //     case 'square':
+  //       canvas.add(new fabric.Rect({
+  //         width: 100,
+  //         height: 100,
+  //         x: 200,
+  //         y: 200,
+  //         fill: '#ff0000'
+  //       }));
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 
   const addImage = (images) => {
     setShowImageUpload(false)
@@ -180,19 +180,19 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) =>
     }
   }
 
-  const addText = () => {
-    let text = new fabric.IText('Edit Me')
-    canvas.add(text)
-  }
+  // const addText = () => {
+  //   let text = new fabric.IText('Edit Me')
+  //   canvas.add(text)
+  // }
 
-  const fontSizeChange = (e) => {
-    if (!!canvas.getActiveObject() && canvas.getActiveObject().type === 'i-text') {
-      setFontSize(e.target.value);
-      canvas.getActiveObject().set('fontSize', e.target.value);
-      canvas.fire('object:modified');
-      canvas.renderAll();
-    }
-  }
+  // const fontSizeChange = (e) => {
+  //   if (!!canvas.getActiveObject() && canvas.getActiveObject().type === 'i-text') {
+  //     setFontSize(e.target.value);
+  //     canvas.getActiveObject().set('fontSize', e.target.value);
+  //     canvas.fire('object:modified');
+  //     canvas.renderAll();
+  //   }
+  // }
 
   const sendDirection = (direction) => {
     if (!!canvas.getActiveObject()) {

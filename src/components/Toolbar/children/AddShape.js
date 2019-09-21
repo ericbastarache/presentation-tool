@@ -2,6 +2,7 @@ import React from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles } from '@material-ui/core/styles';
 import {fabric} from 'fabric';
 import blue from '@material-ui/core/colors/blue';
@@ -10,8 +11,9 @@ import { faShapes } from '@fortawesome/free-solid-svg-icons';
 import { 
         faPlusSquare,
         faPlusCircle,
-        faCaretUp
 } from '@fortawesome/free-solid-svg-icons';
+import {ReactComponent as TriangleIcon} from 'media/icons/triangle_icon.svg';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import {connect} from 'react-redux';
 
 
@@ -33,9 +35,6 @@ const useStyles = makeStyles(theme => ({
     paper: {
         backgroundColor: blue['50'],
     },
-    triangle: {
-        fontSize: '24px'
-    }
 }));
 
 const onMouseEnter = (e) => e.target.style.backgroundColor = blue['100'];
@@ -96,16 +95,20 @@ const AddShape = ({canvas, slideCount}) => {
 
     return (
         <>
-            <IconButton 
-                onClick={handleMenuOpen} 
-                variant="contained" 
-                size="small" 
-                color="primary" 
-                className={(Boolean(anchorEl)) ? `${classes.activeButton} ${classes.button}` : classes.button}
-                disabled={!Boolean(slideCount)}
-            >
-                <FontAwesomeIcon icon={faShapes} />
-            </IconButton>
+        <Tooltip title="Add Shape">
+            <div>
+                <IconButton 
+                    onClick={handleMenuOpen} 
+                    variant="contained" 
+                    size="small" 
+                    color="primary" 
+                    className={(Boolean(anchorEl)) ? `${classes.activeButton} ${classes.button}` : classes.button}
+                    disabled={!Boolean(slideCount)}
+                >
+                    <FontAwesomeIcon icon={faShapes} />
+                </IconButton>
+            </div>
+        </Tooltip>
             <Menu
                 anchorEl={anchorEl}
                 keepMounted
@@ -117,27 +120,38 @@ const AddShape = ({canvas, slideCount}) => {
                 className={classes.Menulist}
                 PaperProps={{ className: classes.paper}}
             >
+                <MenuItem 
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    onClick={(e) => {addShape('square'); onMouseLeave(e)}}
+                    >
+                        <Tooltip title="Add Square">
+                            <div style={{backgroundColor: 'inherit'}}>
+                                <FontAwesomeIcon icon={faPlusSquare} />
+                            </div>
+                        </Tooltip>
+                </MenuItem>        
             <MenuItem 
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
-                onClick={() => addShape('square')}
+                onClick={(e) => {addShape('circle'); onMouseLeave(e)}}
                 >
-                <FontAwesomeIcon icon={faPlusSquare} />
+                <Tooltip title="Add Circle">
+                    <div style={{backgroundColor: 'inherit'}}>
+                        <FontAwesomeIcon icon={faPlusCircle} />
+                    </div>
+                </Tooltip>
             </MenuItem>
             <MenuItem 
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
-                onClick={() => addShape('circle')}
+                onClick={(e) => {addShape('triangle'); onMouseLeave(e)}}
                 >
-                <FontAwesomeIcon icon={faPlusCircle} />
-            </MenuItem>
-            <MenuItem 
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                onClick={() => addShape('triangle')}
-                className={classes.triangle}
-                >
-                <FontAwesomeIcon icon={faCaretUp} />
+                <Tooltip title="Add Triangle">
+                    <div style={{backgroundColor: 'inherit'}}>
+                        <TriangleIcon />
+                    </div>
+                </Tooltip>
             </MenuItem>
         </Menu>
         </>
