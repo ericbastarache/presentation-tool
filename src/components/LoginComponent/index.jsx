@@ -10,6 +10,14 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Snackbar from 'components/Snackbar'
+import { GoogleLogin } from 'react-google-login';
+import { logIn } from 'actions/user'
+import { connect } from 'react-redux'
+import { push } from "connected-react-router";
+import Cookies from 'js-cookie'
+
+
 
 import TextInput from 'components/TextInput';
 import useLoginForm from 'hooks/useLoginForm';
@@ -37,13 +45,60 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  glogin: {
+    width: '100%',
+    justifyContent: 'center',
+    fontSize: '0.875rem !important',
+    margin: theme.spacing(1, 0, 2),
+    boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12) !important'
+  }
 }));
 
-const LoginComponent = () => {
+const LoginComponent = ({logIn, push}) => {
   const classes = useStyles();
   const { inputs, handleInputChange, handleSubmit } = useLoginForm();
+  const [open, setOpen] = React.useState(false)
+
+  const handleGoogleLogin = (response) => {
+    const token = response.Zi.id_token
+    logIn(token)
+    push('/')
+  }
+
+  const saveTempPresentations = async (token) => {
+    let tempUserToken = Cookies.get('tempUserToken')
+    if (tempUserToken) {
+      fetch(`${process.env.REACT_APP_PRESENTATION_ENDPOINT}/presentations/save_temp_presentations`, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+              tempUserToken,
+              token
+          })
+      }).then(res => res.json()).catch(err => {
+          throw err
+      })
+    }
+  }
+
+  const handleSubmitWrapper = async (event) => {
+    const result = await handleSubmit(event)
+    const token = result.access_token
+    if (token) {
+      setOpen(prev => !prev)
+      logIn(token)
+      await saveTempPresentations(token)
+      Cookies.remove('tempUserToken')
+      Cookies.set('userToken', token, 1)
+      setTimeout(() =>{
+        push('/')
+      }, 1000)
+    }
+  }
+
   return (
     <Container component="main" maxWidth="xs">
+      <Snackbar variant="success" message="Sign in Successful. Redirecting to Editor" isOpen={open}/>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -52,7 +107,7 @@ const LoginComponent = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form onSubmit={handleSubmit} className={classes.form} noValidate>
+        <form onSubmit={handleSubmitWrapper} className={classes.form} noValidate>
           <TextInput
             onChange={handleInputChange}
             variant="outlined"
@@ -92,6 +147,14 @@ const LoginComponent = () => {
           >
             Sign In
           </Button>
+          <GoogleLogin
+            clientId="688456308716-0n4h02s30uf3bnsssplskvmnbmfom47g.apps.googleusercontent.com"
+            buttonText="Login with Google"
+            onSuccess={handleGoogleLogin}
+            onFailure={handleGoogleLogin}
+            cookiePolicy={'single_host_origin'}
+            className={classes.glogin}
+          />
           <Grid container>
             <Grid item xs>
               <Link to='/forgot' variant="body2">
@@ -110,4 +173,13 @@ const LoginComponent = () => {
   );
 }
 
-export default LoginComponent;
+
+const mapDispatchToProps = dispatch => ({
+  logIn: (token) => dispatch(logIn(token)),
+  push: (route) => dispatch(push(route))
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(LoginComponent);

@@ -6,7 +6,8 @@ const INITIAL_STATE = Immutable.fromJS({
   active_presentation: null,
   presentations: List([]),
   active_slide: null,
-  slides: List([])
+  slides: List([]),
+  slide_count: 0
 })
 
 const presentationReducer = (state = INITIAL_STATE, action) => {
@@ -18,6 +19,7 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
           .update('presentations', presentations => presentations.push(presentation))
           .set('slides', List(presentation.slides))
           .set('active_slide', presentation.slides[0]._id)
+          .set('slide_count', state.get('slides').count() + 1)
       }))
     case 'SET_ACTIVE_PRESENTATION':
       return state.merge(state, state.set('active_presentation', action.id))
@@ -33,54 +35,71 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
       ))
     case 'CREATE_SLIDE':
       const { slide } = action.slide
-      return state.merge(state, state.update('slides', slides => slides.push(slide)))
+      return state.merge(state, state
+        .update('slides', slides => slides.push(slide))
+        .set('slide_count', state.get('slides').count() + 1)
+        .set('active_slide', slide._id)
+      )
     case 'DELETE_SLIDE':
-      let newState = {
-        ...state
-      };
-      let slideToRemove = null;
-      newState.slides.forEach((slide, index) => {
-        if (slide.id === state.active_slide) slideToRemove = index
-      })
-      newState.active_slide = null;
-      //update active_slide as long as not all slides have bene deleted
-      if (slideToRemove !== 0) {
-        newState.slides.forEach((slide, index) => {
-          if (index === (slideToRemove - 1))
-            newState.active_slide = slide.id
-        })
+      let slideToRemove = state.get('slides').findIndex((slide) => slide._id === state.get('active_slide'));
+      let slideCount = state.get('slides').count();
+      let activeSlide = null;
+      if (slideCount > 1) {
+        if (state.get('slides').has(slideToRemove + 1)){
+          activeSlide = state.get('slides').get(slideToRemove + 1)._id;
+        } else {
+          activeSlide = state.get('slides').get(slideToRemove - 1)._id;
+        }
+        slideCount = state.get('slides').count() - 1;
+      } else {
+        slideCount = 0;
       }
-      newState.slides.splice(slideToRemove, 1)
-
-      if (slideToRemove === 0) {
-        if (newState.slides.length > 0)
-          newState.active_slide = newState.slides[0].id
-      }
-
-      return Object.assign({}, state, {
-        slides: [...newState.slides],
-        active_slide: newState.active_slide
-      });
+      return state.merge(state, state
+        .update('slides', slides => slides.delete(slideToRemove))
+        .set('active_slide', activeSlide)
+        .set('slide_count', slideCount)
+      )
     case 'SAVE_SLIDE':
-        const {data, thumbnail, canvasDimensions} = action
         return state.merge(state, state.update('slides', slides =>
         slides.update(
           state.get('slides').findIndex(slide => slide._id === action.slideID), (slide) => {
             return {
               ...slide,
-              data: JSON.stringify(data),
-              thumbnail: thumbnail,
-              canvasDimensions: canvasDimensions
+              data: JSON.stringify(action.data),
+              canvasDimensions: action.canvasDimensions,
+              thumbnail: action.thumbnail
             }
           })
       ))
       case 'LOAD_PRESENTATION':
-        return state.merge(state, state.set('presentation', action.payload));
+        return state.merge(state, state
+          .set('presentation', action.payload)
+        );
+      case 'LOAD_PRESENTATIONS':
+        return state.merge(state, state.withMutations(map => {
+          map.set('active_presentation', action.presentations[action.presentations.length - 1]._id)
+            .set('presentations', List(action.presentations))
+            .set('slides', 
+                 (action.presentations[action.presentations.length - 1].slides.length > 0) 
+                    ? List(action.presentations[action.presentations.length - 1].slides)
+                    : List([])
+            )
+            .set('active_slide', 
+                  (action.presentations[action.presentations.length - 1].slides.length > 0) 
+                  ? action.presentations[action.presentations.length - 1].slides[0]._id
+                  : null
+            )
+            .set('slide_count', 
+                  (action.presentations[action.presentations.length - 1].slides.length > 0) 
+                  ? action.presentations[action.presentations.length - 1].slides.length
+                  : 0
+            )
+        }))
       case 'SET_ACTIVE_SLIDE':
         return state.merge(state, state.set('active_slide', action.id))
         case 'CHANGE_SLIDE_ORDER':
           let dragSlide = state.get('slides').get(action.dragIndex)
-          return state.merge(state, state.set('slides', state.get('slides').delete(action.dragIndex).insert(action.hoverIndex, dragSlide)))
+          return state.merge(state, state.set('slides', state.get('slides').delete(action.dragIndex).insert(action.hoverIndex, dragSlide))) 
         default:
           return state;
   }

@@ -88,25 +88,28 @@ const Navigation = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   function handleProfileMenuOpen(event) {
     setAnchorEl(event.currentTarget);
+    setIsMenuOpen(true);
   }
 
   function handleMobileMenuClose() {
     setMobileMoreAnchorEl(null);
+    setIsMobileMenuOpen(false);
   }
 
   function handleMenuClose() {
+    setIsMenuOpen(false);
     setAnchorEl(null);
     handleMobileMenuClose();
   }
 
   function handleMobileMenuOpen(event) {
     setMobileMoreAnchorEl(event.currentTarget);
+    setIsMobileMenuOpen(true);
   }
 
   const menuId = 'primary-search-account-menu';

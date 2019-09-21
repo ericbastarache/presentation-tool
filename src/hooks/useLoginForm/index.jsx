@@ -3,22 +3,32 @@ import {
   emailValidator,
   passwordValidator
 } from 'validators';
+import { HEADERS } from 'constants/headers';
 
 const useLoginForm = () => {
   const [inputs, setInputs] = React.useState({
     email: '',
     password: ''
   });
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     if (event) {
       event.preventDefault();
       if (!emailValidator(inputs.email)) {
         console.log('incorrect email entered')
+      } else {
+        const {email, password} = inputs
+          const result = await fetch(`${process.env.REACT_APP_AUTH_ENDPOINT}/login`, {
+              method: 'POST',
+              headers: HEADERS,
+              body: JSON.stringify({
+                  email,
+                  password
+              })
+          }).then(res => res.json()).catch(err => {
+              throw err
+          })
+          return result
       }
-      if (!passwordValidator(inputs.password)) {
-        console.log('please enter a correct password');
-      }
-      // handle login logic
     }
   }
   const handleInputChange = (event) => {

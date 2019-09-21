@@ -4,7 +4,8 @@ import {
   IconButton,
   MenuItem,
   Button,
-  Tooltip
+  Tooltip,
+  Link
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -19,7 +20,11 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import FlipToBackIcon from '@material-ui/icons/FlipToBack';
 import FlipToFrontIcon from '@material-ui/icons/FlipToFront';
-import { EditorContext } from 'components/Editor/context'
+import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import ImageSearch from 'components/ImageSearch'
+import {DropzoneDialog} from 'material-ui-dropzone';
+import { EditorContext } from 'components/Editor/context';
 import { fabric } from 'fabric';
 import SelectInput from 'components/SelectInput';
 import { connect } from 'react-redux'
@@ -28,6 +33,7 @@ import {
   deleteSlide
 }  from 'actions/index'
 import { makeStyles } from '@material-ui/core/styles';
+import { useState } from 'react';
 
 const useStyles = makeStyles(theme => ({
   padding: {
@@ -35,11 +41,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
+const Editor = ({ getNewSlide, deleteSlide, activePresentation, isLoggedIn }) => {
   const classes = useStyles();
-  const [size, setFontSize] = React.useState(12);
-  const [_clipboard, setClipboard] = React.useState(null);
+  const [size, setFontSize] = useState(12);
+  const [_clipboard, setClipboard] = useState(null);
+  const [showImageUpload, setShowImageUpload] = useState(false);
+  const [showImageSearch, setShowImageSearch] = useState(false);
   const { canvas } = React.useContext(EditorContext);
+
+
   const clearCanvas = () => {
     canvas.clear();
     canvas.renderAll();
@@ -77,19 +87,42 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
     }
   }
 
-  const addShape = (shapeType) => {
-    switch (shapeType) {
-      case 'square':
-        canvas.add(new fabric.Rect({
-          width: 100,
-          height: 100,
-          x: 200,
-          y: 200,
-          fill: '#ff0000'
-        }));
-        break;
-      default:
-        break;
+  // const addShape = (shapeType) => {
+  //   switch (shapeType) {
+  //     case 'square':
+  //       canvas.add(new fabric.Rect({
+  //         width: 100,
+  //         height: 100,
+  //         x: 200,
+  //         y: 200,
+  //         fill: '#ff0000'
+  //       }));
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
+
+  const addImage = (images) => {
+    setShowImageUpload(false)
+    const reader = new FileReader();
+    reader.readAsDataURL(images[0]);
+    reader.onload = () => {
+      const imgData = reader.result
+      fabric.Image.fromURL(imgData, function(img) {
+        img.left = 50;
+        img.top = 50;
+        if (img.height > canvas.height) {
+          img.scaleToHeight(canvas.height)
+        }
+        if (img.width > canvas.width) {
+          img.scaleToWidth(canvas.width)
+        }
+        canvas.add(img);
+        img.bringToFront();
+        canvas.renderAll();
+        canvas.fire('object:modified');
+      })
     }
   }
 
@@ -147,29 +180,30 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
     }
   }
 
-  const addText = () => {
-    let text = new fabric.IText('Edit Me')
-    canvas.add(text)
-  }
+  // const addText = () => {
+  //   let text = new fabric.IText('Edit Me')
+  //   canvas.add(text)
+  // }
 
-  const fontSizeChange = (e) => {
-    if (!!canvas.getActiveObject() && canvas.getActiveObject().type === 'i-text') {
-      setFontSize(e.target.value);
-      canvas.getActiveObject().set('fontSize', e.target.value);
-      canvas.fire('object:modified');
-      canvas.renderAll();
-    }
-  }
+  // const fontSizeChange = (e) => {
+  //   if (!!canvas.getActiveObject() && canvas.getActiveObject().type === 'i-text') {
+  //     setFontSize(e.target.value);
+  //     canvas.getActiveObject().set('fontSize', e.target.value);
+  //     canvas.fire('object:modified');
+  //     canvas.renderAll();
+  //   }
+  // }
 
   const sendDirection = (direction) => {
     if (!!canvas.getActiveObject()) {
       if (direction === 'front') {
-        console.log(canvas.getActiveObject().bringToFront());
         canvas.getActiveObject().bringToFront();
+        canvas.fire('object:modified');
         // canvas.renderAll();
       }
       if (direction === 'back') {
         canvas.getActiveObject().sendToBack();
+        canvas.fire('object:modified');
         // canvas.renderAll();
       }
     }
@@ -191,6 +225,18 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
           canvas.renderAll()
         }
       }
+    }
+  }
+
+  const saveLink = () => {
+    if (!isLoggedIn) {
+      return (
+        <Tooltip title="Click here to login">
+          <Link variant="body1" href="/login">
+            Login to save
+          </Link>    
+        </Tooltip>
+      )
     }
   }
 
@@ -276,19 +322,43 @@ const Editor = ({ getNewSlide, deleteSlide, activePresentation }) => {
               Paste
             </Button>
           </Tooltip>
+
+          <Tooltip title="Upload Image">
+            <IconButton size="small" onClick={() => setShowImageUpload(true)}>
+              <CloudUploadIcon />
+            </IconButton>
+          </Tooltip>
+          <DropzoneDialog 
+            onSave={addImage} 
+            open={showImageUpload}
+            acceptedFiles={['image/jpeg', 'image/png']}
+            showPreviews={true}
+            maxFileSize={1000000}
+            onClose={() => setShowImageUpload(false)}
+            filesLimit={1}
+            />
+          <Tooltip title="Search and Insert Image">
+            <IconButton size="small" onClick={() => setShowImageSearch(true)}>
+              <PhotoCameraIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Clear canvas">
             <IconButton onClick={() => clearCanvas()} variant="contained" size="small" color="secondary" aria-label="small contained secondary button ">
               <ClearIcon />
             </IconButton>
           </Tooltip>
+          {saveLink()}
         </Grid>
       </Grid>
+      <ImageSearch open={showImageSearch} setOpen={() => setShowImageSearch(!showImageSearch)}/>
     </Grid>
+
   )
 }
 
 const mapStateToProps = state => ({
-  activePresentation : state.presentation.get('active_presentation')
+  activePresentation : state.presentation.get('active_presentation'),
+  isLoggedIn: state.user.get('isLoggedIn'),
 })
 
 const mapDispatchToProps = dispatch => ({
