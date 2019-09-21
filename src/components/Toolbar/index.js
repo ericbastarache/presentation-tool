@@ -7,6 +7,8 @@ import DeleteSlide from './children/DeleteSlide';
 import AddText from './children/AddText';
 import AddShape from './children/AddShape';
 
+import FontSize from './children/FontSize';
+
 
 const useStyles = makeStyles(theme => ({
     buttonContainer: {
@@ -43,6 +45,11 @@ const Toolbar = ({canvas}) => {
                 </div>
                 <div className={classes.buttonContainer}>
                     <AddShape canvas={canvas} />
+                </div>
+            </div>
+            <div className={classes.divided}>
+                <div className={classes.buttonContainer}>
+                    <FontSize canvas={canvas} />
                 </div>
             </div>
         </div>

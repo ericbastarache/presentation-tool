@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
          padding: '6px',
-         margin: '-4px -6px -5px -6px'
+         margin: '-4px 0px -5px -6px'
     },
     paper: {
         backgroundColor: blue['50'],
