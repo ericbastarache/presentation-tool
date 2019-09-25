@@ -1,0 +1,10 @@
+ <svg height="16px" viewBox="0 0 16 16" width="16px">
+    <path
+      d="M488 480l8 16h-16l8-16zm0 0"
+      transform="translate(-480 -480)"
+      fill="#000"
+      fillRule="evenodd"
+      stroke="none"
+      strokeWidth={1}
+    />
+  </svg>

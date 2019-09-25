@@ -1,39 +1,13 @@
 import React from 'react';
-import Slide from 'components/Slide';
-import Presentation from 'components/Presentation';
+import { ConnectedRouter } from 'connected-react-router'
+import routes from './routes'
 
-class App extends React.PureComponent {
-  render() {
-    return (
-      <div className="App">
-        <Presentation>
-          {({
-            slides,
-            setActive,
-            presentation,
-            activeSlide
-          }) => {
-            return (
-              <>
-                {slides.map((slide, index) => {
-                  return (
-                    <Slide
-                      onClick={() => setActive(slide.id)}
-                      key={`slide-${Math.random(0, 10000)}`}
-                      slide={slide}
-                      position={index}
-                      slideNumber={slide.id}
-                      activeSlide={activeSlide}
-                    />
-                  )
-                })}
-              </>
-            )
-          }}
-        </Presentation>
-      </div>
-    );
-  }
+const App = ({ history }) => {
+  return (
+    <ConnectedRouter history={history}>
+      { routes }
+    </ConnectedRouter>
+  )
 }
 
-export default App;
+export default App

@@ -1,8 +1,12 @@
-import { combineReducers } from 'redux';
-import presentationReducer from 'components/Presentation/reducer';
+import { combineReducers } from 'redux'
+import { connectRouter } from 'connected-react-router'
+import presentationReducer from './presentation'
+import userReducer from './user'
 
-const rootReducer = combineReducers({
+const rootReducer = (history) => combineReducers({
   presentation: presentationReducer,
+  user: userReducer,
+  router: connectRouter(history)
 });
 
 export default rootReducer;
