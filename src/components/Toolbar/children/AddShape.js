@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 const onMouseEnter = (e) => e.target.style.backgroundColor = blue['100'];
 const onMouseLeave = (e) => e.target.style.backgroundColor = blue['50'];
 
-const AddShape = ({canvas, slideCount}) => {
+const AddShape = ({canvas, slideCount, color}) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [isOpen, setIsOpen] = React.useState(false);
@@ -63,8 +63,10 @@ const AddShape = ({canvas, slideCount}) => {
               height: 100,
               x: 200,
               y: 200,
-              fill: '#ff0000'
+              fill: color
             }));
+            canvas.renderAll();
+            canvas.trigger('object:modified');
             handleClose();
             return;
         case 'circle':
@@ -73,9 +75,11 @@ const AddShape = ({canvas, slideCount}) => {
                 x: 200,
                 y: 200,
                 radius: 100,
-                fill: '#ff0000',
+                fill: color,
               })
             )
+            canvas.renderAll();
+            canvas.trigger('object:modified');
             handleClose();
             return;
             case 'triangle':
@@ -85,9 +89,11 @@ const AddShape = ({canvas, slideCount}) => {
                     height: 100,
                     x: 200,
                     y: 200,
-                    fill: '#ff0000'
+                    fill: color
                 })
             )
+            canvas.renderAll();
+            canvas.trigger('object:modified');
             handleClose();
             return;
           default:
@@ -162,6 +168,7 @@ const AddShape = ({canvas, slideCount}) => {
 
 const mapStateToProps = state => ({
     slideCount : state.presentation.get('slide_count'),
+    color: state.presentation.get('color')
 })
 
 export default connect(

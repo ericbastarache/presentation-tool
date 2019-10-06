@@ -7,6 +7,7 @@ const INITIAL_STATE = Immutable.fromJS({
   presentations: List([]),
   active_slide: null,
   slides: List([]),
+  color: '#000000',
   slide_count: 0
 })
 
@@ -23,6 +24,8 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
       }))
     case 'SET_ACTIVE_PRESENTATION':
       return state.merge(state, state.set('active_presentation', action.id))
+    case 'SET_COLOR':
+      return state.merge(state, state.set('color', action.color))
     case 'SET_PRESENTATION_TITLE':
       return state.merge(state, state.update('presentations', presentations =>
         presentations.update(
@@ -36,7 +39,7 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
     case 'CREATE_SLIDE':
       const { slide } = action.slide
       return state.merge(state, state
-        .update('slides', slides => slides.push(slide))
+        .update('slides', slides => slides.push({...slide, thumbnail: null}))
         .set('slide_count', state.get('slides').count() + 1)
         .set('active_slide', slide._id)
       )
@@ -60,14 +63,14 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
         .set('slide_count', slideCount)
       )
     case 'SAVE_SLIDE':
-      return state.merge(state, state.update('slides', slides =>
+      return state.merge(state, state
+        .update('slides', slides =>
         slides.update(
           state.get('slides').findIndex(slide => slide._id === action.slideID), (slide) => {
             return {
               ...slide,
               data: JSON.stringify(action.data),
               canvasDimensions: action.canvasDimensions,
-              thumbnail: action.thumbnail
             }
           })
       ))
@@ -100,8 +103,36 @@ const presentationReducer = (state = INITIAL_STATE, action) => {
         .set('slides', action.slides.slides)
         .set('active_slide', action.slides.activeSlide)
       )
+    case 'UPDATE_THUMBNAILS':
+      let temp = new Array(state.get('slides').count());
+        state.get('slides').forEach((slide, index) => {
+          action.slides.forEach((thumbnail) => {
+            if (thumbnail._id === slide._id) {
+              temp[index] = {...slide, thumbnail: thumbnail.thumbnail};
+            }
+          }
+        );
+          if (!temp[index]) {
+            temp[index] = state.get('slides').get(index)
+          }
+        })
+        return state.merge(state, state
+          .set('slides', List(temp))
+        )
+    case 'UPDATE_THUMBNAIL':
+      return state.merge(state, state
+      .update('slides', slides =>
+      slides.update(
+          state.get('slides').findIndex(slide => slide._id === action.slideID), (slide) => {
+            return {
+              ...slide,
+              thumbnail: action.thumbnail
+            }
+          })
+      ))
     case 'SET_ACTIVE_SLIDE':
-      return state.merge(state, state.set('active_slide', action.id))
+      return state.merge(state, state
+        .set('active_slide', action.id))
     case 'CHANGE_SLIDE_ORDER':
       let dragSlide = state.get('slides').get(action.dragIndex)
       return state.merge(state, state.set('slides', state.get('slides').delete(action.dragIndex).insert(action.hoverIndex, dragSlide)))

@@ -25,23 +25,21 @@ export const toggleModal = () => ({
     type: ActionTypes.TOGGLE_MODAL
 })
 
-export const updateSlide = (token, slideID, presentationID, data, canvasDimensions, thumbnail) => ({
+export const updateSlide = (token, slideID, presentationID, data, canvasDimensions) => ({
     type: ActionTypes.UPDATE_SLIDE,
     token,
     slideID,
     presentationID,
     data,
-    canvasDimensions,
-    thumbnail
+    canvasDimensions
 })
 
-export const saveSlide = (slideID, presentationID, data, canvasDimensions, thumbnail) => ({
+export const saveSlide = (slideID, presentationID, data, canvasDimensions) => ({
     type: ActionTypes.SAVE_SLIDE,
     slideID,
     presentationID,
     data,
-    canvasDimensions,
-    thumbnail
+    canvasDimensions
 })
 
 export const deleteSlide = (token, slideID, presentationID) => ({
@@ -90,4 +88,20 @@ export const setPresentationTitle = (id, title) => ({
     type: ActionTypes.SET_PRESENTATION_TITLE,
     id,
     title
+})
+
+export const updateThumbnail = (slideID, thumbnail) => ({
+    type: ActionTypes.UPDATE_THUMBNAIL,
+    slideID,
+    thumbnail
+})
+
+export const updateThumbnails = (slides) => ({
+    type: ActionTypes.UPDATE_THUMBNAILS,
+    slides
+})
+
+export const setColor = (color) => ({
+    type: ActionTypes.SET_COLOR,
+    color
 })

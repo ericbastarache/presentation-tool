@@ -9,10 +9,10 @@ import {ReactComponent as AddTextIcon} from 'media/icons/add_text_icon.svg';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 
-const AddText = ({canvas, slideCount}) => {
+const AddText = ({canvas, slideCount, color}) => {
 
     const addText = () => {
-        let text = new fabric.IText('Edit Me')
+        let text = new fabric.IText('Edit Me', {fill: color})
         canvas.add(text);
         canvas.fire('object:modified');
         canvas.renderAll();
@@ -33,6 +33,7 @@ const AddText = ({canvas, slideCount}) => {
 
 const mapStateToProps = state => ({
     slideCount : state.presentation.get('slide_count'),
+    color: state.presentation.get('color')
 })
 
 export default connect(

@@ -68,6 +68,7 @@ const Clipboard = ({ canvas, slideCount }) => {
             }
             canvas.setActiveObject(obj);
             canvas.requestRenderAll();
+            canvas.trigger('object:modified');
         });
     }
 

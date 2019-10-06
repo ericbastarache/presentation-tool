@@ -83,9 +83,9 @@ export function* requestNewPresentation() {
 
 export function* updateSlide(action) {
   try {
-    const {token, slideID, presentationID, data, canvasDimensions, thumbnail} = action
+    const {token, slideID, presentationID, data, canvasDimensions} = action
     yield call(() => Api.updateSlide(token, slideID, presentationID, data, canvasDimensions));
-    yield put({ type: SAVE_SLIDE, slideID, presentationID, data, canvasDimensions, thumbnail});
+    yield put({ type: SAVE_SLIDE, slideID, presentationID, data, canvasDimensions});
   } catch (error) {
     throw error
   }

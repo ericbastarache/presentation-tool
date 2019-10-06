@@ -19,6 +19,7 @@ import SetLinethrough from './children/SetLinethrough';
 import AddImage from './children/AddImage';
 import UploadImage from './children/UploadImage';
 
+import SetColor from './children/SetColor';
 import SetDirection from './children/SetDirection';
 
 
@@ -101,6 +102,9 @@ const Toolbar = ({ canvas }) => {
                 </div>
             </div>
             <div className={classes.divided}>
+                <div className={classes.buttonContainer}>
+                    <SetColor canvas={canvas} />
+                </div>
                 <SetDirection canvas={canvas} />
             </div>
         </div>

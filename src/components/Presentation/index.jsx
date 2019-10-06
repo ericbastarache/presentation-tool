@@ -47,8 +47,8 @@ const Presentation = ({
   setActiveSlide,
 }) => {
   const classes = useStyles();
-  const canvasEl = React.createRef(null)
-  const hiddenCanvasEl = React.createRef(null)
+  const canvasEl = React.createRef(null);
+  const hiddenCanvasEl = React.createRef(null);
 
   const canvasObj = () => {
     return canvas
@@ -74,10 +74,9 @@ const Presentation = ({
   }
 
   const renderSlide = (slide) => {
-    canvas.clear()
-    let slideData = JSON.parse(slide.data)
-    updateSlideWithNewResolution(slideData.objects, slide.canvasDimensions.width)
-    canvas.loadFromJSON(slideData)
+    let slideData = JSON.parse(slide.data);
+    updateSlideWithNewResolution(slideData.objects, slide.canvasDimensions.width);
+    canvas.loadFromJSON(slideData);
   }
 
   React.useEffect(() => {
@@ -110,8 +109,7 @@ const Presentation = ({
   }, [])
 
   React.useEffect(() => {
-
-    if (slides.length === 0) {
+    if (slides.count() === 0) {
       canvas.clear()
       return
     }
@@ -154,7 +152,7 @@ const Presentation = ({
         <Grid item xs={2} className={classes.height}>
           <div className={`${classes.overflow} ${classes.height}`}>
             <SlideContextProvider canvasObj={canvasObj} hiddenCanvasObj={hiddenCanvasObj}>
-              <Slidebar slides={slides} />
+              <Slidebar />
             </SlideContextProvider>
           </div>
         </Grid>
