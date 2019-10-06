@@ -1,15 +1,12 @@
 import React from 'react';
-import { fabric } from 'fabric';
 import { connect } from 'react-redux';
-import {
-    IconButton,
-    Tooltip
-} from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { SketchPicker } from 'react-color'
 import { setColor } from 'actions/index';
 
-const useStyles = makeStyles(theme => ({
+
+const useStyles = makeStyles(({
     color: {
         width: '36px',
         height: '14px',
@@ -71,9 +68,12 @@ const AddText = ({canvas, color, setColor}) => {
             }
         })
         canvas.renderAll();
+        setColorPickerDisplayColor(selectedColor.hex);
+    }
+
+    const handleCompleteColorchange = (selectedColor) => {
         canvas.trigger('object:modified');
         setColor(selectedColor.hex);
-        setColorPickerDisplayColor(selectedColor.hex);
     }
 
     const handleSelection = (event) => {
@@ -123,7 +123,11 @@ const AddText = ({canvas, color, setColor}) => {
             </Tooltip>
             { isColorPickerVisible ? <div className={ classes.popover }>
             <div className={ classes.cover } onClick={ hideColorPicker }/>
-                <SketchPicker color={ colorPickerDisplayColor } onChange={ handleColorChange } />
+                <SketchPicker 
+                    color={ colorPickerDisplayColor } 
+                    onChange={ handleColorChange } 
+                    onChangeComplete={ handleCompleteColorchange }
+                />
             </div> : null }
         </div>
     )
