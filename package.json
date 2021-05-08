@@ -16,7 +16,7 @@
     "i18next-xhr-backend": "^3.1.2",
     "immutable": "^4.0.0-rc.12",
     "js-cookie": "^2.2.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "material-ui": "^0.20.2",
     "material-ui-dropzone": "^2.4.1",
     "npm-check-updates": "^3.1.20",
